@@ -1,0 +1,47 @@
+.editor {
+
+}
+
+.editor section {
+}
+
+.editor section h4 {
+  font-size: 20px;
+  margin: 50px 0 20px 0;
+}
+
+.editor .date_section input {
+  border: none;
+  padding: 10px 20px;
+  background-color: rgb(236,236,236);
+  border-radius: 7px;
+  font-size: 18px;
+}
+
+.editor .title_section input {
+  width: 70%;
+  border: none;
+  background-color: rgb(236,236,236);
+  border-radius: 7px;
+  height: 42px;
+  padding: 0px 20px;
+  font-size: 18px;
+}
+
+.editor .contents_section textarea {
+  padding: 20px;
+  width: 100%;
+  min-height: 200px;
+  resize: vertical;
+  box-sizing: border-box;
+  background-color: rgb(236,236,236);
+  border: none;
+  border-radius: 7px;
+  font-size: 18px;
+}
+
+.editor .editor_footer {
+  display: flex;
+  margin-top: 20px;
+  justify-content: space-between;
+}

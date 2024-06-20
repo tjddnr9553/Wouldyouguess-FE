@@ -1,0 +1,99 @@
+.login {
+  background-color: rgba(171, 158, 158, 0.2);
+  max-width: 600px;
+  min-height: 500px;
+
+  border-radius: 20px;
+
+  margin: 0 auto;
+  margin-top: 200px;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  position: relative;
+}
+
+.login .profile_img_wrap {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+
+  position: absolute;
+  top: -50px;
+
+  display: flex;
+  justify-content: center;
+
+  overflow: hidden;
+
+  background-color: rgba(20, 18, 18, 0.2);
+}
+
+.login .profile_img_wrap img {
+  width: 110px;
+  height: 110px;
+  position: absolute;
+  opacity: 0.8;
+}
+
+.login .login_form {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  margin-top: 110px;
+  gap: 20px;
+}
+.login .login_form .form_group {
+  width: 400px;
+  height: 35px;
+  display: flex;
+  background-color: white;
+}
+.login .login_form .form_group div {
+  width: 30px;
+  height: inherit;
+  background-color: blue;
+}
+
+.login .login_form .form_group div.id_emoticon{
+  /* background-image: url('../assets/id_img.png'); */
+}
+
+.login .login_form .form_group div.pw_emoticon{
+  /* background-image: url('../assets/pw_img.png'); */
+}
+
+.login .login_form .form_group input {
+  height: inherit;
+  font-size: 15px;
+  border: none;
+  box-sizing: border-box;
+  flex: 1;
+  padding: 0 5px;
+}
+
+.login .login_form button {
+  width: 50%;
+  height: 35px;
+  border-radius: 15px;
+  font-size: 20px;
+  margin-top: 20px;
+  border: none;
+  background-color: rgba(20, 18, 18, 0.2);
+  margin: 0 auto;
+  cursor: pointer;
+}
+
+.login .login_form h4 {
+  font-size: 40px;
+  text-align: center;
+  /* color: brown; */
+}
+
+.login .loginBtn {
+
+}
