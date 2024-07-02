@@ -13,5 +13,5 @@ export default Palette;
 const Temp = styled.div`
   width: 180px;
   background-color: gray;
-  height: 500px;
+  height: 350px;
 `

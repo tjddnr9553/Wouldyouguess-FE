@@ -12,7 +12,7 @@ export default Drawing;
 
 const Container = styled.div`
   width: 95%;
-  height: 700px;
+  height: 450px;
   background-color: gray;
   margin: auto;
   margin-top: 40px;
