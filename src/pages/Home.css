@@ -1,0 +1,101 @@
+.home.container {
+  display: flex;
+  flex-direction: column;
+  width: 1280px;
+  height: 890px;
+}
+
+/**
+* 헤더
+**/
+.container .header {
+  width: 100%;
+  height: 15%;
+  background-color: blueviolet;
+  display: flex;
+  justify-content: center;
+}
+.header .left-item, .right-item {
+  width: 25%;
+}
+.header .center-item {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+}
+.center-item .logo-img {
+  width: 100px;
+  background-color: aliceblue;
+  height: 100%;
+}
+.header .right-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.right-item .ranking {
+  width: 100px;
+  height: 100px;
+}
+
+/**
+* 게임 내용 
+**/
+.container .content {
+  width: 100%;
+  height: 85%;
+  display: flex;
+  gap: 1vw;
+}
+
+/* 플레이어 리스트 창 */
+.content .side {
+  width: 30%;
+  height: 100%;
+}
+
+/* 캐릭터 선택 */
+.container .content .game-content {
+  background-color: wheat;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.game-content .character-section {
+  background-color: rgb(70, 44, 9);
+  height: 45%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 8%;
+}
+
+/* 게임 모드 선택 */
+.game-content .mode-section {
+  background-color: rgb(255, 0, 81);
+  height: 45%;
+  width: 100%;
+  display: flex;
+}
+
+.mode-section .left, .right {
+  width: 8%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mode-section .game-mode {
+  width: 84%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+
