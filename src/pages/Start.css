@@ -1,0 +1,39 @@
+.background {
+  background-image: url('/images/background-img.png');
+  width: 100vw;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+}
+
+.img-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;               
+  border: none;
+  height: 94px;  
+  width: 280px;
+  cursor: pointer;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: 100px;
+  position: absolute;
+  bottom: 70px;
+  background-color: transparent;
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 20px 20px rgba(0,0,0,0.22);
+  transition: transform 0.4s;
+}
+
+.background .btn-start {
+  position: absolute;
+  font-size: 50px;
+  font-weight: bold;
+  color: #fff;
+}
+.img-button:hover {
+  box-shadow: 0 24px 38px rgba(0,0,0,0.25), 0 20px 20px rgba(0,0,0,0.22);
+  transform: scale(1.1);
+}
