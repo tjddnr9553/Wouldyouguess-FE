@@ -8,6 +8,7 @@ import Home from './pages/home/Home.jsx'
 import Game2 from "./pages/game2/Game2.jsx";
 import Game3 from "./pages/game3/Game3.jsx";
 import Result from "./pages/result/Result.jsx";
+import Login from "./pages/oauth/Login.jsx";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <GlobalStyles />
       <Routes>
         <Route path='/' element={<Home />} />
+        <Route path='/login' element={<Login />} />
         <Route path='/waitRoom' element={<WaitRoom />} />
         <Route path='/game1' element={<Game1 />} />
         <Route path='/game2' element={<Game2 />} />
