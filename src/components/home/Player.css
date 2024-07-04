@@ -1,0 +1,28 @@
+.player {
+  display: flex;
+  height: 70px;
+  
+}
+
+.player .profile-section {
+  background-color: rgba(201, 188, 188, 0.63);
+  display: flex;
+  align-items: center;
+  width: 70px;
+  justify-content: center;
+  border-radius: 50% 0 0 50%;
+}
+
+.player .name-section {
+  background-color: rgba(201, 188, 188, 0.63);
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  flex: 1;
+  border-radius: 0 15px 15px 0;
+}
+
+.player .nickname {
+
+}
+

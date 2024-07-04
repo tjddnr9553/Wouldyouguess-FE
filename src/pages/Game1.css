@@ -1,0 +1,44 @@
+.game{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.game .container {
+  background-color: rgb(153, 114, 64);
+  width: 1280px;
+  height: 650px;
+  display: flex ;
+}
+
+.game .left-section {
+  width: 15%;
+  height: 100%;
+  background-color: aqua;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+.game .center {
+  width: 70%;
+  height: 100%;
+  background-color: antiquewhite;
+}
+.game .right-section {
+  width: 15%;
+  height: 100%;
+  background-color: rgb(31, 65, 65);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}     
+/* 수정 필요 */
+.right-section .quite-btn {
+  width: 180px;
+  height: 150px;
+  border-radius: 15px;
+  font-size: 30px;
+}
