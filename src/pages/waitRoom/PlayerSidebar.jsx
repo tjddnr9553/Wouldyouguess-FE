@@ -1,6 +1,6 @@
 import './PlayerSidebar.css'
-import Player from './Player'
-import Button from '../Button/Button';
+import Player from '../../components/waitRoom/Player.jsx'
+import Button from '../../components/button/Button.jsx';
 
 const PlayerSidebar = () => {
   return (

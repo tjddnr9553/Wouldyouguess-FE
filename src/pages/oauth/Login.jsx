@@ -1,5 +1,5 @@
 import axios from "axios"
-import { KAKAO_AUTH_URL, KAKAO_TOKEN_URL } from "../oauth/Oauth"
+import { KAKAO_AUTH_URL, KAKAO_TOKEN_URL } from "../../api/oauth/Oauth.js"
 
 const Login = () => {
     return (

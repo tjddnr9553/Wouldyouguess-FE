@@ -1,21 +1,25 @@
-import { Route, Routes } from 'react-router-dom'
+import {Route, Routes} from 'react-router-dom'
 import './App.css'
 import GlobalStyles from './styles/GlobalStyles'
 
-import Home from './pages/Home'
-import Loading from './pages/Loading'
-import Game1 from './pages/Game1'
-import Start from './pages/Start'
+import WaitRoom from './pages/waitRoom/WaitRoom.jsx'
+import Game1 from './pages/game1/Game1.jsx'
+import Home from './pages/home/Home.jsx'
+import Game2 from "./pages/game2/Game2.jsx";
+import Game3 from "./pages/game3/Game3.jsx";
+import Result from "./pages/result/Result.jsx";
 
 function App() {
   return (
     <>
       <GlobalStyles />
       <Routes>
-        <Route path='/' element={<Start />} />
-        <Route path='/home' element={<Home />} />
-        <Route path='/loading' element={<Loading />} />
-        <Route path='/game' element={<Game1 />} />
+        <Route path='/' element={<Home />} />
+        <Route path='/waitRoom' element={<WaitRoom />} />
+        <Route path='/game1' element={<Game1 />} />
+        <Route path='/game2' element={<Game2 />} />
+        <Route path='/game3' element={<Game3 />} />
+        <Route path='/result' element={<Result />} />
       </Routes>
     </>
   )

@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom';
-import './Start.css'
+import './Home.css'
 
-const Start = () => {
+const Home = () => {
   const nav = useNavigate();
 
   return ( 
     <div className="background">
-      <button className="img-button" onClick={() => { nav('/home') }}>
+      <button className="img-button" onClick={() => { nav('/waitRoom') }}>
         <img src='/images/btn.png' alt="btn" className="btn-img" />
         <div className="btn-start">START</div>
       </button>
@@ -14,4 +14,4 @@ const Start = () => {
   )
 }
 
-export default Start;
+export default Home;

@@ -1,13 +1,13 @@
-import './Home.css'
+import './WaitRoom.css'
 import styled from "styled-components";
 
-import GameMode from "../components/home/GameMode";
-import PlayerSidebar from "../components/home/PlayerSidebar";
-import Character from "../components/home/Character";
+import GameMode from "../../components/waitRoom/GameMode.jsx";
+import PlayerSidebar from "./PlayerSidebar.jsx";
+import Character from "../../components/waitRoom/Character.jsx";
 
-const Home = () => {
+const WaitRoom = () => {
   return (
-    <div className="inner ">
+    <div className="inner">
       <div className="home container">
         <div className="header">
           <div className="left-item"></div>
@@ -53,7 +53,7 @@ const Home = () => {
   )
 }
 
-export default Home;
+export default WaitRoom;
 
 const Button = styled.button`
   border-radius: 50%;
