@@ -15,8 +15,14 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.23.1",
+    "socket.io-client": "^4.7.5",
+    "zustand": "^4.5.4",
+    "zustand-persist": "^0.4.0",
     "styled-components": "^6.1.11",
-    "styled-reset": "^4.5.2"
+    "styled-reset": "^4.5.2",
+
+    "react-konva": "^18.2.10",
+    "konva": "^9.3.12"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
