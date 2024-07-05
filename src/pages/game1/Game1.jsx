@@ -1,7 +1,6 @@
 import './Game1.css'
 import User from "../../components/game/User.jsx";
 import Drawing from "./Drawing.jsx";
-import Tools from "./Tools.jsx";
 import Timer from "../../components/game/Timer.jsx";
 import Palette from "./Palette.jsx";
 
@@ -18,7 +17,6 @@ const Game = () => {
           </div>
           <div className="center">
             <Drawing />
-            <Tools />
           </div>
           <div className="right-section">
             <Timer />
