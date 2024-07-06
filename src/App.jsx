@@ -12,6 +12,8 @@ import Game2_result from "./pages/game2/Game2_result.jsx";
 import Game3 from "./pages/game3/Game3.jsx";
 import Result from "./pages/result/Result.jsx";
 import Login from "./pages/oauth/Login.jsx";
+import Loading from './components/loading/Loading.jsx'
+import Temp from './pages/Temp.jsx'
 
 function App() {
   return (
@@ -28,6 +30,8 @@ function App() {
         <Route path="/game2/result" element={<Game2_result />} />
         <Route path='/game3' element={<Game3 />} />
         <Route path='/result' element={<Result />} />
+        <Route path='/loading' element={<Loading />} />
+        <Route path='/temp' element={<Temp />} />
       </Routes>
     </>
   );

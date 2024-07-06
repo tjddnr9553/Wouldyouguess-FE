@@ -3,24 +3,32 @@ import styled from "styled-components";
 
 import GameMode from "../../components/lobby/GameMode.jsx";
 import PlayerSidebar from "./PlayerSidebar.jsx";
-import Character from "../../components/lobby/Character.jsx";
+import Button from '../../components/button/Button.jsx';
+import Plante from '../../components/game/Planet.jsx'
+import Header from '../../components/game/Header.jsx';
+
+const textList = [
+  {
+    id: 'game1',
+    text: "재미있는 라이어 게임 입니다.",
+  },
+  {
+    id: 'game2',
+    text: "재미있는 틀린 부분 찾기 입니다.",
+  },
+  {
+    id: 'game3',
+    text: "아주아주 재밌는 game3 입니다.",
+  },
+]
 
 const Lobby = () => {
-
-
-
+  
   return (
     <div className="inner">
-      <div className="home container">
-        <div className="header">
-          <div className="left-item"></div>
-          <div className="center-item">
-            <div className="logo-img"> 로고 </div>
-          </div>
-          <div className="right-item">
-            <button className="ranking"> 랭킹 </button>
-          </div>
-        </div>
+      <div className="lobby container">
+
+        <Header />
 
         <div className="content">
           <div className="side">
@@ -28,26 +36,9 @@ const Lobby = () => {
           </div>
 
           <div className="game-content">
-
-            <div className="character-section">
-              <Character />
-              <Character />
-              <Character />
-            </div>
-
-            <div className="mode-section">
-              <div className="left">
-                <Button id='left-btn'> {"<"} </Button>
-              </div>
-              <div className="game-mode">
-                <GameMode /> 
-                <GameMode /> 
-                <GameMode /> 
-              </div>
-              <div className="right">
-                <Button id='right-btn'> {">"} </Button>
-              </div>
-            </div>
+            <Plante style={{top:'10%'}} id={'planet4'} min={5} max={15} text={textList[0].text}/>
+            <Plante style={{bottom:'5%', left:'30%'}} id={'planet2'} min={5} max={25} text={textList[1].text} />
+            <Plante style={{right:'12%'}} id={'planet5'} min={5} max={20} text={textList[2].text} />
 
           </div>
         </div>
@@ -57,10 +48,3 @@ const Lobby = () => {
 }
 
 export default Lobby;
-
-const Button = styled.button`
-  border-radius: 50%;
-  border: none;
-  width: 30px;
-  height: 30px;
-`

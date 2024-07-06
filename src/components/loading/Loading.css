@@ -333,7 +333,7 @@
     border-bottom: 10px solid #b0cfe4;
 }
 
-.content p {
+/* .content p {
     color: #ffffff;
     font-size: 24px;
     position: absolute;
@@ -344,8 +344,7 @@
     animation: text 4s ease infinite;
     width: 100px;
     text-align: center;
-
-}
+} */
 
 @keyframes text {
     0% {

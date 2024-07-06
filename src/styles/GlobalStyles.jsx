@@ -21,6 +21,9 @@ const GlobalStyles = createGlobalStyle`
     display: flex;
     align-items: center;
     justify-content: center;
+
+    position: fixed;
+    width: 100vw;
   }
   
   .inner::after {
