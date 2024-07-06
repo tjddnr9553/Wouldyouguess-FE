@@ -1,0 +1,110 @@
+/* This is an example, feel free to delete this code */
+.tooltip-container {
+  --background: #4132c9;
+  --support-size: 50px;
+  --tooltip-radius: 10px 10px 10px 0;
+  --outline-border-color: #0096aa;
+  position: relative;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 17px;
+  font-weight: bold;
+  padding: 0.7em 1.8em;
+  color: var(--background);
+  border: solid 2px var(--background);
+}
+
+.tooltip-container::before {
+  content: "";
+  display: inline-block;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  transition: all 0.5s linear;
+  outline: 3px solid transparent;
+  background: var(--background);
+}
+.tooltip-container:hover {
+  color: white;
+}
+.tooltip-container:hover:before {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  outline-offset: 5px;
+  outline-color: var(--outline-border-color);
+}
+.tooltip {
+  position: absolute;
+  display: inline-block;
+  top: 0;
+  left: 50%;
+  transform: translateX(-5%);
+  padding: 0.3em 0.6em;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s;
+  background: var(--background);
+  border-radius: var(--tooltip-radius);
+  color: white;
+  box-shadow: 3px 3px 0px var(--outline-border-color);
+}
+
+.tooltip::after {
+  content: "Hello!👋";
+  display: inline-block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--background);
+  text-align: center;
+  border-radius: var(--tooltip-radius);
+}
+.tooltip::before {
+  position: absolute;
+  content: "";
+  bottom: 0;
+  border-style: solid;
+  border-width: 10px;
+  left: 0;
+  transform: translateX(-50%);
+  border-color: transparent var(--background) var(--background) transparent;
+  box-shadow: 0px 3px 0px var(--outline-border-color);
+}
+
+.tooltip-container:hover .tooltip::after {
+  animation: hidden 0.5s 1.5s linear forwards;
+}
+
+.tooltip-container:hover .tooltip {
+  top: calc(-100% - var(--support-size) * 0.5);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  animation: shake 0.5s 1s linear;
+  transition: all 0.3s 0.5s;
+}
+
+@keyframes hidden {
+  50% {
+    transform: translate(-50%, -50%) scale(0.5);
+    background-color: #1ca0f5;
+  }
+  100% {
+    transform: translate(0, -50%) scale(0.5);
+    opacity: 0;
+  }
+}
+
+
+.tooltip-container:hover #Calque_1 {
+  top: calc(var(--support-size) * -1);
+  opacity: 1;
+}
