@@ -28,23 +28,18 @@ const Lobby = () => {
   const navigate = useNavigate();
 
   const setSocket = useSocketStore(state => state.setSocket);
-  const socketRef = useRef<Socket | null>(null);
-
-
-
 
   useEffect(() => {
     const socketConnect = io(import.meta.env.VITE_SOCKET_SERVER_URL);
     setSocket(socketConnect);
 
     socketConnect.on("connect",() => {
-      socketConnect.emit("connenct_check", "roomId 넘길 예정임!");
+      socketConnect.emit("room_create", "roomId & userId 넘길 예정임!");
     });
 
-
-    return () => {
-      socketConnect.disconnect();
-    };
+    // return () => {
+    //   socketConnect.disconnect();
+    // };
   }, [setSocket]);
 
 

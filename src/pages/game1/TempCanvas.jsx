@@ -11,22 +11,20 @@ const TempCanvas = () => {
     const [lines, setLines] = useState([]);
     const isDrawing = useRef(false);
 
+
+
     const handleMouseDown = (e) => {    // click
-        console.log("mouse down");
         isDrawing.current = true;
-        const pos = e.target.getStage().getPointerPosition();
-        setLines([...lines, { tool, points: [pos.x, pos.y] }]);
-        socket.emit("start_coordinates", { tool, points: [pos.x, pos.y] });
+        const point = e.target.getStage().getPointerPosition();
+        setLines([...lines, { tool, points: [point.x, point.y] }]);
+        socket.emit("drawer_draw_start", { tool, points: [point.x, point.y] });
     };
 
     const handleMouseUp = () => {   // click 해제
-        console.log("mouse up");
         isDrawing.current = false;
     };
 
     const handleMouseMove = (e) => {
-        console.log("mouse move");
-        // no drawing - skipping
         if (!isDrawing.current) {
             return;
         }
@@ -40,62 +38,50 @@ const TempCanvas = () => {
         // replace last
         lines.splice(lines.length - 1, 1, lastLine);
         setLines(lines.concat());
-        socket.emit("coordinates", lines);
+        socket.emit("drawer_draw_move", { points: {x : point.x, y : point.y }});
     };
 
-    const start_drawing = (data) => {
+    const handleDrawStart = (data) => {
         setLines([...lines, data]);
     }
 
-    const drawing = (data) => {
-        const test = data[data.length - 1].points;
-        console.log(test[test.length - 1], test[test.length - 2]);
-
-
+    const handleDrawMove = (data) => {
         let lastLine = lines[lines.length - 1];
-        // add point
-        lastLine.points = lastLine.points.concat([test[test.length - 2], test[test.length - 1]]);
-
-        // replace last
-        lines.splice(lines.length - 1, 1, lastLine);
+        lastLine.points = lastLine.points.concat([ data.points['x'], data.points['y'] ]);   // add point
+        lines.splice(lines.length - 1, 1, lastLine);                        // replace last
         setLines(lines.concat());
     }
 
-    useEffect(() => {
-        socket?.on('start_coordinates1', start_drawing);
-        return () => {
-            socket?.off("start_coordinates1", start_drawing);
-        };
-    }, [drawing]);
-
-    useEffect(() => {
-        socket?.on('coordinates1', drawing);
-        return () => {
-            socket?.off("coordinates1", drawing);
-        };
-    }, [drawing]);
-
-
-
-    useEffect(() => {
-
-        const turn = searchParams.get('turn');
-        if (turn === 1) {
-            socket.on("game_join", "game_join 전송")
-        }
-
-        return () => {
-            socket?.off("game_join", "game_join 전송");
-        }
-
-    }, [])
-
-
-    const changeLineWidth = (event) => {
-        // setLineWidth(event.target.value);
+    const handleGameJoin = () => {
+        console.log("game_join 전송");
     }
 
+    const handleGameTurnChange = () => {
+        console.log("game_turn_change 전송");
+    }
 
+    useEffect(() => {
+        socket?.on('drawer_draw_start', handleDrawStart);
+        socket?.on('drawer_draw_move', handleDrawMove);
+        socket?.on('game_join', handleGameJoin);
+        socket?.on('game_turn_change', handleGameTurnChange);
+
+        return () => {
+            socket?.off("drawer_draw_start", handleDrawStart);
+            socket?.off("drawer_draw_move", handleDrawMove);
+            socket?.off("game_join", handleGameJoin);
+            socket?.off("game_turn_change", handleGameTurnChange);
+        };
+    }, [handleDrawStart, handleDrawMove, handleGameJoin, handleGameTurnChange]);
+
+    useEffect(() => {
+        const turn = searchParams.get('turn');
+        if (turn === '1') {
+            socket.emit("game_join", "game_join_1");
+        } else{
+            socket.emit("game_turn_change", "game_turn_change_1");
+        }
+    }, [])
 
     return (
         <div>
