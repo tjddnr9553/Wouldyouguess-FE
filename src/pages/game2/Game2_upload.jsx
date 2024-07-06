@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import NewButton from "../../components/button/newButton";
 import useImagesStore from "../../store/useImagesStore";
+import User from "../../components/game/User";
 import "./Game2.css";
+
 
 const Game2_upload = () => {
   const imgSelctBtn = useRef(null);
@@ -75,8 +77,10 @@ const Game2_upload = () => {
     formData.append("mask_y1", 200); // 좌표(캔버스에서 입력받음)
     formData.append("mask_x2", 600); // 좌표(캔버스에서 입력받음)
     formData.append("mask_y2", 600); // 좌표(캔버스에서 입력받음)
-    formData.append("prompt", 
-    "Modify two random parts of the original image and create a new image with the changes highlighted by a bold stroke."); // 프롬프트
+    formData.append(
+      "prompt",
+      "Modify two random parts of the original image and create a new image with the changes highlighted by a bold stroke."
+    ); // 프롬프트
     setFormData(formData);
   };
 
@@ -90,29 +94,39 @@ const Game2_upload = () => {
 
   return (
     <div className="inner">
-      <div className="game2_border">
-        <div className="titleContainer">
-          <div>
-            <strong>Upload Your Image !</strong>
-          </div>
+      <div className="game container">
+        <div className="left-section">
+          <User />
+          <User />
+          <User />
+          <User />
         </div>
-        <div className="imageContainer">
-          <div className="previewImage" ref={previewImage}></div>
-          <div className="imageBtnContainer">
-            <input
-              type="file"
-              id="imageFile"
-              ref={imgSelctBtn}
-              onChange={selectImage}
-              accept="image/png"
-              style={{ display: "none" }}
-              multiple
-            />
-            <NewButton
-              text={"Image Upload"}
-              onClick={() => imgSelctBtn.current.click()}
-            ></NewButton>
-            <NewButton text={"전송하기"} onClick={sendToServer}></NewButton>
+        <div className="center">
+          <div className="game2_border">
+            <div className="titleContainer">
+              <div>
+                <strong>Upload Your Image !</strong>
+              </div>
+            </div>
+            <div className="imageContainer">
+              <div className="previewImage" ref={previewImage}></div>
+              <div className="imageBtnContainer">
+                <input
+                  type="file"
+                  id="imageFile"
+                  ref={imgSelctBtn}
+                  onChange={selectImage}
+                  accept="image/png"
+                  style={{ display: "none" }}
+                  multiple
+                />
+                <NewButton
+                  text={"Image Upload"}
+                  onClick={() => imgSelctBtn.current.click()}
+                ></NewButton>
+                <NewButton text={"전송하기"} onClick={sendToServer}></NewButton>
+              </div>
+            </div>
           </div>
         </div>
       </div>

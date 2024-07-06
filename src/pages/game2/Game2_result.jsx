@@ -18,7 +18,7 @@ const Game2 = () => {
       console.log(image);
       previewImage.current.style.backgroundImage = `url(${image})`;
       return () => URL.revokeObjectURL(image);
-    }); // 0초, 5초, 10초(5초 간격으로 넘어감)
+    });
   }, []);
 
   return (
@@ -58,7 +58,7 @@ const Game2 = () => {
                 {" "}
                 <div
                   className="swiperSlide"
-                  style={{ backgroundImage: 'url("/images/player_img.png")' }}
+                  style={{ backgroundImage: 'url("/images/clock-planet.png")' }}
                 ></div>
               </SwiperSlide>
               <SwiperSlide>
@@ -69,7 +69,7 @@ const Game2 = () => {
                 {" "}
                 <div
                   className="swiperSlide"
-                  style={{ backgroundImage: 'url("/images/btn.png")' }}
+                  style={{ backgroundImage: 'url("/images/magnifier.png")' }}
                 ></div>
               </SwiperSlide>
               <SwiperSlide>
@@ -81,7 +81,7 @@ const Game2 = () => {
           <div className="imageBtnContainer">
             <NewButton
               text={"랭킹 확인"}
-              onClick={() => navigate("/waitRoom")}
+              onClick={() => navigate("/lobby")}
             ></NewButton>
           </div>
         </div>
