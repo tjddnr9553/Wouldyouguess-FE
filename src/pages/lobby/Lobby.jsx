@@ -39,6 +39,7 @@ const Lobby = () => {
             <Plante style={{top:'10%'}} id={'planet4'} min={5} max={15} text={textList[0].text}/>
             <Plante style={{bottom:'5%', left:'30%'}} id={'planet2'} min={5} max={25} text={textList[1].text} />
             <Plante style={{right:'12%'}} id={'planet5'} min={5} max={20} text={textList[2].text} />
+
           </div>
         </div>
       </div>
