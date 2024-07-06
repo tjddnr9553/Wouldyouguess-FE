@@ -1,5 +1,5 @@
 import './PlayerSidebar.css'
-import Player from '../../components/waitRoom/Player.jsx'
+import Player from '../../components/lobby/Player.jsx'
 import Button from '../../components/button/Button.jsx';
 
 const PlayerSidebar = () => {

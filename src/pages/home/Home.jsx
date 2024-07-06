@@ -6,7 +6,7 @@ const Home = () => {
 
   return ( 
     <div className="background">
-      <button className="img-button" onClick={() => { nav('/waitRoom') }}>
+      <button className="img-button" onClick={() => { nav('/lobby') }}>
         <img src='/images/btn.png' alt="btn" className="btn-img" />
         <div className="btn-start">START</div>
       </button>

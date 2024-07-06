@@ -1,11 +1,14 @@
 import './Lobby.css'
 import styled from "styled-components";
 
-import GameMode from "../../components/waitRoom/GameMode.jsx";
+import GameMode from "../../components/lobby/GameMode.jsx";
 import PlayerSidebar from "./PlayerSidebar.jsx";
-import Character from "../../components/waitRoom/Character.jsx";
+import Character from "../../components/lobby/Character.jsx";
 
 const Lobby = () => {
+
+
+
   return (
     <div className="inner">
       <div className="home container">
