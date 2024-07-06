@@ -2,6 +2,30 @@
   flex-direction: column;
 }
 
+.game.container {
+  /* background-color: rgb(153, 114, 64); */
+  width: 100%;
+  height: 100%;
+}
+
+.game .left-section {
+  width: 20%;
+  height: 100%;
+  /* background-color: aqua; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+.game .center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* background-color: antiquewhite; */
+}
+
 .game2_border {
   display: flex;
   align-items: center;
@@ -49,10 +73,10 @@
   background-repeat: no-repeat;
   background-position: center;
 
-  max-width: 60rem;
-  max-height: 40rem;
-  min-width: 60rem;
-  min-height: 40rem;
+  max-width: 75rem;
+  max-height: 35rem;
+  min-width: 75rem;
+  min-height: 35rem;
 
   background-color: white;
   border-radius: 1rem;
@@ -63,8 +87,8 @@
 .swiperSlide {
   border: 1rem solid transparent;
 
-  max-height: 40rem;
-  min-height: 40rem;
+  max-height: 35rem;
+  min-height: 35rem;
 
   background-size: contain;
   background-repeat: no-repeat;

@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import NewButton from "../../components/button/newButton";
 import useImagesStore from "../../store/useImagesStore";
+import User from "../../components/game/User";
 import "./Game2.css";
 import "swiper/css";
 
@@ -26,24 +27,44 @@ const Game2 = () => {
 
   return (
     <div className="inner">
-      <div className="game2_border">
-        <div className="titleContainer">
-          <div>
-            <strong>Find Diffrence !</strong>
-          </div>
+      {" "}
+      <div className="game container">
+        <div className="left-section">
+          <User />
+          <User />
+          <User />
+          <User />
         </div>
-        <div className="imageContainer">
-          <div className="findDiffrence" ref={previewImage}></div>
-          <div className="magnifierContainer">
-            <NewButton
-              text={
-                <div>
-                  <img src="/images/magnifier.png" style={{ width: "2rem" }} />
-                  <img src="/images/magnifier.png" style={{ width: "2rem" }} />
-                  <img src="/images/magnifier.png" style={{ width: "2rem" }} />
-                </div>
-              }
-            ></NewButton>
+        <div className="center">
+          <div className="game2_border">
+            <div className="titleContainer">
+              <div>
+                <strong>Find Diffrence !</strong>
+              </div>
+            </div>
+            <div className="imageContainer">
+              <div className="findDiffrence" ref={previewImage}></div>
+              <div className="magnifierContainer">
+                <NewButton
+                  text={
+                    <div>
+                      <img
+                        src="/images/magnifier.png"
+                        style={{ width: "2rem" }}
+                      />
+                      <img
+                        src="/images/magnifier.png"
+                        style={{ width: "2rem" }}
+                      />
+                      <img
+                        src="/images/magnifier.png"
+                        style={{ width: "2rem" }}
+                      />
+                    </div>
+                  }
+                ></NewButton>
+              </div>
+            </div>
           </div>
         </div>
       </div>
