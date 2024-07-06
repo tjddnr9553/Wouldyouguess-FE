@@ -1,20 +1,14 @@
-.game{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-.game .container {
-  background-color: rgb(153, 114, 64);
-  width: 1280px;
-  height: 650px;
+.game.container {
+  /* background-color: rgb(153, 114, 64); */
+  width: 100%;
+  height: 100%;
   display: flex ;
 }
 
 .game .left-section {
   width: 15%;
   height: 100%;
-  background-color: aqua;
+  /* background-color: aqua; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -24,21 +18,31 @@
 .game .center {
   width: 70%;
   height: 100%;
-  background-color: antiquewhite;
+  /* background-color: antiquewhite; */
 }
 .game .right-section {
   width: 15%;
   height: 100%;
-  background-color: rgb(31, 65, 65);
+  /* background-color: rgb(31, 65, 65); */
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-}     
+  justify-content: space-evenly;
+}
 /* 수정 필요 */
 .right-section .quite-btn {
   width: 180px;
   height: 150px;
+
+  border: 2px solid yellow;
   border-radius: 15px;
+
+  background-color: rgba(129, 62, 146, 0.85);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 20px 20px rgba(0, 0, 0, 0.22);
+
   font-size: 30px;
+
 }
+
+
