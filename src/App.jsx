@@ -14,6 +14,7 @@ import Result from "./pages/result/Result.jsx";
 import Login from "./pages/oauth/Login.jsx";
 import Loading from './components/loading/Loading.jsx'
 import Temp from './pages/Temp.jsx'
+import TempCanvas from "./pages/game1/TempCanvas.jsx";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
         <Route path='/result' element={<Result />} />
         <Route path='/loading' element={<Loading />} />
         <Route path='/temp' element={<Temp />} />
+        <Route path='/test' element={<TempCanvas />} />
       </Routes>
     </>
   );

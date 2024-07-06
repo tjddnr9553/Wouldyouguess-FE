@@ -1,13 +1,13 @@
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 import "./Lobby.css";
-import styled from "styled-components";
-
-import GameMode from "../../components/lobby/GameMode.jsx";
 import PlayerSidebar from "./PlayerSidebar.jsx";
-import Button from "../../components/button/Button.jsx";
 import Planet from "../../components/game/Planet.jsx";
 import Header from "../../components/game/Header.jsx";
+import useSocketStore from "../../store/socket/useSocketStore.js";
+import {io, Socket} from "socket.io-client";
+import {useEffect, useRef} from "react";
+import {room_create} from "../../api/home/Room.js";
 
 const textList = [
   {
@@ -27,6 +27,28 @@ const textList = [
 const Lobby = () => {
   const navigate = useNavigate();
 
+  const setSocket = useSocketStore(state => state.setSocket);
+  const socketRef = useRef<Socket | null>(null);
+
+
+
+
+  useEffect(() => {
+    const socketConnect = io(import.meta.env.VITE_SOCKET_SERVER_URL);
+    setSocket(socketConnect);
+
+    socketConnect.on("connect",() => {
+      socketConnect.emit("connenct_check", "roomId 넘길 예정임!");
+    });
+
+
+    return () => {
+      socketConnect.disconnect();
+    };
+  }, [setSocket]);
+
+
+
   return (
     <div className="inner">
       <div className="lobby container">
@@ -44,7 +66,8 @@ const Lobby = () => {
               min={5}
               max={15}
               text={textList[0].text}
-              onClick={() => navigate("/game1")}
+              // onClick={() => navigate("/game1")}
+              onClick={() => navigate("/test")}
             />
             <Planet
               style={{ bottom: "5%", left: "30%" }}

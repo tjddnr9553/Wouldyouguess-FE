@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import NewButton from "../../components/button/newButton";
-import useImagesStore from "../../store/useImagesStore";
+import useImagesStore from "../../store/image/useImagesStore.js";
 import User from "../../components/game/User";
 import "./Game2.css";
 

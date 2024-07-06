@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import NewButton from "../../components/button/newButton";
-import useImagesStore from "../../store/useImagesStore";
+import useImagesStore from "../../store/image/useImagesStore.js";
 import User from "../../components/game/User";
 import "./Game2.css";
 import "swiper/css";

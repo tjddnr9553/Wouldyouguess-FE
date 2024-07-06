@@ -1,8 +1,8 @@
 import './Drawing.css'
 import styled from "styled-components";
 import { useEffect, useRef, useState } from 'react';
-import { useCanvasStore } from '../../store/useCanvasStore';
-import { useColorStore } from '../../store/useColorStore';
+import {useCanvasStore} from "../../store/canvas/useCanvasStore.js";
+import {useColorStore} from "../../store/canvas/useColorStore.js";
 
 const Drawing = () => {
   const { prepareCanvas, startDrawing, finishDrawing, draw, clearCanvas, drawSquare } = useCanvasStore();

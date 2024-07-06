@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import NewButton from "../../components/button/newButton";
-import useImagesStore from "../../store/useImagesStore";
+import useImagesStore from "../../store/image/useImagesStore.js";
 import "./Game2.css";
 import "swiper/css";
 import "swiper/css/navigation";
