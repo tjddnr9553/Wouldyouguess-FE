@@ -1,28 +1,89 @@
 .player {
   display: flex;
-  height: 70px;
-  
+  justify-content: center;
+  align-items: center;
+  height: 120px;
+  width: 100%;
+  color: white;
+  font-size: 1.5rem;
+  position: relative;
+  animation: returnAnimation 1s;
+}
+
+.player:hover {
+  animation: slide 1s;
+  animation-fill-mode: forwards; /* 애니메이션 후 상태 유지 */
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(0);
+  } to {
+    transform: translateX(50%);
+  }
+}
+
+@keyframes returnAnimation {
+  from {
+    transform: translateX(50%);
+  } to {
+    transform: translateX(0);
+  }
 }
 
 .player .profile-section {
-  background-color: rgba(201, 188, 188, 0.63);
+  position: absolute;
+  left: -60px;
+  background-color: rgb(255, 255, 255);
   display: flex;
   align-items: center;
-  width: 70px;
+  width: 120px;
+  height: 120px;
   justify-content: center;
-  border-radius: 50% 0 0 50%;
+  border-radius: 50% ;
+  filter: drop-shadow(0 0 2px rgba(17, 26, 78, 0.7))
+          drop-shadow(0 0 5px rgba(43, 59, 111, 0.7))
+          drop-shadow(0 0 15px rgba(255, 255, 250, 0.7));
+  z-index: 10;
 }
 
 .player .name-section {
-  background-color: rgba(201, 188, 188, 0.63);
+  position: relative;
+;
+  /* background-color: rgb(123 168 191 / 63%); */
   display: flex;
-  align-items: center;
-  padding: 0 10px;
+  flex-direction: column;
+  /* justify-content: center; */
+  padding-top: 30px;
+  text-align: left;
+
+  height: 100%;
+  /* align-items: center; */
+  padding-left: 80px;
   flex: 1;
-  border-radius: 0 15px 15px 0;
+  border-radius: 0 10px 10px 0;
+  border: 1px solid rgb(55, 36, 131);
+  box-shadow: 0 14px 28px rgba(29, 4, 83, 0.25), 0 20px 20px rgba(0,0,0,0.22);
+  border-left: none;
 }
 
-.player .nickname {
-
+.player .name-section * {
+  margin-bottom: 5px;
 }
 
+.player .name-section h1 {
+  font-weight: bold;
+}
+
+.player .name-section .user-description {
+  font-size: 1rem;
+}
+
+.player .name-section .user-description::after {
+  content: "";
+  display: block;
+  width: 70%;
+  height: 2px;
+  border-bottom: 2px solid black;
+  margin-top: 10px;
+}

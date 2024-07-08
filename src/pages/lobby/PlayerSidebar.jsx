@@ -2,6 +2,7 @@ import './PlayerSidebar.css'
 import Player from '../../components/lobby/Player.jsx'
 import Button from '../../components/button/Button.jsx';
 import RocketBtn from '../../components/button/RocketBtn.jsx';
+import GameMode from '../../components/lobby/GameMode.jsx';
 
 const PlayerSidebar = () => {
   return (
@@ -9,18 +10,18 @@ const PlayerSidebar = () => {
       {/* <img className="rocket-board" src='/images/game/rocket-board.png' alt="rocket-board" /> */}
 
       <div className="title-section">
-        {/* <h1 className='title'>플레이어</h1> */}
+        Player
       </div>
+
       <div className="player-section">
-        {/* <Player />
         <Player />
         <Player />
-        <Player /> */}
+        <Player />
+        <Player />
       </div>
-      <div className="invite-section">
-        {/* <RocketBtn /> */}
-        <button>Invite Friends</button>
-      </div>
+      {/* <div className="invite-section">
+
+      </div> */}
     </div>
   )
 }
