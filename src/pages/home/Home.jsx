@@ -16,14 +16,6 @@ const Home = () => {
 
   return (
     <div className="home background">
-      { !isLoggedIn ? 
-      (
-        <button className="img-button" onClick={() => { nav('/lobby') }}>
-          <img src='/images/btn/basic_btn.png' alt="btn" className="btn-img" />
-          <div className="btn-start">START</div>
-        </button>
-      ) : 
-      (
       <button className="img-button" onClick={() => { nav('/lobby') }}>
         <img src='/images/btn/basic_btn.png' alt="btn" className="btn-img" />
         <div className="btn-start">START</div>
