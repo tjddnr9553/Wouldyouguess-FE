@@ -1,6 +1,6 @@
-// import axios from 'axios';
+import axios from 'axios';
 
-// export const API_BASE_URL = process.env.REACT_APP_API_URL;
+export const API_BASE_URL = import.meta.env.API_BASE_URL;
 
 // then 방식
 export const test_api = () => {
