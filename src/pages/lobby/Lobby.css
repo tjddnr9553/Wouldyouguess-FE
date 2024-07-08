@@ -23,8 +23,8 @@
 
 /* 플레이어 리스트 창 */
 .lobby .side {
-  width: 20%;
-  height: 500px;
+  width: 30%;
+  height: 100%;
 }
 
 /* 캐릭터 선택 */
@@ -36,3 +36,4 @@
   height: 100%;
   /* background-color: aliceblue; */
 }
+

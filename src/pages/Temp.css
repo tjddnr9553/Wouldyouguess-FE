@@ -1,0 +1,33 @@
+.temp-container {
+  width: 500px;
+  height: 500px;
+  border: 1px solid black;
+  position: relative;
+
+  background: #ffffff00;
+  border-radius: 40px;
+
+  filter: blur(50px);
+  opacity: 0.7;
+}
+
+.first {
+  width: 100%;
+  height: 50%;
+  background-color: #50c7ecae;
+}
+
+.second {
+  width: 100%;
+  height: 50%;
+  background-color: #339c4db1;
+}
+
+.third {
+  position: absolute;
+  top: 15%;
+
+  width: 100%;
+  height: 70%;
+  background-color: #6658b3eb;
+}

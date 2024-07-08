@@ -37,7 +37,6 @@ const GlobalStyles = createGlobalStyle`
     background-position: center;
     background-repeat: no-repeat;
     
-    opacity: 0.8;
     z-index: -1;
     position: absolute;
   }
