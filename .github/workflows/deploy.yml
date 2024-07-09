@@ -16,12 +16,19 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+
       - name: Create env file
         run: |
           touch .env
-          echo VITE_SOCKET_SERVER_URL=${{ secrets.VITE_SOCKET_SERVER_URL }} >> .env
-          # ...이런식으로 환경 변수 삽입
-          cat .env
+          echo "${{ secrets.ENV }}" > .env
+
+      #      - name: Create env file
+#        run: |
+#          touch .env
+#          echo VITE_SOCKET_SERVER_URL=${{ secrets.VITE_SOCKET_SERVER_URL }} >> .env
+#          # ...이런식으로 환경 변수 삽입
+#          cat .env
+
       - name: Yarn Install
         run: yarn install
       - name: Yarn Build
