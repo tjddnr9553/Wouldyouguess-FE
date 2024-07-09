@@ -19,20 +19,6 @@ export const room_create = async (userId) => {
     }
 };
 
-export const room_delete = async (roomId) => {
-    try {
-        const res = await axios({
-            method: "DELETE",
-            url: `${API_BASE_URL}/api/room/${roomId}`,
-        });
-        console.log(res);
-        return res;
-    } catch (error) {
-        console.error(error);
-        throw new Error(error);
-    }
-};
-
 export const room_join = async (roomId, userId) => {
     try {
         const res = await axios({
