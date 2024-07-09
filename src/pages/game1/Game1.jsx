@@ -16,11 +16,11 @@ const Game1 = () => {
 
   // 다음 사람 턴으로 이동하거나 결과 창
   const nextTurnOrResult = () => {
-    const turn = searchParams.get('turn');
+    const round = Number(searchParams.get('round'));
 
-    if (turn < 5) {
+    if (round < 5) {
       socket.on("game_turn_change", handleGameTurnChange);
-      navigate(`/game1?turn=${turn + 1}`)
+      navigate(`/game1?round=${round + 1}`)
     } else {
       socket.on("game_end", handleGameEnd);
       navigate(`/game1/result`)

@@ -5,9 +5,10 @@ import PlayerSidebar from "./PlayerSidebar.jsx";
 import Planet from "../../components/game/Planet.jsx";
 import Header from "../../components/game/Header.jsx";
 import useSocketStore from "../../store/socket/useSocketStore.js";
-import {io, Socket} from "socket.io-client";
-import {useEffect, useRef} from "react";
-import {room_create} from "../../api/home/Room.js";
+import {io} from "socket.io-client";
+import {useEffect} from "react";
+import useRoomStore from "../../store/room/useRoomStore.js";
+import useUserStore from "../../store/user/useUserStore.js";
 
 const textList = [
   {
@@ -27,22 +28,53 @@ const textList = [
 const Lobby = () => {
   const navigate = useNavigate();
 
-  const setSocket = useSocketStore(state => state.setSocket);
+  const {userId, isInvited} = useUserStore();
+  const {roomId} = useRoomStore();
+  const {socket, setSocket} = useSocketStore();
 
   useEffect(() => {
     const socketConnect = io(import.meta.env.VITE_SOCKET_SERVER_URL);
     setSocket(socketConnect);
 
     socketConnect.on("connect",() => {
-      socketConnect.emit("room_create", "roomId & userId 넘길 예정임!");
+      if (isInvited) {
+        socketConnect.emit("room_join", { roomId, userId });
+      } else {
+        socketConnect.emit("room_create", { roomId, userId });
+      }
     });
 
-    // return () => {
-    //   socketConnect.disconnect();
-    // };
+    // 연결이 끊어졌을 때
+    // socketConnect.on("disconnect", async (reason) => {
+    //   socketConnect.emit("room_exit", { roomId, userId });
+    //   await room_exit(roomId, userId);
+    // });
+
+    socketConnect.on("game_start", (data) => {
+      console.log(data.gameId);
+      navigate(`/test?gameId=${data.gameId}&round=1`);
+    });
+
+    socketConnect.on("room_join", (gameId) => {
+        // room list 갱신 필요
+    });
+
+
+    return () => {
+      // socketConnect.disconnect();
+      socketConnect?.off("game_start", (data) => {
+        navigate(`/test?gameId=${data.gameId}&round=1`);
+      });
+    };
   }, [setSocket]);
 
+  const startCatchLiar = async () => {
 
+    // const gameId = await catchLiar_start(roomId);
+    const gameId = 321;
+    socket.emit("game_start", { gameId } );
+    navigate(`/test?gameId=${gameId}&round=1`);
+  }
 
   return (
     <div className="inner">
@@ -61,8 +93,7 @@ const Lobby = () => {
               min={5}
               max={15}
               text={textList[0].text}
-              // onClick={() => navigate("/game1")}
-              onClick={() => navigate("/test")}
+              onClick={startCatchLiar}
             />
             <Planet
               style={{ bottom: "5%", left: "30%" }}
