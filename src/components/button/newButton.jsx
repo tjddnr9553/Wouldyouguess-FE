@@ -1,8 +1,8 @@
 import "./NewButton.css";
 
-const NewButton = ({ text, ...props }) => {
+const NewButton = ({ text, onClick, ...props }) => {
   return (
-    <button className="btn" {...props}>
+    <button className="btn" {...props} onClick={onClick}>
       <strong>{text}</strong>
       <div id="container-stars">
         <div id="stars"></div>

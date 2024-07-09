@@ -1,46 +1,39 @@
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './Home.css'
 import { KAKAO_AUTH_URL } from '../../api/oauth/Oauth';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 
-let url = 'https://localhost:8080';
-const kakaoLoginURL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=6484bad6b0521f31f7fca78c30752386&redirect_uri=${url}/login/oauth2/code/kakao`
-
-// const loginRequest = 'http://localhost:8080/loginSuccess';
-
-
+const loginRequest = '/loginSuccess';
 
 const Home = () => {
+  // login 상태에 따른 화면 렌더링 상태를 변경하는 코드를 추가해야 함.
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const nav = useNavigate();
-
-  const getLoginData = async () => {
-    const response = await axios.get('/loginSuccess');
-
-    const { nickname } = response.data;
-
-    if (!nickname) {
-      nav("/lobby");
-    } else {
-      nav("/");
-      }
-  };
-
+  const nav = useNavigate(null);
 
   const goToKakaoLogin = () => {
-    window.location.href = kakaoLoginURL;
-    
-    setIsLoggedIn(true);
-  };
+    window.location.href = KAKAO_AUTH_URL;      
+  }
 
-  useEffect(() => {
-    getLoginData();
-  }, [isLoggedIn])
+  // 로그인이 성공적으로 수행됐는지 확인
+  // 
+  const LoginData = async () => {
+    const request = await axios.get(loginRequest);
 
-  useEffect(() => {
-    getLoginData();
-  }, [])
+    const isSuccessed = request.message;
+    if (isSuccessed == "success") {
+      const nickname = request.user.nickname;
+
+      if (nickname == null) {
+        nav("/nickname");
+      } else {
+        nav("lobby");
+      }
+    }
+  }
+
+ 
 
 
   return (

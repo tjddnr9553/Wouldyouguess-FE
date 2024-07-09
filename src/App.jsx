@@ -15,13 +15,18 @@ import Login from "./pages/oauth/Login.jsx";
 import Loading from './components/loading/Loading.jsx'
 import Temp from './pages/Temp.jsx'
 import TempCanvas from "./pages/game1/TempCanvas.jsx";
+import Profile from "./pages/home/Profile.jsx";
+import LoginHandeler from "./pages/oauth/LoginHandeler.jsx";
 
 function App() {
+  const REDIRECT_URL = '/auth/kakao/callback';
+  
   return (
     <>
       <GlobalStyles />
       <Routes>
         <Route path='/' element={<Home />} />
+        <Route path='/profile' element={<Profile />} />
         <Route path='/login' element={<Login />} />
         <Route path='/lobby' element={<Lobby />} />
         <Route path='/game1' element={<Game1 />} />
@@ -34,6 +39,7 @@ function App() {
         <Route path='/loading' element={<Loading />} />
         <Route path='/temp' element={<Temp />} />
         <Route path='/test' element={<TempCanvas />} />
+        <Route path={REDIRECT_URL} element={<LoginHandeler />} />
       </Routes>
     </>
   );

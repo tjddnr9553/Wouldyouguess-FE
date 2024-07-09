@@ -1,8 +1,8 @@
 import './Game1.css'
 import User from "../../components/game/User.jsx";
-import Drawing from "./Drawing.jsx";
+import Drawing from "./canvas/Drawing.jsx";
 import Timer from "../../components/game/Timer.jsx";
-import Palette from "./Palette.jsx";
+import Palette from "./canvas/Palette.jsx";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {useEffect} from "react";
 import useSocketStore from "../../store/socket/useSocketStore.js";

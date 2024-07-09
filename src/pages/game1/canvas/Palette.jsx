@@ -1,5 +1,5 @@
 import './Palette.css';
-import {useColorStore} from "../../store/canvas/useColorStore.js";
+import {useColorStore} from "../../../store/canvas/useColorStore";
 
 const colorOptions = [
     "red", "orange", "yellow", "green", "blue", "purple", "pink", "brown", "gray",
