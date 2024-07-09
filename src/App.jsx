@@ -1,10 +1,12 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import GlobalStyles from "./styles/GlobalStyles";
+import useUserStore from "./store/user/useUserStore.js";
 import "./App.css";
 
-import Lobby from './pages/lobby/Lobby.jsx'
-import Game1 from './pages/game1/Game1.jsx'
-import Home from './pages/home/Home.jsx'
+import Lobby from "./pages/lobby/Lobby.jsx";
+import Game1 from "./pages/game1/Game1.jsx";
+import Home from "./pages/home/Home.jsx";
 import Game2 from "./pages/game2/Game2.jsx";
 import Game2_upload from "./pages/game2/Game2_upload.jsx";
 import Game2_remember from "./pages/game2/Game2_remember.jsx";
@@ -18,7 +20,7 @@ import TempCanvas from "./pages/game1/test/TempCanvas.jsx";
 import Game1_vote from "./pages/game1/test/Game1_vote.jsx";
 import Game1_result from "./pages/game1/test/Game1_result.jsx";
 import Profile from "./pages/home/Profile.jsx";
-import LoginHandeler from "./pages/oauth/LoginHandeler.jsx";
+import LoginHandler from "./pages/oauth/LoginHandler.jsx";
 
 function App() {
   const REDIRECT_URL = '/auth/kakao/callback';
@@ -30,7 +32,7 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/profile' element={<Profile />} />
         <Route path='/login' element={<Login />} />
-        <Route path='/lobby' element={<Lobby />} />
+          <Route path="/lobby/:roomUrl" element={<Lobby />} />
 
         <Route path='/game1' element={<Game1 />} />
         <Route path='/test' element={<TempCanvas />} />
@@ -47,7 +49,7 @@ function App() {
         <Route path='/loading' element={<Loading />} />
         <Route path='/temp' element={<Temp />} />
 
-        <Route path={REDIRECT_URL} element={<LoginHandeler />} />
+        <Route path={REDIRECT_URL} element={<LoginHandler />} />
       </Routes>
     </>
   );
