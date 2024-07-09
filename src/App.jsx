@@ -1,5 +1,4 @@
-import { Route, Routes, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
 import GlobalStyles from "./styles/GlobalStyles";
 import useUserStore from "./store/user/useUserStore.js";
 import "./App.css";
