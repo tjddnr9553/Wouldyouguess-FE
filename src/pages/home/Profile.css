@@ -1,0 +1,74 @@
+/* 공통 스타일링 */
+.profile .btn {
+  width: 100px;
+  height: 50px;
+  color: white;
+  position: absolute;
+  bottom: 0;
+}
+
+.left, .right {
+  width: 50%;
+  height: 100%;
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.content-section {
+  height: 85%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.content-section .center {  
+  background-color: rgb(255, 240, 254);
+
+  width: 40%;
+  height: 55%;
+
+  border-radius: 20px;
+}
+.content-section .center .content {
+  display: flex;
+  flex-direction: row;
+  background-color: rgba(112, 49, 141, 0.534);
+  width: 100%;
+  height: 70%;
+}
+
+.content .profile-img {
+  width: 150px;
+  height: 150px;
+
+  margin-bottom: 20px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.content .profile-img img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.content .input-section p {
+  margin-bottom: 10px;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.input-section input {
+  box-sizing: border-box;
+  width: 60%;
+  height: 38px;
+  border-radius: 15px;
+  margin-top: 10px;
+  cursor: pointer;
+  padding: 0 15px;
+}

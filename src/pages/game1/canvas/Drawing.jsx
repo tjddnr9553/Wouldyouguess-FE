@@ -1,8 +1,8 @@
 import './Drawing.css'
 import styled from "styled-components";
 import { useEffect, useRef, useState } from 'react';
-import {useCanvasStore} from "../../store/canvas/useCanvasStore.js";
-import {useColorStore} from "../../store/canvas/useColorStore.js";
+import {useCanvasStore} from "../../../store/canvas/useCanvasStore.js";
+import {useColorStore} from "../../../store/canvas/useColorStore.js";
 
 const Drawing = () => {
   const { prepareCanvas, startDrawing, finishDrawing, draw, clearCanvas, drawSquare } = useCanvasStore();
@@ -16,6 +16,7 @@ const Drawing = () => {
   // 컴포넌트가 랜더링 되면 canvas 기본 세팅.
   useEffect(() => {
     prepareCanvas(canvasRef, containerRef, contextRef);
+    drawSquare(contextRef);
   }, [])
 
 

@@ -49,16 +49,27 @@ export const useCanvasStore = create((set,get)=>({
     drawSquare: ({nativeEvent}, canvasRef ) => {
         const isDrawing = get().isDrawing;
         const ctx = get().ctx;
+        set({isDrawing: true});
+
+        console.log('실행');
 
         if (!isDrawing) return;
 
-        ctx.strokeStyle = 'yellow';
-        const { offsetX, offsetY } = nativeEvent;
 
-        let x = offsetX;
-        let y = offsetY;
+        // ctx.strokeStyle = 'yellow';
+        // const { offsetX, offsetY } = nativeEvent;
 
-        ctx.strokeRect(x, y, 50, 50);
+        // let x = offsetX;
+        // let y = offsetY;
+
+        // ctx.strokeRect(x, y, 50, 50);
+
+        ctx.strokeStyle = "red";
+        let x = nativeEvent.clientX - canvasRef.current.offsetLeft;
+        let y = nativeEvent.clientY - canvasRef.current.offsetTop;
+        let w = 50;
+        let h = 50;
+        ctx.strokeRect(x - w / 2, y - h / 2, w, h);
     },
 
     clearCanvas: (canvasRef) => {

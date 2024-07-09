@@ -10,35 +10,37 @@ const GlobalStyles = createGlobalStyle`
   }
 
   body {
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
+
+    background-image: url('/images/background-img.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 
   .inner {
     min-width: 900px;
     height: 100vh;
+    width: 100vw;
     
     display: flex;
     align-items: center;
     justify-content: center;
 
     position: fixed;
-    width: 100vw;
   }
-  
-  .inner::after {
+
+  .container {
     width: 100vw;
     height: 100vh;
+  }
 
-    content: "";
-    background-image: url('/images/background-img.png');
-    background-size: cover;
-    background-color: gray;
-    background-position: center;
-    background-repeat: no-repeat;
-    
-    z-index: -1;
-    position: absolute;
+  .center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 `
 
