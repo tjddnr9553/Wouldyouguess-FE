@@ -2,15 +2,10 @@ import "./Profile.css";
 import Header from "../../components/game/Header";
 import NewButton from "../../components/button/newButton";
 import useUserStore from "../../store/user/useUserStore";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const Profile = () => {
-  const userId = useUserStore((state) => state.userId);
-  const nickname = useUserStore((state) => state.nickname);
   const setNickname = useUserStore((state) => state.setNickname);
-  const navigate = useNavigate();
 
   const [input, setInput] = useState({ nickname: "" });
 
@@ -25,33 +20,6 @@ const Profile = () => {
 
   const onSubmitBtnClick = () => {
     setNickname(input);
-    console.log(nickname);
-    loginCreateRoom();
-  };
-
-  // 방장이 방 만들기
-  const loginCreateRoom = async () => {
-    try {
-      const roomId = await axios({
-        method: "POST",
-        url: "http://localhost:8080/api/room",
-        data: { roomUrl: window.location.href, userId: userId },
-      });
-
-      if (roomId.status === 200) {
-        const res = await axios({
-          method: "POST",
-          url: `http://localhost:8080/api/room/${roomId.data}/join`,
-          data: { roomUrl: window.location.href, userId: userId },
-          roomId: roomId.data,
-        });
-        if (res.status === 200) {
-          navigate(`/lobby/${roomId.data}`);
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   return (
