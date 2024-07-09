@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import './Home.css'
 import { KAKAO_AUTH_URL } from '../../api/oauth/Oauth';
 import { useState } from 'react';
@@ -31,10 +31,6 @@ const Home = () => {
         nav("lobby");
       }
     }
-  }
-
- 
-
 
   return (
     <div className="home background">
@@ -47,6 +43,7 @@ const Home = () => {
       ) : 
       (
       <button className="img-button" onClick={goToKakaoLogin}>
+
         <img src='/images/btn/basic_btn.png' alt="btn" className="btn-img" />
         <div className="btn-start">START</div>
       </button>
