@@ -7,7 +7,7 @@ const Tools = () => {
   return (
     <div>
       <div className="tools-wrap">
-        <button onClick={() => setTool(TOOL_PENCIL)}>
+        <button onClick={() => setTool('clear')}>
             <img src="./images/canvas/clear_btn.png"/>
         </button>
         <button 

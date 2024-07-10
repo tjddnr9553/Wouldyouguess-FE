@@ -26,6 +26,10 @@ const Drawing = ({width, height}) => {
     }, [tool])
 
     const initTool = (tool) => {
+        if (tool == 'clear') {
+            ctxRef.current.clearRect(0, 0, width, height);
+            return 
+        }
         toolRef.current = toolsMap[tool](ctxRef.current);
     }
 
