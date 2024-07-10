@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
@@ -12,6 +12,7 @@ const Game2 = () => {
   const navigate = useNavigate();
   const images = useImagesStore((state) => state.images);
   const previewImage = useRef(null);
+  const { roomId } = useParams();
 
   // useEffect(() => {
   //   images.forEach((image, index) => {

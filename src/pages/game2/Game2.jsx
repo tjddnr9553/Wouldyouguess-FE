@@ -1,15 +1,27 @@
-import { useNavigate } from "react-router-dom";
-import { useEffect, useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import NewButton from "../../components/button/newButton";
-import useImagesStore from "../../store/image/useImagesStore.js";
+import axios from "axios";
 import User from "../../components/game/User";
 import "./Game2.css";
 import "swiper/css";
 
 const Game2 = () => {
   const navigate = useNavigate();
-  const images = useImagesStore((state) => state.images);
+  const { roomId } = useParams();
   const previewImage = useRef(null);
+  const [images, setImages] = useState([]);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+        const response = await axios.get(
+          `http://localhost:8080/api/image/gen/mode2/${roomId}`
+        );
+        setImages(response.data);
+    };
+
+    fetchImages();
+  }, []);
 
   useEffect(() => {
     images.forEach((image, index) => {

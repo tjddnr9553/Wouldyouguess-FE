@@ -171,7 +171,7 @@ const Lobby = () => {
               min={5}
               max={25}
               text={textList[1].text}
-              onClick={() => navigate("/game2/upload")}
+              onClick={() => navigate(`/game2/upload/${currentRoomId}`)}
             />
             <Planet
               style={{ right: "12%" }}

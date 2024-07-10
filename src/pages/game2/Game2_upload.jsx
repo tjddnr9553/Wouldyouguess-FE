@@ -1,18 +1,25 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import NewButton from "../../components/button/newButton";
 import useImagesStore from "../../store/image/useImagesStore.js";
 import User from "../../components/game/User";
 import "./Game2.css";
+import { jwtDecode } from "jwt-decode";
 
 
 const Game2_upload = () => {
   const imgSelctBtn = useRef(null);
   const previewImage = useRef(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const { roomId } = useParams();
   const [formData, setFormData] = useState(null);
   const addImages = useImagesStore((state) => state.addImages);
+
+  const token = localStorage.getItem("accessToken")
+  const decodedToken = jwtDecode(token);
+  const kakaoId = decodedToken.sub;
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,10 +37,18 @@ const Game2_upload = () => {
   }, [selectedImage]);
 
   const sendToServer = async () => {
-    navigate("/game2/remember");
     try {
-      const res = await axios.post(
+      const inpaintRes = await axios.post(
         "http://localhost:8080/api/image/inpaint",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      const uploadResponse = await axios.post(
+        "http://localhost:8080/api/image/upload",
         formData,
         {
           headers: {
@@ -43,7 +58,7 @@ const Game2_upload = () => {
       );
       if (res.status === 200) {
         console.log("서버로 이미지 전송 성공");
-
+        
         // 원본 이미지와 생성된 이미지 URL 추출
         const originalImageUrl = res.data.original.path;
         const generatedImageUrl = res.data.generated.path;
@@ -71,8 +86,8 @@ const Game2_upload = () => {
     formData.append("mask_y1", 200);
     formData.append("mask_x2", 600);
     formData.append("mask_y2", 600);
-    formData.append("roomId", "room123"); // 실제 방 ID로 교체해야 합니다
-    formData.append("userId", "user456"); // 실제 사용자 ID로 교체해야 합니다
+    formData.append("roomId", roomId); // 실제 방 ID로 교체해야 합니다
+    formData.append("userId", kakaoId); // 실제 사용자 ID로 교체해야 합니다
     formData.append(
       "prompt",
       "Modify safely."

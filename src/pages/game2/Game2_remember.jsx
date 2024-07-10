@@ -1,5 +1,6 @@
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import User from "../../components/game/User";
@@ -9,17 +10,44 @@ import "swiper/css/navigation";
 
 const Game2_remember = () => {
   const navigate = useNavigate();
+  const { roomId } = useParams();
+  const [images, setImages] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // 추후 이미지(또는 인원수에 따라 시간조정 필요)
-    setTimeout(() => {
-      navigate("/game2");
-    }, 15000);
-  }, [navigate]);
+    const fetchImages = async () => {
+      try {
+        setIsLoading(true);
+        const response = await axios.get(
+          `http://localhost:8080/api/image/og/mode2/${roomId}`
+        );
+        setImages(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching images:", error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchImages();
+  }, [roomId]);
+
+  useEffect(() => {
+    if (!isLoading && images.length > 0) {
+      const timer = setTimeout(() => {
+        navigate(`/game2/${roomId}`);
+      }, 15000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isLoading, images, navigate]);
+
+  if (isLoading) {
+    return <div>Loading images...</div>;
+  }
 
   return (
     <div className="inner">
-      {" "}
       <div className="game container">
         <div className="left-section">
           <User />
@@ -45,32 +73,16 @@ const Game2_remember = () => {
                   modules={[Navigation]}
                   navigation={true}
                 >
-                  <SwiperSlide>
-                    {" "}
-                    <div
-                      className="swiperSlide"
-                      style={{
-                        backgroundImage:
-                          'url("https://버킷이름.s3.amazonaws.com/이미지url")',
-                      }}
-                    ></div>
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    {" "}
-                    <div
-                      className="swiperSlide"
-                      style={{ backgroundImage: 'url("/images/og2.png")' }}
-                    ></div>
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    {" "}
-                    <div
-                      className="swiperSlide"
-                      style={{
-                        backgroundImage: 'url("/images/og3.png")',
-                      }}
-                    ></div>
-                  </SwiperSlide>
+                  {images.map((image, index) => (
+                    <SwiperSlide key={index}>
+                      <div
+                        className="swiperSlide"
+                        style={{
+                          backgroundImage: `url("${image.path}")`,
+                        }}
+                      ></div>
+                    </SwiperSlide>
+                  ))}
                 </Swiper>
               </div>
             </div>
