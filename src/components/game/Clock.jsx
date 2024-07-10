@@ -1,5 +1,6 @@
 import { useEffect, useRef,useState } from 'react';
 import './Clock.css'
+import Counter from './Counter';
 
 const Clock = () => {
   const [showLeftClock, setShowLeftClock] = useState(false);
@@ -23,39 +24,35 @@ const Clock = () => {
 
   useEffect(() => {
     const semicircle = semicircleRef.current;
-    semicircle.addEventListener('transitionend', handleTransitionEnd);
+    semicircle.addEventListener('animationend', handleTransitionEnd);
 
     const semicircleL = semicircleLeftRef.current;
-    semicircleL.addEventListener('transitionend', handleLeft);
+    semicircleL.addEventListener('animationend', handleLeft);
 
     return () => {
-      semicircle.removeEventListener('transitionend', handleTransitionEnd);
+      semicircle.removeEventListener('animationend', handleTransitionEnd);
     };
   }, [])
 
   return (
-    <div className="main-container center">
-      <div className="circle-container container center">
-        <div 
-          ref={semicircleLeftRef}
-          style={{transform: showLeftClock ? 'rotate(180deg)' : 'rotate(0deg)',
-            display: isDoneLeft ? 'none' : 'block'
-           }}
-          className="semicircle left"></div>
-        <div 
-          ref={semicircleRef} 
-          style={{ display: showRightClock ? 'block' : 'none' }}  
-          className="semicircle right"></div> 
-        <div
-          style={{display : showHiddenImg ? 'block' : 'none'}} 
-          className="hidden-img"></div>
-          
-
-        <div className="clock-border">
-          <img className="mars" src="../clock-planet.png" alt="mars" />
+    <>
+      <div className="clock main-container">
+        <div className="circle-container">
+          <div 
+            ref={semicircleLeftRef}
+            style={{ display: isDoneLeft ? 'none' : 'block' }} 
+            className={`semicircle left-circle ${showLeftClock ? 'show' : ''}`}></div>
+          <div 
+            ref={semicircleRef} 
+            style={{ display: showRightClock ? 'block' : 'none' }}  
+            className="semicircle right-circle"></div> 
+          <div
+            style={{display : showHiddenImg ? 'block' : 'none'}} 
+            className="hidden-img"></div>
         </div>
+        <Counter countDown={30} />
       </div>
-    </div>
+    </>
   )
 }
 

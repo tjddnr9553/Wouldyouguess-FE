@@ -1,25 +1,22 @@
-.center {
+.circle-container {
   background-color: antiquewhite;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 .main-container {
   width: 100%;
-  height: 100vh;
 }
 
 .circle-container {
-  width: 400px;
-  height: 400px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   position: absolute;
   z-index: 1;
   overflow: hidden;
 
 
-  background-image: url('../star-bg.png');
+  background-image: url('/images/game/star-bg.png');
   background-size: cover; 
+  background-position: center;
 }
   
 .semicircle {
@@ -28,7 +25,26 @@
   position: absolute;
   top: 0;
 }
-.semicircle.right {
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.semicircle.right-circle {
   background-color: rgb(255, 255, 255);
   z-index: 2;
 
@@ -36,8 +52,11 @@
 
   overflow: hidden;
   transform-origin: left center;
+  
+  animation: rotate 15s linear forwards;
 }
-.semicircle.left {
+
+.semicircle.left-circle {
   background-color: rgb(255, 255, 255);
   z-index: 2;
 
@@ -46,17 +65,8 @@
   transform-origin: right center;
 }
 
-/* hover */
-.main-container:hover .semicircle.right {
-  transform: rotate(180deg);
-  transition: 15s linear;
-}
-.main-container:hover .semicircle.left {
-  transition: 15s linear;
-}
-.main-container:hover .semicircle:nth-child(3) {
-  opacity: 0;
-  transition: opacity 0s 15s;
+.semicircle.left-circle.show {
+  animation: rotate 15s linear forwards;
 }
 
 .hidden-img{
@@ -67,9 +77,12 @@
   position: absolute;
   right: 0;
   top: 0;
-  background-image: url('../star-bg.png');
+
+  background-image: url('/images/game/star-bg.png');
   background-size: cover; 
   background-position: right;
+
+  /* animation: fade-out 0s 15s forwards; */
 }
 
 .clock-border {
@@ -86,25 +99,14 @@
   width: 100%;
   height: 100%;
   border: 3px solid rgb(0, 0, 0);
-  animation: spin 30s;
   z-index: 10;
   border-radius: 50%;
 }
 
-.mars {
+.counter {
+  color: black;
+  z-index: 99;
   position: absolute;
-  width: 50px;
-  top:-25%;
-  left: 25%;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.container {
-  display: flex;
-  width: 150px;  /* 컨테이너 전체 너비 */
-  height: 150px;  /* 원하는 높이 설정 */
+  font-size: 2rem;
+  font-weight: 700;
 }
