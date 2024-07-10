@@ -4,13 +4,40 @@ import Drawing from "./canvas/Drawing.jsx";
 import Timer from "../../components/game/Timer.jsx";
 import Palette from "./canvas/Palette.jsx";
 import {useNavigate, useSearchParams} from "react-router-dom";
-import {useEffect} from "react";
+import {useEffect, useRef, useState} from "react";
 import useSocketStore from "../../store/socket/useSocketStore.js";
-
+import Tools from './canvas/CanvasTools.jsx';
+import { useCanvasStore } from '../../store/canvas/useCanvasStore.js';
 
 const Game1 = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+
+  const containerRef = useRef(null);
+
+  const [parentwidth, setParentWidth] = useState(0);
+  const [parentheight,setParentHeight] = useState(0);
+
+  const  [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+  
+  // window size 변경 시 캔버스 좌표 수정을 위한 resize
+  useEffect(() => {
+    window.addEventListener('resize', () => setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    }));
+    setParentWidth(containerRef.current.clientWidth);
+    setParentHeight(containerRef.current.clientHeight);
+  }, [windowSize])
+  
+  // 나중에 삭제
+  const {tool} = useCanvasStore();
+  useEffect(() => {
+    console.log(tool);
+  }, [tool])
 
   const socket = useSocketStore(state => state.socket);
 
@@ -42,7 +69,7 @@ const Game1 = () => {
       socket?.off("game_turn_change", handleGameTurnChange);
       socket?.off("game_end", handleGameEnd);
     }
-  },[])
+  }, [])
 
 
   return(
@@ -55,7 +82,10 @@ const Game1 = () => {
             <User />
           </div>
           <div className="center">
-            <Drawing />
+            <div ref={containerRef} className="canvas-container">
+              <Drawing  width={parentwidth} height={parentheight} />
+              <Tools />
+            </div>
           </div>
           <div className="right-section">
             <Timer />
