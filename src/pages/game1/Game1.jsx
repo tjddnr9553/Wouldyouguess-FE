@@ -1,13 +1,12 @@
 import './Game1.css'
 import User from "../../components/game/User.jsx";
 import Drawing from "./canvas/Drawing.jsx";
-import Timer from "../../components/game/Timer.jsx";
 import Palette from "./canvas/Palette.jsx";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import useSocketStore from "../../store/socket/useSocketStore.js";
 import Tools from './canvas/CanvasTools.jsx';
-import { useCanvasStore } from '../../store/canvas/useCanvasStore.js';
+import Clock from '../../components/game/Clock.jsx';
 
 const Game1 = () => {
   const navigate = useNavigate();
@@ -33,12 +32,6 @@ const Game1 = () => {
     setParentHeight(containerRef.current.clientHeight);
   }, [windowSize])
   
-  // 나중에 삭제
-  const {tool} = useCanvasStore();
-  useEffect(() => {
-    console.log(tool);
-  }, [tool])
-
   const socket = useSocketStore(state => state.socket);
 
   // 다음 사람 턴으로 이동하거나 결과 창
@@ -88,7 +81,7 @@ const Game1 = () => {
             </div>
           </div>
           <div className="right-section">
-            <Timer />
+            <Clock />
             <Palette />
             <button className="quite-btn">DONE</button>
           </div>

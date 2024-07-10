@@ -44,7 +44,9 @@ const Drawing = ({width, height}) => {
     // 인자가 필요 없을 경우?
     const onMouseDown = (e) => {
         const {x, y} = getCursorPosition(e);
-        toolRef.current.onMouseDown(x, y, color, size, fillColor);
+        tool == TOOL_PENCIL ?
+            toolRef.current.onMouseDown(x, y, color, size) :
+            toolRef.current.onMouseDown(x, y, color, size, fillColor);
     }
 
     const onMouseUp = (e) => {

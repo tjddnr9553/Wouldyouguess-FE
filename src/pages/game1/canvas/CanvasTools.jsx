@@ -2,7 +2,7 @@ import { useCanvasStore } from "../../../store/canvas/useCanvasStore";
 import {TOOL_PENCIL, TOOL_LINE, TOOL_ELLIPSE, TOOL_RECTANGLE} from './tools';
 
 const Tools = () => {
-  const {setTool, size, setSize, setFillColor, setColor} = useCanvasStore();
+  const {setTool, size, setSize, setFillColor, color, setColor} = useCanvasStore();
 
   return (
     <div>
@@ -21,21 +21,36 @@ const Tools = () => {
         <button onClick={() => setTool(TOOL_PENCIL)}>
             <img src="./images/canvas/pencil_btn.png"/>
         </button>
-        <button onClick={() => setTool(TOOL_RECTANGLE)}>
+        <button 
+          onClick={() => {
+            setTool(TOOL_RECTANGLE);
+            setFillColor('');
+          }}
+        >
             <img src="./images/canvas/stroke_rect_btn.png"/>
         </button>
-        <button onClick={() => setTool(TOOL_ELLIPSE)}> 
+        <button 
+          onClick={() => {
+            setTool(TOOL_ELLIPSE);
+            setFillColor('');
+          }}
+        >
             <img src="./images/canvas/stroke_circle_btn.png"/>
         </button>
         <button 
           onClick={() => {
             setTool(TOOL_RECTANGLE);
-            setFillColor('black');
+            setFillColor(color);
           }}
         >
             <img src="./images/canvas/fill_rect_btn.png"/>
         </button>
-        <button onClick={() => setTool('fill_circle')}>
+        <button 
+          onClick={() => {
+            setTool(TOOL_ELLIPSE);
+            setFillColor(color);
+          }}
+        >
             <img src="./images/canvas/fill_circle_btn.png"/>
         </button>
         <div className="PB-range-slider-div">

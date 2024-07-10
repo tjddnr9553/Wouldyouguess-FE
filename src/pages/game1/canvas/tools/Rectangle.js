@@ -50,12 +50,9 @@ export default (context) => {
     // return [item];
   };
 
-  const draw = item => drawRectangle(item, item.end.x, item.end.y);
-
   return {
     onMouseDown,
     onMouseMove,
     onMouseUp,
-    draw,
   };
 }
