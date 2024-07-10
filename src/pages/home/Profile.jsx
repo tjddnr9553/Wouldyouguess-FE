@@ -3,23 +3,36 @@ import Header from "../../components/game/Header";
 import NewButton from "../../components/button/newButton";
 import useUserStore from "../../store/user/useUserStore";
 import { useState } from "react";
+import {update_nickname} from "../../api/oauth/User.js";
+import {useNavigate} from "react-router-dom";
+import useRoomStore from "../../store/room/useRoomStore.js";
+import {room_create, room_join} from "../../api/home/Room.js";
 
 const Profile = () => {
-  const setNickname = useUserStore((state) => state.setNickname);
+  const navigate = useNavigate();
 
-  const [input, setInput] = useState({ nickname: "" });
+  const inviteRoomId = localStorage.getItem("inviteRoomId");
+  const isInvited = localStorage.getItem("isInvited") === "true";
+
+
+  const [inputNick, setInputNick] = useState("" );
+  const { userId, setNickname } = useUserStore();
+  const { setRoomId } = useRoomStore();
+
 
   const onChangeInput = (e) => {
-    let name = e.target.name;
     let value = e.target.value;
-
-    setInput({
-      [name]: value,
-    });
+    setInputNick(value);
   };
 
-  const onSubmitBtnClick = () => {
-    setNickname(input);
+  const onSubmitBtnClick = async () => {
+    const response = await update_nickname(userId, inputNick);
+    setNickname(response.nickname);
+
+    const roomId = isInvited ? await room_join(userId, inviteRoomId) : await room_create(userId);
+    setRoomId(roomId);
+    window.localStorage.removeItem("isInvited");
+    navigate(`/lobby/${roomId}`);
   };
 
   return (
@@ -40,7 +53,7 @@ const Profile = () => {
               <input
                 type="text"
                 name="nickname"
-                value={input.nickname}
+                value={inputNick.nickname}
                 onChange={onChangeInput}
               />
               <NewButton
