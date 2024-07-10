@@ -29,12 +29,11 @@ const Game2_upload = () => {
     }
   }, [selectedImage]);
 
-  const imageSendToServer = async () => {
+  const sendToServer = async () => {
     navigate("/game2/remember");
     try {
       const res = await axios.post(
-        // 서버 이미지 고정되어 있지 않아서 서버 재실행시 변경
-        "https://4db5-34-143-228-123.ngrok-free.app/inpaint",
+        "http://localhost:8080/api/image/inpaint",
         formData,
         {
           headers: {
@@ -43,25 +42,21 @@ const Game2_upload = () => {
         }
       );
       if (res.status === 200) {
-        console.log("AI 서버로 이미지 전송 성공");
-        // 반환받은 이미지 변환
-        const base64Data = res.data.image;
-        const binaryData = atob(base64Data);
-        const uint8Array = new Uint8Array(binaryData.length);
-        for (let i = 0; i < binaryData.length; i++) {
-          uint8Array[i] = binaryData.charCodeAt(i);
-        }
-        const blob = new Blob([uint8Array], { type: "image/png" });
+        console.log("서버로 이미지 전송 성공");
 
-        const url = URL.createObjectURL(blob);
+        // 원본 이미지와 생성된 이미지 URL 추출
+        const originalImageUrl = res.data.original.path;
+        const generatedImageUrl = res.data.generated.path;
 
-        // 테스트용으로 3번 주입
-        addImages(url);
-        addImages(url);
-        addImages(url);
+        // 원본 이미지와 생성된 이미지를 상태에 추가
+        addImages(originalImageUrl);
+        addImages(generatedImageUrl);
+
+        console.log("Original Image URL:", originalImageUrl);
+        console.log("Generated Image URL:", generatedImageUrl);
       }
     } catch (e) {
-      console.log(e);
+      console.error("이미지 전송 중 오류 발생:", e);
     }
   };
 
@@ -69,27 +64,22 @@ const Game2_upload = () => {
     const file = event.target.files[0];
     const formData = new FormData();
 
-    // 기존 이미지를 선택했던 것을 해제하고 새로운 이미지를 선택해 URL 생성
     setSelectedImage(file);
 
-    formData.append("image", file); // 이미지 파일
-    formData.append("mask_x1", 200); // 좌표(캔버스에서 입력받음)
-    formData.append("mask_y1", 200); // 좌표(캔버스에서 입력받음)
-    formData.append("mask_x2", 600); // 좌표(캔버스에서 입력받음)
-    formData.append("mask_y2", 600); // 좌표(캔버스에서 입력받음)
+    formData.append("image", file);
+    formData.append("mask_x1", 200);
+    formData.append("mask_y1", 200);
+    formData.append("mask_x2", 600);
+    formData.append("mask_y2", 600);
+    formData.append("roomId", "room123"); // 실제 방 ID로 교체해야 합니다
+    formData.append("userId", "user456"); // 실제 사용자 ID로 교체해야 합니다
     formData.append(
       "prompt",
-      "Modify two random parts of the original image and create a new image with the changes highlighted by a bold stroke."
-    ); // 프롬프트
-    setFormData(formData);
-  };
+      "Modify safely."
+    );
+    formData.append("mode", "mode2"); // 또는 적절한 모드 값
 
-  const sendToServer = () => {
-    if (selectedImage) {
-      imageSendToServer(formData);
-    } else {
-      console.log("이미지 선택하지 않음");
-    }
+    setFormData(formData);
   };
 
   return (

@@ -50,7 +50,7 @@ const Game2_remember = () => {
                     <div
                       className="swiperSlide"
                       style={{
-                        backgroundImage: 'url("/images/background-img.png")',
+                        backgroundImage: 'url("/images/og1.png")',
                       }}
                     ></div>
                   </SwiperSlide>
@@ -58,7 +58,7 @@ const Game2_remember = () => {
                     {" "}
                     <div
                       className="swiperSlide"
-                      style={{ backgroundImage: 'url("/images/clock-planet.png")' }}
+                      style={{ backgroundImage: 'url("/images/og2.png")' }}
                     ></div>
                   </SwiperSlide>
                   <SwiperSlide>
@@ -66,7 +66,7 @@ const Game2_remember = () => {
                     <div
                       className="swiperSlide"
                       style={{
-                        backgroundImage: 'url("/images/magnifier.png")',
+                        backgroundImage: 'url("/images/og3.png")',
                       }}
                     ></div>
                   </SwiperSlide>
