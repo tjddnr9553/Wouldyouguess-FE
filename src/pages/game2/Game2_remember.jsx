@@ -50,7 +50,8 @@ const Game2_remember = () => {
                     <div
                       className="swiperSlide"
                       style={{
-                        backgroundImage: 'url("/images/og1.png")',
+                        backgroundImage:
+                          'url("https://버킷이름.s3.amazonaws.com/이미지url")',
                       }}
                     ></div>
                   </SwiperSlide>
