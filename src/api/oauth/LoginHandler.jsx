@@ -2,117 +2,135 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
 import useUserStore from "../../store/user/useUserStore.js";
+import { jwtDecode } from "jwt-decode";
 
 const LoginHandler = () => {
   const navigate = useNavigate();
-  // const userId = useUserStore((state) => state.userId);
-  const nickname = useUserStore((state) => state.nickname);
-  const username = useUserStore((state) => state.username);
-  const participateRoomId = useUserStore((state) => state.participateRoomId);
-  const isLogin = useUserStore((state) => state.isLogin);
+  const {
+    nickname,
+    username,
+    participateRoomId,
+    isLogin,
+    setUsername,
+    setParticipateRoomId,
+    setIsLogin,
+  } = useUserStore();
 
-  // const setUserId = useUserStore((state) => state.setUserId);
-  const setParticipateRoomId = useUserStore(
-    (state) => state.setParticipateRoomId
-  );
-  const setIsLogin = useUserStore((state) => state.setIsLogin);
   const inviteUrl = localStorage.getItem("inviteUrl");
   const isInvited = localStorage.getItem("isInvited");
 
-  const userId = localStorage.getItem("userId");
   useEffect(() => {
-    console.log("유저 기본 정보");
-    console.log("userId : ", userId);
-    console.log("nickname : ", nickname);
-    console.log("username : ", username);
-    console.log("participateRoomId : ", participateRoomId);
-    console.log("isLogin : ", isLogin);
-    console.log("isInvited : ", isInvited); // 초대 링크로 바로 접속했을 경우 isInvited를 false
-  }, [userId, nickname, username, participateRoomId, isLogin]);
+    console.log("유저 기본 정보", {
+      username,
+      nickname,
+      participateRoomId,
+      isLogin,
+      isInvited,
+    });
+  }, [username, nickname, participateRoomId, isLogin]);
 
-  // 로그인이 성공적으로 수행됐는지 확인
-  const LoginData = async (result) => {
-    const res = await axios.get("/loginSuccess");
-    localStorage.setItem("userId", result.data.id);
+  const handleLoginSuccess = (loginResponse) => {
+    const { success, message, accessToken, refreshToken, username } =
+      loginResponse;
 
-    if (res.status === 200) {
+    if (success) {
       setIsLogin(true);
-      console.log("로그인 성공");
+      setUsername(username);
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+
+      console.log("로그인 성공:", message);
+
       if (nickname === null) {
         navigate("/profile");
       } else if (isInvited === "false") {
         console.log("방 만들기");
-        loginCreateRoom();
+        loginCreateRoom(accessToken);
       } else {
         console.log("방 참가하기");
-        loginJoinRoom(inviteUrl); // inviteRoomId를 파라미터로 전달
+        loginJoinRoom(inviteUrl, accessToken);
       }
+    } else {
+      console.error("로그인 실패:", message);
     }
   };
 
-  // 방장이 방 만들기
-  const loginCreateRoom = async () => {
+  const loginCreateRoom = async (token) => {
     try {
-      const roomId = await axios({
-        method: "POST",
-        url: "http://localhost:8080/api/room",
-        data: { userId: userId },
-      });
-      console.log("방 번호", roomId.data);
-      await loginJoinRoom(roomId.data); // loginJoinRoom 함수를 await로 호출
+      const decodedToken = jwtDecode(token);
+      const kakaoId = decodedToken.sub;
+
+      console.log(`KakaoId : ${kakaoId}`);
+      const response = await axios.post(
+        "http://localhost:8080/api/room",
+        { kakaoId: kakaoId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response);
+      const roomId = response.data;
+      console.log("방 번호", roomId);
+      await loginJoinRoom(roomId, token);
     } catch (error) {
-      console.log(error);
+      console.error("방 생성 중 오류 발생:", error);
     }
   };
 
-  // 초대받은 사람들 방에 참여하기
-  const loginJoinRoom = async (inviteRoomId) => {
-    const userId = localStorage.getItem("userId");
-    console.log(userId);
+  const loginJoinRoom = async (inviteRoomId, token) => {
     try {
-      const res = await axios({
-        method: "POST",
-        url: `http://localhost:8080/api/room/${inviteRoomId}/join`,
-        data: { userId: userId },
-      });
+      const decodedToken = jwtDecode(token);
+      const kakaoId = decodedToken.sub;
+      
+      const res = await axios.post(
+        `http://localhost:8080/api/room/${inviteRoomId}/join`,
+        { kakaoId : kakaoId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (res.status === 200) {
-        window.localStorage.setItem("isInvited", "false");
-        setParticipateRoomId(inviteRoomId); // 초대 roomId 설정
+        localStorage.setItem("isInvited", "false");
+        setParticipateRoomId(inviteRoomId);
         navigate(`/lobby/${inviteRoomId}`);
       }
     } catch (error) {
-      console.log(error);
+      console.error("방 참가 중 오류 발생:", error);
     }
   };
 
-  //인가코드 백으로 보내는 코드
   useEffect(() => {
     const currentUrl = new URL(window.location.href);
     const codeParam = currentUrl.searchParams.get("code");
     if (codeParam) {
-      axios({
-        method: "GET",
-        url: `http://localhost:8080/auth/kakao/callback?code=${codeParam}`,
-        headers: {
-          "Content-Type": "application/json;charset=utf-8",
-        },
-      }).then((res) => {
-        //백에서 완료후 우리사이트 전용 토큰 넘겨주는게 성공했다면
-        console.log(res);
-        LoginData(res);
-      });
+      axios
+        .get(`http://localhost:8080/auth/kakao/callback?code=${codeParam}`, {
+          headers: {
+            "Content-Type": "application/json;charset=utf-8",
+          },
+        })
+        .then((response) => {
+          handleLoginSuccess(response.data);
+        })
+        .catch((error) =>
+          console.error("카카오 로그인 처리 중 오류 발생:", error)
+        );
     }
   }, []);
 
-  // return (
-  //   <div className="LoginHandeler">
-  //     <div className="notice">
-  //       <p>로그인 중입니다.</p>
-  //       <p>잠시만 기다려주세요.</p>
-  //       <div className="spinner"></div>
-  //     </div>
-  //   </div>
-  // );
+  return (
+    <div className="LoginHandler">
+      <div className="notice">
+        <p>로그인 중입니다.</p>
+        <p>잠시만 기다려주세요.</p>
+        <div className="spinner"></div>
+      </div>
+    </div>
+  );
 };
 
 export default LoginHandler;
