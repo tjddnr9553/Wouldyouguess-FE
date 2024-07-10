@@ -1,10 +1,7 @@
 import './Player.css'
 import styled from 'styled-components';
-import useUserStore from "../../store/user/useUserStore.js";
 
-const Player = () => {
-  const {nickname} = useUserStore();
-
+const Player = ({nickname, username}) => {
   return (
     <div className='player'>
       <div className="wrap">
@@ -17,7 +14,7 @@ const Player = () => {
       </div>
       <div className="name-section">
         <h1 className='nickname'>{nickname}</h1>
-        <p className="user-description">나는야 몽땅 연필</p>
+        <p className="user-description">{username}</p>
       </div>
     </div>
   )

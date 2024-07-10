@@ -32,23 +32,17 @@ const textList = [
 
 const Lobby = () => {
   const navigate = useNavigate();
+
+  let modalOn = false;
   const modalRef = useRef(null);
-  const accessToken = useUserStore((state) => state.accessToken);
-  const isLogin = useUserStore((state) => state.isLogin);
 
-  const currentRoomId = window.location.href.split("/").pop();
-  const roomUrl = `http://localhost:5173/invite/${currentRoomId}`;
-  const [users, setUsers] = useState();
 
-  const { userId, isInvited } = useUserStore();
+  const { userId, isInvite, accessToken, isLogin, setIsLogin } = useUserStore();
   const { roomId } = useRoomStore();
   const { socket, setSocket } = useSocketStore();
-  let modalOn = false;
 
   // 뒤로가기 방지
   useEffect(() => {
-    // window.localStorage.setItem("inviteUrl", currentRoomId);
-    
     window.history.pushState(null, null, window.location.href);
 
     window.onpopstate = () => {
@@ -60,40 +54,42 @@ const Lobby = () => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   const socketConnect = io(import.meta.env.VITE_SOCKET_SERVER_URL);
-  //   setSocket(socketConnect);
+  useEffect(() => {
+    const socketConnect = io(import.meta.env.VITE_SOCKET_SERVER_URL);
+    setSocket(socketConnect);
 
-  //   socketConnect.on("connect", () => {
-  //     if (isInvited) {
-  //       socketConnect.emit("room_join", { roomId, userId });
-  //     } else {
-  //       socketConnect.emit("room_create", { roomId, userId });
-  //     }
-  //   });
+    socketConnect.on("connect", () => {
+      if (isInvite) {
+        socketConnect.emit("room_join", { roomId, userId });
+      } else {
+        socketConnect.emit("room_create", { roomId, userId });
+      }
+    });
 
-  //   // 연결이 끊어졌을 때
-  //   // socketConnect.on("disconnect", async (reason) => {
-  //   //   socketConnect.emit("room_exit", { roomId, userId });
-  //   //   await room_exit(roomId, userId);
-  //   // });
+    // 연결이 끊어졌을 때
+    // socketConnect.on("disconnect", async (reason) => {
+    //   socketConnect.emit("room_exit", { roomId, userId });
+    //   await room_exit(roomId, userId);
+    // });
 
-  //   socketConnect.on("game_start", (data) => {
-  //     console.log(data.gameId);
-  //     navigate(`/test?gameId=${data.gameId}&round=1`);
-  //   });
+    socketConnect.on("game_start", (data) => {
+      console.log(data.gameId);
+      if (data.mode ===  1) {
+        navigate(`/test?gameId=${data.gameId}&round=1`);
+      } else if (data.mode === 2) {
+        navigate(`/game2/upload`);
+      }
 
-  //   socketConnect.on("room_join", (gameId) => {
-  //     // room list 갱신 필요
-  //   });
+    });
 
-  //   return () => {
-  //     // socketConnect.disconnect();
-  //     socketConnect?.off("game_start", (data) => {
-  //       navigate(`/test?gameId=${data.gameId}&round=1`);
-  //     });
-  //   };
-  // }, [setSocket]);
+
+    return () => {
+      // socketConnect.disconnect();
+      socketConnect?.off("game_start", (data) => {
+        navigate(`/test?gameId=${data.gameId}&round=1`);
+      });
+    };
+  }, [setSocket]);
 
   // 친구 초대 모달창
   const handleModal = () => {
@@ -105,17 +101,20 @@ const Lobby = () => {
       modalOn = true;
     }
   };
+
   const startCatchLiar = async () => {
     // const gameId = await catchLiar_start(roomId);
     const gameId = 321;
-    socket.emit("game_start", { gameId });
+    socket.emit("game_start", { mode: 1, gameId });
     navigate(`/test?gameId=${gameId}&round=1`);
   };
 
+  const findAIGeneratedImage = () => {
+    socket.emit("game_start", { mode: 2 });
+  }
+
   // 카카오 로그아웃
   const kakaoLogout = () => {
-    const setIsLogin = useUserStore((state) => state.setIsLogin);
-    console.log(accessToken);
     axios({
       method: "POST",
       url: "https://kapi.kakao.com/v1/user/logout",
@@ -143,10 +142,8 @@ const Lobby = () => {
         <Header />
         {isLogin && <button onClick={kakaoLogout}>로그아웃</button>}
         <div className="modal-container" ref={modalRef}>
-          <span className="close" onClick={handleModal}>
-            X
-          </span>
-          <Modal text={roomUrl} />
+          <span className="close" onClick={handleModal}>X</span>
+          <Modal text={`${window.location.origin}/invite/${roomId}`} />
         </div>
         <div className="content">
           <div className="side">

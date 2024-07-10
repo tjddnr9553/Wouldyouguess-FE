@@ -1,8 +1,6 @@
-import { Route, Routes } from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import GlobalStyles from "./styles/GlobalStyles";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import useUserStore from "./store/user/useUserStore.js";
+import {useEffect} from "react";
 import "./App.css";
 
 import Lobby from "./pages/lobby/Lobby.jsx";
@@ -22,7 +20,7 @@ import Game1_vote from "./pages/game1/test/Game1_vote.jsx";
 import Game1_result from "./pages/game1/test/Game1_result.jsx";
 import Profile from "./pages/home/Profile.jsx";
 import LoginHandler from "./api/oauth/LoginHandler.jsx";
-import { KAKAO_AUTH_URL } from "./api/oauth/Oauth.js";
+import {KAKAO_AUTH_URL} from "./api/oauth/Oauth.js";
 
 function App() {
 
@@ -38,7 +36,6 @@ function App() {
       console.log("초대받은 주소 : ", inviteRoomId);
       window.location.href = KAKAO_AUTH_URL;
     }
-    console.log(urlType, inviteRoomId);
   }, []);
 
   return (

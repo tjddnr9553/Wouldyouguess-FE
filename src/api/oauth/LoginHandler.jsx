@@ -11,7 +11,7 @@ const LoginHandler = () => {
   const inviteRoomId = localStorage.getItem("inviteRoomId");
   const isInvited = localStorage.getItem("isInvited") === "true";
 
-  const { setUserId, setNickname } = useUserStore();
+  const { setUserId, setUsername, setNickname, setIsLogin, setIsInvite } = useUserStore();
   const { setRoomId } = useRoomStore();
 
   useEffect(() => {
@@ -22,6 +22,9 @@ const LoginHandler = () => {
         const login_response = await auth_kakao_callback(codeParam);
         const userId = login_response.user_id;
         setUserId(userId);
+        setUsername(login_response.username);
+        setIsLogin(true);
+        setIsInvite(isInvited)
 
         if (login_response.nickname === null) {
           navigate("/profile");

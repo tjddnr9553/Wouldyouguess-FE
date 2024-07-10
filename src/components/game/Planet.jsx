@@ -12,7 +12,6 @@ const Planet = ({ style, id, min, max, text, onClick }) => {
   };
 
   const floatingObj = (selector, delay, size) => {
-    console.log(selector);
     gsap.to("." + selector, {
       duration: random(1.5, 2.5),
       delay: random(0, delay),
