@@ -1,4 +1,4 @@
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import "./Lobby.css";
 import PlayerSidebar from "./PlayerSidebar.jsx";
@@ -7,12 +7,12 @@ import Header from "../../components/game/Header.jsx";
 import Invite from "../../components/lobby/Invite.jsx";
 import useSocketStore from "../../store/socket/useSocketStore.js";
 import useUserStore from "../../store/user/useUserStore.js";
-import {io} from "socket.io-client";
-import {useEffect, useRef} from "react";
-import {room_create} from "../../api/home/Room.js";
+import { io } from "socket.io-client";
+import { useEffect, useRef } from "react";
+import { room_create } from "../../api/home/Room.js";
 import Modal from "../../components/lobby/Modal.jsx";
 import useRoomStore from "../../store/room/useRoomStore.js";
-import {catchLiar_start} from "../../api/game/CatchLiar.js";
+import { catchLiar_start } from "../../api/game/CatchLiar.js";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 import useWebrtcStore from "../../store/webrtc/useWebrtcStore.tsx";
 
@@ -34,12 +34,11 @@ const textList = [
 const Lobby = () => {
   const navigate = useNavigate();
 
-  let modalOn = false;
   const modalRef = useRef(null);
   const currentRoomId = window.location.href.split("/").pop();
   const roomUrl = `http://localhost:5173/invite/${currentRoomId}`;
 
-  const { userId, isInvited,nickname } = useUserStore();
+  const { userId, isInvited, nickname } = useUserStore();
   const { roomId } = useRoomStore();
   const { socket, setSocket } = useSocketStore();
   let modalOn = false;
@@ -63,12 +62,12 @@ const Lobby = () => {
   useEffect(() => {
     const socketConnect = io(import.meta.env.VITE_SOCKET_SERVER_URL);
     setSocket(socketConnect);
-  useEffect(() => {
-    // 룸에 참가시키기
-    if (roomId && nickname) {
-      joinRoom(); // 룸 접속 함수 호출
-    }
-  }, [roomId, nickname]); // 의존성 배열 추가
+    useEffect(() => {
+      // 룸에 참가시키기
+      if (roomId && nickname) {
+        joinRoom(); // 룸 접속 함수 호출
+      }
+    }, [roomId, nickname]); // 의존성 배열 추가
 
     socketConnect.on("connect", () => {
       if (isInvite) {
@@ -80,7 +79,7 @@ const Lobby = () => {
 
     socketConnect.on("game_start", (data) => {
       console.log(data);
-      if (data.mode ===  1) {
+      if (data.mode === 1) {
         setGameId(data.gameId);
         navigate(`/game1?gameId=${data.gameId}&round=1`);
       } else if (data.mode === 2) {
@@ -130,55 +129,56 @@ const Lobby = () => {
   };
 
   const startFindAIGeneratedImage = () => {
-    socket.emit("game_start", { mode: 2, userId, roomId, });
+    socket.emit("game_start", { mode: 2, userId, roomId });
     navigate("/game2/upload");
-  }
   };
-  return (
-    <div className="inner">
-      <div className="lobby container">
-        <Header />
-        <div className="modal-container" ref={modalRef}>
-          <span className="close" onClick={handleModal}>X</span>
-          <Modal text={`${window.location.origin}/invite/${roomId}`} />
+};
+return (
+  <div className="inner">
+    <div className="lobby container">
+      <Header />
+      <div className="modal-container" ref={modalRef}>
+        <span className="close" onClick={handleModal}>
+          X
+        </span>
+        <Modal text={`${window.location.origin}/invite/${roomId}`} />
+      </div>
+      <div className="content">
+        <div className="side">
+          <PlayerSidebar />
+          <div className="inviteBtn">
+            <Invite onClick={handleModal} />
+          </div>
         </div>
-        <div className="content">
-          <div className="side">
-            <PlayerSidebar />
-            <div className="inviteBtn">
-              <Invite onClick={handleModal} />
-            </div>
-          </div>
 
-          <div className="game-content">
-            <Planet
-              style={{ top: "10%" }}
-              id={"planet4"}
-              min={5}
-              max={15}
-              text={textList[0].text}
-              onClick={startCatchLiar}
-            />
-            <Planet
-              style={{ bottom: "5%", left: "30%" }}
-              id={"planet2"}
-              min={5}
-              max={25}
-              text={textList[1].text}
-              onClick={startFindAIGeneratedImage}
-            />
-            <Planet
-              style={{ right: "12%" }}
-              id={"planet5"}
-              min={5}
-              max={20}
-              text={textList[2].text}
-            />
-          </div>
+        <div className="game-content">
+          <Planet
+            style={{ top: "10%" }}
+            id={"planet4"}
+            min={5}
+            max={15}
+            text={textList[0].text}
+            onClick={startCatchLiar}
+          />
+          <Planet
+            style={{ bottom: "5%", left: "30%" }}
+            id={"planet2"}
+            min={5}
+            max={25}
+            text={textList[1].text}
+            onClick={startFindAIGeneratedImage}
+          />
+          <Planet
+            style={{ right: "12%" }}
+            id={"planet5"}
+            min={5}
+            max={20}
+            text={textList[2].text}
+          />
         </div>
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 export default Lobby;
