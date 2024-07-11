@@ -1,13 +1,14 @@
+import './CanvasTools.css';
 import { useCanvasStore } from "../../../store/canvas/useCanvasStore";
 import {TOOL_PENCIL, TOOL_LINE, TOOL_ELLIPSE, TOOL_RECTANGLE} from './tools';
 
 const Tools = () => {
-  const {setTool, size, setSize, setFillColor, color, setColor} = useCanvasStore();
+  const {setTool, size, setSize, setFillColor, color, setColor, clearBtnClick, setClearBtnClick} = useCanvasStore();
 
   return (
     <div>
       <div className="tools-wrap">
-        <button onClick={() => setTool('clear')}>
+        <button onClick={() => setClearBtnClick(!clearBtnClick)}>
             <img src="./images/canvas/clear_btn.png"/>
         </button>
         <button 

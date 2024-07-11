@@ -11,13 +11,25 @@ const toolsMap = {
   };
 
 const Drawing = ({width, height}) => {
+    
     const canvasRef = useRef(null);
     const ctxRef = useRef(null);
     const toolRef = useRef(null);
-    const {tool, color, size, fillColor} = useCanvasStore();
+    const {tool, color, size, fillColor, clearBtnClick, setCanvas} = useCanvasStore();
+
+    const saveCanvas = () => {
+        const  link = document.createElement("a");
+        const canvas = canvasRef.current;
+
+        link.download = "canvas.png";
+        link.href = canvas.toDataURL("image/png");
+        alert(link.href );
+        link.click();
+      }
     
     useEffect(() => { 
         const canvas = canvasRef.current;
+        setCanvas(canvas);
         ctxRef.current = canvas.getContext('2d');
     }, [])
 
@@ -25,11 +37,15 @@ const Drawing = ({width, height}) => {
         initTool(tool);
     }, [tool])
 
+    useEffect(() => {
+        clearCanvas();
+    }, [clearBtnClick])
+
+    const clearCanvas = () => {
+        ctxRef.current.clearRect(0, 0, width, height);
+    }
+
     const initTool = (tool) => {
-        if (tool == 'clear') {
-            ctxRef.current.clearRect(0, 0, width, height);
-            return 
-        }
         toolRef.current = toolsMap[tool](ctxRef.current);
     }
 
@@ -70,7 +86,6 @@ const Drawing = ({width, height}) => {
                 onMouseUp={onMouseUp}
                 onMouseMove={onMouseMove}
             />
-            
         </>
     );
 }

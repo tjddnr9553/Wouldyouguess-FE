@@ -22,7 +22,7 @@ export default (context) => {
     context.lineWidth = drawItem.size;
     context.strokeStyle = drawItem.color;
     context.globalCompositeOperation = 'source-over'; // 처음 그려진 도형 위에 나중에 그려진 도형 표시
-    context.moveTo(start.x, start.y);
+    context.moveTo(start.x, start.y); 
     context.lineTo(x, y);
     context.closePath();
     context.stroke();
