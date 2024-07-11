@@ -22,7 +22,7 @@ export const catchLiar_info = async (gameId, userId, round) => {
         const res = await axios({
             method: "GET",
             url: `${API_SERVER_URL}/api/catchLiar/info`,
-            data: {
+            params: {
                 catchLiarGameId: gameId,
                 userId,
                 round

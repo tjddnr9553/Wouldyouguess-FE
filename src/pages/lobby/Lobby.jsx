@@ -15,6 +15,7 @@ import Modal from "../../components/lobby/Modal.jsx";
 import axios from "axios";
 import useRoomStore from "../../store/room/useRoomStore.js";
 import {catchLiar_start} from "../../api/game/CatchLiar.js";
+import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 
 const textList = [
   {
@@ -39,8 +40,9 @@ const Lobby = () => {
 
 
   const { userId, isInvite, accessToken, isLogin, setIsLogin } = useUserStore();
-  const { roomId } = useRoomStore();
   const { socket, setSocket } = useSocketStore();
+  const { roomId } = useRoomStore();
+  const { setGameId } = useCatchLiarStore();
 
   // 뒤로가기 방지
   useEffect(() => {
@@ -70,6 +72,7 @@ const Lobby = () => {
     socketConnect.on("game_start", (data) => {
       console.log(data);
       if (data.mode ===  1) {
+        setGameId(data.gameId);
         navigate(`/game1?gameId=${data.gameId}&round=1`);
       } else if (data.mode === 2) {
         navigate(`/game2/upload`);
@@ -103,12 +106,15 @@ const Lobby = () => {
 
   const startCatchLiar = async () => {
     const gameId = await catchLiar_start(roomId);
+    setGameId(gameId);
+
     socket.emit("game_start", { mode: 1, userId, roomId, gameId });
     navigate(`/game1?gameId=${gameId}&round=1`);
   };
 
-  const findAIGeneratedImage = () => {
+  const startFindAIGeneratedImage = () => {
     socket.emit("game_start", { mode: 2, userId, roomId, });
+    navigate("/game2/upload");
   }
 
   // 카카오 로그아웃
@@ -166,7 +172,7 @@ const Lobby = () => {
               min={5}
               max={25}
               text={textList[1].text}
-              onClick={() => navigate("/game2/upload")}
+              onClick={startFindAIGeneratedImage}
             />
             <Planet
               style={{ right: "12%" }}

@@ -2,6 +2,9 @@ import './Drawing.css'
 import { useEffect, useRef, useState } from 'react';
 import {Pencil, TOOL_PENCIL, Line, TOOL_LINE, Ellipse, TOOL_ELLIPSE, Rectangle, TOOL_RECTANGLE} from './tools';
 import { useCanvasStore } from '../../../store/canvas/useCanvasStore';
+import useSocketStore from "../../../store/socket/useSocketStore.js";
+import useCatchLiarStore from "../../../store/game/useCatchLiarStore.js";
+import useRoomStore from "../../../store/room/useRoomStore.js";
 
 const toolsMap = {
     [TOOL_PENCIL]: Pencil,
@@ -14,21 +17,35 @@ const Drawing = ({width, height}) => {
     const canvasRef = useRef(null);
     const ctxRef = useRef(null);
     const toolRef = useRef(null);
-    const {tool, color, size, fillColor} = useCanvasStore();
-    
-    useEffect(() => { 
+
+    const { socket } = useSocketStore();
+    const { tool, color, size, fillColor } = useCanvasStore();
+    const { roomId } = useRoomStore();
+    const { isDrawing } = useCatchLiarStore();
+
+    useEffect(() => {
         const canvas = canvasRef.current;
         ctxRef.current = canvas.getContext('2d');
-    }, [])
+    }, []);
 
     useEffect(() => {
         initTool(tool);
-    }, [tool])
+    }, [tool]);
+
+    useEffect(() => {
+        socket?.on('drawer_draw_start', handleDrawStart);
+        socket?.on('drawer_draw_move', handleDrawMove);
+
+        return () => {
+            socket?.off("drawer_draw_start", handleDrawStart);
+            socket?.off("drawer_draw_move", handleDrawMove);
+        };
+    }, [socket]);
 
     const initTool = (tool) => {
-        if (tool == 'clear') {
+        if (tool === 'clear') {
             ctxRef.current.clearRect(0, 0, width, height);
-            return 
+            return ;
         }
         toolRef.current = toolsMap[tool](ctxRef.current);
     }
@@ -44,21 +61,35 @@ const Drawing = ({width, height}) => {
     // 인자가 필요 없을 경우?
     const onMouseDown = (e) => {
         const {x, y} = getCursorPosition(e);
-        tool == TOOL_PENCIL ?
+        console.log("onMouseDown : ", x, y);
+        tool === TOOL_PENCIL ?
             toolRef.current.onMouseDown(x, y, color, size) :
             toolRef.current.onMouseDown(x, y, color, size, fillColor);
+        socket?.emit('drawer_draw_start', { tool, xAxis: x, yAxis: y, roomId });
     }
 
     const onMouseUp = (e) => {
         const {x, y} = getCursorPosition(e);
+        console.log("onMouseUp : ", x, y);
         toolRef.current.onMouseUp(x, y);
     }
 
     const onMouseMove = (e) => {
         const {x, y} = getCursorPosition(e);
+        console.log("onMouseMove : ", x, y);
         toolRef.current.onMouseMove(x, y);
+        socket?.emit('drawer_draw_move', { tool, xAxis: x, yAxis: y, roomId });
     }
 
+    const handleDrawStart = (data) => {
+        console.log(data);
+
+    }
+
+    const handleDrawMove = (data) => {
+        console.log(data);
+
+    }
 
     return (
         <>

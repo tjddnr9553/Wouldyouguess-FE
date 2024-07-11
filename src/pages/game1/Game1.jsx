@@ -2,26 +2,42 @@ import './Game1.css'
 import User from "../../components/game/User.jsx";
 import Drawing from "./canvas/Drawing.jsx";
 import Palette from "./canvas/Palette.jsx";
-import {useNavigate, useSearchParams} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
-import useSocketStore from "../../store/socket/useSocketStore.js";
 import Tools from './canvas/CanvasTools.jsx';
 import Clock from '../../components/game/Clock.jsx';
+import {catchLiar_info} from "../../api/game/CatchLiar.js";
+import useUserStore from "../../store/user/useUserStore.js";
+import {useSearchParams} from "react-router-dom";
+import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 
 const Game1 = () => {
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   const containerRef = useRef(null);
 
   const [parentwidth, setParentWidth] = useState(0);
   const [parentheight,setParentHeight] = useState(0);
-
   const  [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
   });
-  
+
+  const { userId } = useUserStore();
+  const { gameId, setIsDrawing, setIsLiar, setKeyword } = useCatchLiarStore();
+
+  useEffect(() => {
+    const syn_func = async () => {
+      const round = Number(searchParams.get('round'));
+
+      const response = await catchLiar_info(gameId, userId, round);
+      setIsDrawing(response.isDrawing);
+      setIsLiar(response.isLiar);
+      setKeyword(response.keyword);
+
+    }
+    syn_func();
+  }, [])
+
   // window size 변경 시 캔버스 좌표 수정을 위한 resize
   useEffect(() => {
     window.addEventListener('resize', () => setWindowSize({
@@ -31,39 +47,6 @@ const Game1 = () => {
     setParentWidth(containerRef.current.clientWidth);
     setParentHeight(containerRef.current.clientHeight);
   }, [windowSize])
-  
-  const socket = useSocketStore(state => state.socket);
-
-  // 다음 사람 턴으로 이동하거나 결과 창
-  const nextTurnOrResult = () => {
-    const round = Number(searchParams.get('round'));
-
-    if (round < 5) {
-      socket.on("game_turn_change", handleGameTurnChange);
-      navigate(`/game1?round=${round + 1}`)
-    } else {
-      socket.on("game_end", handleGameEnd);
-      navigate(`/game1/result`)
-    }
-  }
-
-  const handleGameTurnChange = (message) => {
-    console.log('game_turn_change 전송:', message);
-    // 필요시 추가 로직
-  };
-
-  const handleGameEnd = (message) => {
-    console.log('game_end 전송:', message);
-    // 필요시 추가 로직
-  };
-
-  useEffect(() => {
-    return () => {
-      socket?.off("game_turn_change", handleGameTurnChange);
-      socket?.off("game_end", handleGameEnd);
-    }
-  }, [])
-
 
   return(
       <div className="inner">
@@ -87,7 +70,6 @@ const Game1 = () => {
           </div>
         </div>
       </div>
-
   )
 }
 
