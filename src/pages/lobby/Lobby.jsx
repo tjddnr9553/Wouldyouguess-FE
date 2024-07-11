@@ -132,53 +132,53 @@ const Lobby = () => {
     socket.emit("game_start", { mode: 2, userId, roomId });
     navigate("/game2/upload");
   };
-};
-return (
-  <div className="inner">
-    <div className="lobby container">
-      <Header />
-      <div className="modal-container" ref={modalRef}>
-        <span className="close" onClick={handleModal}>
-          X
-        </span>
-        <Modal text={`${window.location.origin}/invite/${roomId}`} />
-      </div>
-      <div className="content">
-        <div className="side">
-          <PlayerSidebar />
-          <div className="inviteBtn">
-            <Invite onClick={handleModal} />
-          </div>
-        </div>
 
-        <div className="game-content">
-          <Planet
-            style={{ top: "10%" }}
-            id={"planet4"}
-            min={5}
-            max={15}
-            text={textList[0].text}
-            onClick={startCatchLiar}
-          />
-          <Planet
-            style={{ bottom: "5%", left: "30%" }}
-            id={"planet2"}
-            min={5}
-            max={25}
-            text={textList[1].text}
-            onClick={startFindAIGeneratedImage}
-          />
-          <Planet
-            style={{ right: "12%" }}
-            id={"planet5"}
-            min={5}
-            max={20}
-            text={textList[2].text}
-          />
+  return (
+    <div className="inner">
+      <div className="lobby container">
+        <Header />
+        <div className="modal-container" ref={modalRef}>
+          <span className="close" onClick={handleModal}>
+            X
+          </span>
+          <Modal text={`${window.location.origin}/invite/${roomId}`} />
+        </div>
+        <div className="content">
+          <div className="side">
+            <PlayerSidebar />
+            <div className="inviteBtn">
+              <Invite onClick={handleModal} />
+            </div>
+          </div>
+
+          <div className="game-content">
+            <Planet
+              style={{ top: "10%" }}
+              id={"planet4"}
+              min={5}
+              max={15}
+              text={textList[0].text}
+              onClick={startCatchLiar}
+            />
+            <Planet
+              style={{ bottom: "5%", left: "30%" }}
+              id={"planet2"}
+              min={5}
+              max={25}
+              text={textList[1].text}
+              onClick={startFindAIGeneratedImage}
+            />
+            <Planet
+              style={{ right: "12%" }}
+              id={"planet5"}
+              min={5}
+              max={20}
+              text={textList[2].text}
+            />
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
-
+  );
+};
 export default Lobby;
