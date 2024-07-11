@@ -1,11 +1,11 @@
 import { create } from "zustand";
 
 const useUserStore = create((set) => ({
-    user_id: null,
+    uesrId: null,
     nickname: null,
     rank: null,
     score: 0,
-    game1_role: null,   // drawer, watcher
+    gameRole: "drawer",   // drawer, watcher
 
 }));
 export default useUserStore;

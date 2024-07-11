@@ -7,6 +7,7 @@ import {useEffect, useRef, useState} from "react";
 import useSocketStore from "../../store/socket/useSocketStore.js";
 import Tools from './canvas/CanvasTools.jsx';
 import Clock from '../../components/game/Clock.jsx';
+import { useCanvasStore } from '../../store/canvas/useCanvasStore.js';
 
 const Game1 = () => {
   const navigate = useNavigate();
@@ -16,6 +17,8 @@ const Game1 = () => {
 
   const [parentwidth, setParentWidth] = useState(0);
   const [parentheight,setParentHeight] = useState(0);
+
+  const {getSaveImg} = useCanvasStore();
 
   const  [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
@@ -64,6 +67,12 @@ const Game1 = () => {
     }
   }, [])
 
+  const handleSaveCanvas = () => {
+    const imgUrl = getSaveImg();
+
+    // 서버 전달 로직 작성하기.
+  }
+
 
   return(
       <div className="inner">
@@ -75,15 +84,22 @@ const Game1 = () => {
             <User />
           </div>
           <div className="center">
+            <div className="keyword">
+              <div>
+                Keyword &nbsp; &nbsp; &nbsp; tiger
+              </div>
+            </div>
             <div ref={containerRef} className="canvas-container">
               <Drawing  width={parentwidth} height={parentheight} />
+            </div>
+            <div className="canvas-tools">
               <Tools />
             </div>
           </div>
           <div className="right-section">
             <Clock />
             <Palette />
-            <button className="quite-btn">DONE</button>
+            <button className="quite-btn" onClick={handleSaveCanvas}>DONE</button>
           </div>
         </div>
       </div>

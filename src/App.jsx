@@ -17,6 +17,7 @@ import Temp from './pages/Temp.jsx'
 import TempCanvas from "./pages/game1/TempCanvas.jsx";
 import Profile from "./pages/home/Profile.jsx";
 import LoginHandeler from "./pages/oauth/LoginHandeler.jsx";
+import Vote from "./pages/game1/Vote.jsx";
 
 function App() {
   const REDIRECT_URL = '/auth/kakao/callback';
@@ -30,6 +31,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/lobby' element={<Lobby />} />
         <Route path='/game1' element={<Game1 />} />
+        <Route path='/game1/vote' element={<Vote />} />
         <Route path="/game2" element={<Game2 />} />
         <Route path="/game2/upload" element={<Game2_upload />} />
         <Route path="/game2/remember" element={<Game2_remember />} />
