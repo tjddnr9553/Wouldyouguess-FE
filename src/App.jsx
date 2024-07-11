@@ -52,10 +52,10 @@ function App() {
         <Route path="/game1/vote" element={<Game1_vote />} />
         <Route path="/game1/result" element={<Game1_result />} />
 
-        <Route path="/game2/:roomId" element={<Game2 />} />
-        <Route path="/game2/upload/:roomId" element={<Game2_upload />} />
-        <Route path="/game2/remember/:roomId" element={<Game2_remember />} />
-        <Route path="/game2/result/:roomId" element={<Game2_result />} />
+        <Route path="/game2/" element={<Game2 />} />
+        <Route path="/game2/upload/" element={<Game2_upload />} />
+        <Route path="/game2/remember/" element={<Game2_remember />} />
+        <Route path="/game2/result/" element={<Game2_result />} />
 
         <Route path="/game3" element={<Game3 />} />
         <Route path="/result" element={<Result />} />

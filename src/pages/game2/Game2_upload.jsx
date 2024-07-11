@@ -1,24 +1,24 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import NewButton from "../../components/button/newButton";
 import useImagesStore from "../../store/image/useImagesStore.js";
 import User from "../../components/game/User";
 import "./Game2.css";
-import { jwtDecode } from "jwt-decode";
+import useRoomStore from "../../store/room/useRoomStore.js";
+import useUserStore from "../../store/user/useUserStore.js";
 
 
 const Game2_upload = () => {
   const imgSelctBtn = useRef(null);
   const previewImage = useRef(null);
   const [selectedImage, setSelectedImage] = useState(null);
-  const { roomId } = useParams();
-  const [formData, setFormData] = useState(null);
+  const { roomId } = useRoomStore();
+  const [uploadForm, setUploadForm] = useState(null);
+  const [inpaintForm, setInpaintForm] = useState(null);
   const addImages = useImagesStore((state) => state.addImages);
 
-  const token = localStorage.getItem("accessToken")
-  const decodedToken = jwtDecode(token);
-  const kakaoId = decodedToken.sub;
+  const { userId } = useUserStore();
 
   const navigate = useNavigate();
 
@@ -38,27 +38,31 @@ const Game2_upload = () => {
 
   const sendToServer = async () => {
     try {
-      const inpaintRes = await axios.post(
-        "http://localhost:8080/api/image/inpaint",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      const uploadResponse = await axios.post(
+
+      const uploadRes = await axios.post(
         "http://localhost:8080/api/image/upload",
-        formData,
+        uploadForm,
         {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         }
       );
-      if (res.status === 200) {
+
+      if (uploadRes.status === 200) {
         console.log("서버로 이미지 전송 성공");
-        
+
+        navigate(`/game2/remember/`);
+
+        await axios.post(
+          "http://localhost:8080/api/image/inpaint",
+          inpaintForm,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
         // 원본 이미지와 생성된 이미지 URL 추출
         const originalImageUrl = res.data.original.path;
         const generatedImageUrl = res.data.generated.path;
@@ -77,24 +81,30 @@ const Game2_upload = () => {
 
   const selectImage = (event) => {
     const file = event.target.files[0];
-    const formData = new FormData();
+    const uploadForm = new FormData();
+    const inpaintForm = new FormData();
 
     setSelectedImage(file);
 
-    formData.append("image", file);
-    formData.append("mask_x1", 200);
-    formData.append("mask_y1", 200);
-    formData.append("mask_x2", 600);
-    formData.append("mask_y2", 600);
-    formData.append("roomId", roomId); // 실제 방 ID로 교체해야 합니다
-    formData.append("userId", kakaoId); // 실제 사용자 ID로 교체해야 합니다
-    formData.append(
+    inpaintForm.append("image", file);
+    inpaintForm.append("mask_x1", 200);
+    inpaintForm.append("mask_y1", 200);
+    inpaintForm.append("mask_x2", 600);
+    inpaintForm.append("mask_y2", 600);
+    inpaintForm.append("roomId", roomId); // 실제 방 ID로 교체해야 합니다
+    inpaintForm.append("userId", userId); // 실제 사용자 ID로 교체해야 합니다
+    inpaintForm.append(
       "prompt",
       "Modify safely."
     );
-    formData.append("mode", "mode2"); // 또는 적절한 모드 값
 
-    setFormData(formData);
+    uploadForm.append("image", file);
+    uploadForm.append("roomId", roomId);
+    uploadForm.append("userId", userId);
+
+    setInpaintForm(inpaintForm);
+    setUploadForm(uploadForm);
+
   };
 
   return (

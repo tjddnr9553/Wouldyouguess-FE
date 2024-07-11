@@ -7,19 +7,23 @@ import User from "../../components/game/User";
 import "./Game2.css";
 import "swiper/css";
 import "swiper/css/navigation";
+import useRoomStore from "../../store/room/useRoomStore";
+import useUserStore from "../../store/user/useUserStore";
 
 const Game2_remember = () => {
   const navigate = useNavigate();
-  const { roomId } = useParams();
+  const { roomId } = useRoomStore();
+  const { userId } = useUserStore();
   const [images, setImages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+    
   useEffect(() => {
     const fetchImages = async () => {
       try {
         setIsLoading(true);
         const response = await axios.get(
-          `http://localhost:8080/api/image/og/mode2/${roomId}`
+          `http://localhost:8080/api/${roomId}/og`
         );
         setImages(response.data);
         setIsLoading(false);
