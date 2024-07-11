@@ -60,17 +60,18 @@ const Lobby = () => {
   }, []);
 
   useEffect(() => {
+    // 룸에 참가시키기
+    if (roomId && nickname) {
+      joinRoom(); // 룸 접속 함수 호출
+    }
+  }, [roomId, nickname]); // 의존성 배열 추가
+
+  useEffect(() => {
     const socketConnect = io(import.meta.env.VITE_SOCKET_SERVER_URL);
     setSocket(socketConnect);
-    useEffect(() => {
-      // 룸에 참가시키기
-      if (roomId && nickname) {
-        joinRoom(); // 룸 접속 함수 호출
-      }
-    }, [roomId, nickname]); // 의존성 배열 추가
 
     socketConnect.on("connect", () => {
-      if (isInvite) {
+      if (isInvited) {
         socketConnect.emit("room_join", { roomId, userId });
       } else {
         socketConnect.emit("room_create", { roomId, userId });
@@ -141,7 +142,7 @@ const Lobby = () => {
           <span className="close" onClick={handleModal}>
             X
           </span>
-          <Modal text={`${window.location.origin}/invite/${roomId}`} />
+          <Modal text1={`${window.location.origin}/invite/${roomId}`} />
         </div>
         <div className="content">
           <div className="side">
