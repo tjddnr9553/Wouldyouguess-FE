@@ -26,7 +26,7 @@ export const auth_kakao_callback = async (codeParam) => {
         "Content-Type": "application/json;charset=utf-8",
       }
     });
-    console.log(res.data);
+
     return res.data;
   } catch (error) {
     throw new Error(error);

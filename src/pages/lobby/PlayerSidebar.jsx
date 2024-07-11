@@ -18,13 +18,10 @@ const PlayerSidebar = () => {
 
 
     useEffect(() => {
-        console.log(roomId);
         sync_func(roomId);
     }, [])
 
     useEffect(() => {
-        console.log(socket);
-
         socket?.on("room_join", sync_func);
 
         return () => {
