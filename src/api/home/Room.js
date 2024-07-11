@@ -17,6 +17,19 @@ export const room_create = async (userId) => {
     }
 };
 
+export const room_users = async (roomId) => {
+    try {
+        const res = await axios({
+            method: "GET",
+            url: `${API_SERVER_URL}/api/room/${roomId}/users`,
+        });
+        return res.data;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+
 export const room_join = async (userId, roomId) => {
     try {
         const res = await axios({

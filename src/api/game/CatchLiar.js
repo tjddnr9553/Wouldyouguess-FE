@@ -4,14 +4,14 @@ export const API_SERVER_URL = import.meta.env.VITE_API_SERVER_URL;
 export const catchLiar_start = async (roomId) => {
     try {
         const res = await axios({
-            method: "GET",
+            method: "POST",
             url: `${API_SERVER_URL}/api/catchLiar/start`,
             data: {
                 roomId
             }
         });
 
-        return res;
+        return res.data;
     } catch (error) {
         throw new Error(error);
     }
@@ -22,14 +22,14 @@ export const catchLiar_info = async (gameId, userId, round) => {
         const res = await axios({
             method: "GET",
             url: `${API_SERVER_URL}/api/catchLiar/info`,
-            data: {
+            params: {
                 catchLiarGameId: gameId,
                 userId,
                 round
             }
         });
 
-        return res;
+        return res.data;
     } catch (error) {
         throw new Error(error);
     }
@@ -46,7 +46,7 @@ export const catchLiar_vote_candidates = async (gameId) => {
             }
         });
 
-        return res;
+        return res.data;
     } catch (error) {
         throw new Error(error);
     }
@@ -63,7 +63,7 @@ export const catchLiar_vote = async (gameId, votingUserId) => {
             }
         });
 
-        return res;
+        return res.data;
     } catch (error) {
         throw new Error(error);
     }
@@ -80,7 +80,7 @@ export const catchLiar_result = async (gameId, userId) => {
             }
         });
 
-        return res;
+        return res.data;
     } catch (error) {
         throw new Error(error);
     }

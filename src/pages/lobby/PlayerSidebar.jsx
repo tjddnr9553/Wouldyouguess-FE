@@ -1,27 +1,46 @@
 import './PlayerSidebar.css'
 import Player from '../../components/lobby/Player.jsx'
-import Button from '../../components/button/Button.jsx';
-import RocketBtn from '../../components/button/RocketBtn.jsx';
-import GameMode from '../../components/lobby/GameMode.jsx';
+import useSocketStore from "../../store/socket/useSocketStore.js";
+import {useEffect, useState} from "react";
+import {room_users} from "../../api/home/Room.js";
+import useRoomStore from "../../store/room/useRoomStore.js";
 
 const PlayerSidebar = () => {
+    const [players, setPlayers] = useState([]);
+
+    const {roomId} = useRoomStore();
+    const {socket} = useSocketStore();
+
+    const sync_func = async (roomId) => {
+        const roomUsers = await room_users(roomId);
+        setPlayers(roomUsers);
+    }
+
+
+    useEffect(() => {
+        sync_func(roomId);
+    }, [])
+
+    useEffect(() => {
+        socket?.on("room_join", sync_func);
+
+        return () => {
+            socket?.off("room_join", sync_func);
+        };
+    }, [socket])
+
+
   return (
     <div className="sidebar">
-      {/* <img className="rocket-board" src='/images/game/rocket-board.png' alt="rocket-board" /> */}
-
       <div className="title-section">
         Player
       </div>
 
       <div className="player-section">
-        <Player />
-        <Player />
-        <Player />
-        <Player />
+          {players.map((player, index) => (
+              <Player key={index} username={player.username} nickname={player.nickname}/>
+          ))}
       </div>
-      {/* <div className="invite-section">
-
-      </div> */}
     </div>
   )
 }
