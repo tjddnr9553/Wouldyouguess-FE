@@ -1,0 +1,129 @@
+.inner {
+  flex-direction: column;
+}
+
+.game.container {
+  /* background-color: rgb(153, 114, 64); */
+  width: 100%;
+  height: 100%;
+}
+
+.game .left-section {
+  width: 20%;
+  height: 100%;
+  /* background-color: aqua; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+.game .center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* background-color: antiquewhite; */
+}
+
+.game2_border {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-direction: column;
+  background-color: white;
+  text-align: center;
+  padding: 2rem;
+
+  background-color: white;
+  border-radius: 1rem;
+  filter: drop-shadow(0px 10px 10px #4444dd);
+  margin: 0 auto;
+}
+
+.titleContainer {
+  margin-bottom: 3rem;
+}
+
+.titleContainer strong {
+  font-family: "Keania One";
+  font-size: 3rem;
+  font-weight: 900;
+  color: rgb(0, 0, 0);
+  filter: drop-shadow(5px 5px 5px gray);
+}
+
+.imageBtnContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  margin: 1rem;
+}
+
+.findDiffrence {
+  display: flex;
+  justify-content: center;
+  align-items: stretch; /* 모든 자식 요소가 동일한 높이를 가짐 */
+  text-align: center;
+  flex-wrap: wrap;
+
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  max-width: 75rem;
+  max-height: 35rem;
+  min-width: 75rem;
+  min-height: 35rem;
+
+  background-color: white;
+  border-radius: 1rem;
+  filter: drop-shadow(0px 10px 10px #4444dd);
+  margin-bottom: 2rem;
+  padding: 10px 20px;
+}
+
+.findDiffrence:hover {
+  cursor: url("/images/cursor_1.png") 20 30, auto !important;
+}
+
+.img-border, .user-painting {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.user-painting {
+  box-sizing: border-box;
+  flex: 1 1 50%;
+}
+.img-border {
+  width: 90%;
+  height: 90%;
+
+  border: 1px solid black;
+  border-radius: 30px;
+
+  box-shadow: 10px 10px 10px -5px rgba(68, 68, 221, 0.7);
+}
+.img-border:hover {
+  animation: grow 1s forwards;
+}
+
+@keyframes grow {
+  form {
+    transform: scale(1);
+    border-width: 1px;
+  } to {
+    transform: scale(1.05);
+    border-width: 2px;
+  }
+}
+
+.user-painting img {
+  display: block;
+  height: 90%;
+  object-fit: cover;
+  border-radius: 20px;
+}
