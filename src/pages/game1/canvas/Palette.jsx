@@ -1,9 +1,9 @@
 import './Palette.css';
-import {useColorStore} from "../../../store/canvas/useColorStore";
+import { useCanvasStore } from '../../../store/canvas/useCanvasStore';
 
 const colorOptions = [
     "red", "orange", "yellow", "green", "blue", "purple", "pink", "brown", "gray",
-    "black", "white", "cyan", "magenta", "lime", "teal", "navy", "olive", "maroon"
+    "black", "white", "cyan",
 ];
 
 const chunkArray = (array, size) => {
@@ -14,14 +14,14 @@ const chunkArray = (array, size) => {
     return result;
 };
 
-
 const Palette = () => {
   const colorGroups = chunkArray(colorOptions, 3);
 
-  const { color, setColor } = useColorStore();
+  const { setColor, setFillColor } = useCanvasStore();
 
   function changeColor(targetColor) {
     setColor(targetColor);
+    setFillColor(targetColor);
   }
 
   return (

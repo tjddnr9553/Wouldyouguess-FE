@@ -1,11 +1,11 @@
 import axios from 'axios';
-export const API_BASE_URL = import.meta.env.API_BASE_URL;
+export const API_SERVER_URL = import.meta.env.VITE_API_SERVER_URL;
 
 export const catchLiar_start = async (roomId) => {
     try {
         const res = await axios({
             method: "GET",
-            url: `${API_BASE_URL}/api/catchLiar/start`,
+            url: `${API_SERVER_URL}/api/catchLiar/start`,
             data: {
                 roomId
             }
@@ -21,7 +21,7 @@ export const catchLiar_info = async (gameId, userId, round) => {
     try {
         const res = await axios({
             method: "GET",
-            url: `${API_BASE_URL}/api/catchLiar/info`,
+            url: `${API_SERVER_URL}/api/catchLiar/info`,
             data: {
                 catchLiarGameId: gameId,
                 userId,
@@ -40,7 +40,7 @@ export const catchLiar_vote_candidates = async (gameId) => {
     try {
         const res = await axios({
             method: "GET",
-            url: `${API_BASE_URL}/api/catchLiar/candidates`,
+            url: `${API_SERVER_URL}/api/catchLiar/candidates`,
             data: {
                 catchLiarGameId: gameId
             }
@@ -56,7 +56,7 @@ export const catchLiar_vote = async (gameId, votingUserId) => {
     try {
         const res = await axios({
             method: "POST",
-            url: `${API_BASE_URL}/api/catchLiar/vote`,
+            url: `${API_SERVER_URL}/api/catchLiar/vote`,
             data: {
                 catchLiarGameId: gameId,
                 votingUserId
@@ -73,7 +73,7 @@ export const catchLiar_result = async (gameId, userId) => {
     try {
         const res = await axios({
             method: "GET",
-            url: `${API_BASE_URL}/api/catchLiar/result`,
+            url: `${API_SERVER_URL}/api/catchLiar/result`,
             data: {
                 catchLiarGameId: gameId,
                 userId
