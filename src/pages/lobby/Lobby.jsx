@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
 import "./Lobby.css";
-import "../../components/lobby/Modal.css";
 import PlayerSidebar from "./PlayerSidebar.jsx";
 import Planet from "../../components/game/Planet.jsx";
 import Header from "../../components/game/Header.jsx";
@@ -9,11 +8,11 @@ import Invite from "../../components/lobby/Invite.jsx";
 import useSocketStore from "../../store/socket/useSocketStore.js";
 import useUserStore from "../../store/user/useUserStore.js";
 import { io, Socket } from "socket.io-client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { room_create } from "../../api/home/Room.js";
 import Modal from "../../components/lobby/Modal.jsx";
-import axios from "axios";
 import useRoomStore from "../../store/room/useRoomStore.js";
+import useWebrtcStore from "../../store/webrtc/useWebrtcStore.tsx";
 
 const textList = [
   {
@@ -33,22 +32,19 @@ const textList = [
 const Lobby = () => {
   const navigate = useNavigate();
   const modalRef = useRef(null);
-  const accessToken = useUserStore((state) => state.accessToken);
-  const isLogin = useUserStore((state) => state.isLogin);
-
   const currentRoomId = window.location.href.split("/").pop();
   const roomUrl = `http://localhost:5173/invite/${currentRoomId}`;
-  const [users, setUsers] = useState();
 
-  const { userId, isInvited } = useUserStore();
+  const { userId, isInvited,nickname } = useUserStore();
   const { roomId } = useRoomStore();
   const { socket, setSocket } = useSocketStore();
+
   let modalOn = false;
+
+  const { joinRoom } = useWebrtcStore();
 
   // 뒤로가기 방지
   useEffect(() => {
-    // window.localStorage.setItem("inviteUrl", currentRoomId);
-    
     window.history.pushState(null, null, window.location.href);
 
     window.onpopstate = () => {
@@ -56,44 +52,45 @@ const Lobby = () => {
     };
 
     return () => {
-      window.onpopstate = null; // 컴포넌트 언마운트 시 이벤트 제거
+      window.onpopstate = null;
     };
   }, []);
 
-  // useEffect(() => {
-  //   const socketConnect = io(import.meta.env.VITE_SOCKET_SERVER_URL);
-  //   setSocket(socketConnect);
+  useEffect(() => {
+    // 룸에 참가시키기
+    if (roomId && nickname) {
+      joinRoom(); // 룸 접속 함수 호출
+    }
+  }, [roomId, nickname]); // 의존성 배열 추가
 
-  //   socketConnect.on("connect", () => {
-  //     if (isInvited) {
-  //       socketConnect.emit("room_join", { roomId, userId });
-  //     } else {
-  //       socketConnect.emit("room_create", { roomId, userId });
-  //     }
-  //   });
+  useEffect(() => {
+    const socketConnect = io(import.meta.env.VITE_SOCKET_SERVER_URL);
+    setSocket(socketConnect);
 
-  //   // 연결이 끊어졌을 때
-  //   // socketConnect.on("disconnect", async (reason) => {
-  //   //   socketConnect.emit("room_exit", { roomId, userId });
-  //   //   await room_exit(roomId, userId);
-  //   // });
+    socketConnect.on("connect", () => {
+      if (isInvited) {
+        socketConnect.emit("room_join", { roomId, userId });
+      } else {
+        socketConnect.emit("room_create", { roomId, userId });
+      }
+    });
 
-  //   socketConnect.on("game_start", (data) => {
-  //     console.log(data.gameId);
-  //     navigate(`/test?gameId=${data.gameId}&round=1`);
-  //   });
+    socketConnect.on("game_start", (data) => {
+      console.log(data.gameId);
+      navigate(`/test?gameId=${data.gameId}&round=1`);
+    });
 
-  //   socketConnect.on("room_join", (gameId) => {
-  //     // room list 갱신 필요
-  //   });
+    socketConnect.on("room_join", (gameId) => {
+      // room list 갱신 필요
+    });
 
-  //   return () => {
-  //     // socketConnect.disconnect();
-  //     socketConnect?.off("game_start", (data) => {
-  //       navigate(`/test?gameId=${data.gameId}&round=1`);
-  //     });
-  //   };
-  // }, [setSocket]);
+    return () => {
+      // socketConnect.disconnect();
+      socketConnect?.off("game_start", (data) => {
+        navigate(`/test?gameId=${data.gameId}&round=1`);
+      });
+    };
+  }, [setSocket]);
 
   // 친구 초대 모달창
   const handleModal = () => {
@@ -105,6 +102,7 @@ const Lobby = () => {
       modalOn = true;
     }
   };
+
   const startCatchLiar = async () => {
     // const gameId = await catchLiar_start(roomId);
     const gameId = 321;
@@ -112,41 +110,18 @@ const Lobby = () => {
     navigate(`/test?gameId=${gameId}&round=1`);
   };
 
-  // 카카오 로그아웃
-  const kakaoLogout = () => {
-    const setIsLogin = useUserStore((state) => state.setIsLogin);
-    console.log(accessToken);
-    axios({
-      method: "POST",
-      url: "https://kapi.kakao.com/v1/user/logout",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Authorization: `Bearer ${accessToken}`,
-      },
-    })
-      .then(() => {
-        setIsLogin(false);
-        window.location.href = "/";
-      })
-      .catch((e) => {
-        console.log("e : ", e);
-        // 이미 만료된 토큰일 경우
-        if (e.response.data.code === -401) {
-          window.location.href = "/";
-        }
-      });
+  const enterGame2 = () => {
+    navigate("/game2/upload");
   };
-
   return (
     <div className="inner">
       <div className="lobby container">
         <Header />
-        {isLogin && <button onClick={kakaoLogout}>로그아웃</button>}
         <div className="modal-container" ref={modalRef}>
           <span className="close" onClick={handleModal}>
             X
           </span>
-          <Modal text={roomUrl} />
+          <Modal text1={roomUrl} text2={"복사하기"} />
         </div>
         <div className="content">
           <div className="side">
@@ -171,7 +146,7 @@ const Lobby = () => {
               min={5}
               max={25}
               text={textList[1].text}
-              onClick={() => navigate("/game2/upload")}
+              onClick={enterGame2}
             />
             <Planet
               style={{ right: "12%" }}

@@ -1,8 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import GlobalStyles from "./styles/GlobalStyles";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import useUserStore from "./store/user/useUserStore.js";
 import "./App.css";
 
 import Lobby from "./pages/lobby/Lobby.jsx";
@@ -25,13 +23,12 @@ import LoginHandler from "./api/oauth/LoginHandler.jsx";
 import { KAKAO_AUTH_URL } from "./api/oauth/Oauth.js";
 
 function App() {
-
   // 초대 받은 사람은 여기서 분류
   useEffect(() => {
     const currentUrl = new URL(window.location.href);
-    const urlPaths = currentUrl.pathname.split("/");          // URL 경로를 '/'로 분할
-    const urlType = urlPaths[urlPaths.length - 2];             // 마지막에서 두 번째 요소 가져오기
-    const inviteRoomId = urlPaths[urlPaths.length - 1];        // 마지막 요소 가져오기
+    const urlPaths = currentUrl.pathname.split("/"); // URL 경로를 '/'로 분할
+    const urlType = urlPaths[urlPaths.length - 2]; // 마지막에서 두 번째 요소 가져오기
+    const inviteRoomId = urlPaths[urlPaths.length - 1]; // 마지막 요소 가져오기
     if (urlType === "invite") {
       window.localStorage.setItem("inviteRoomId", inviteRoomId);
       window.localStorage.setItem("isInvited", "true");
