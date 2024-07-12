@@ -3,43 +3,42 @@ import { useEffect, useRef, useState } from "react";
 import NewButton from "../../components/button/newButton";
 import axios from "axios";
 import User from "../../components/game/User";
+import useImagesStore from "../../store/image/useImagesStore";
+import useRoomStore from "../../store/room/useRoomStore";
+
 import "./Game2.css";
 import "swiper/css";
 
 const Game2 = () => {
   const navigate = useNavigate();
-  const { roomId } = useParams();
+  const { roomId } = useRoomStore();
   const previewImage = useRef(null);
-  const [images, setImages] = useState([]);
+  const { generatedImages } = useImagesStore();
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
-    const fetchImages = async () => {
-        const response = await axios.get(
-          `http://localhost:8080/api/image/gen/mode2/${roomId}`
-        );
-        setImages(response.data);
+    const showImages = () => {
+      if (currentImageIndex < generatedImages.length) {
+        previewImage.current.style.backgroundImage = `url(${generatedImages[currentImageIndex]})`;
+        setCurrentImageIndex((prevIndex) => prevIndex + 1);
+        setTimeout(showImages, 2000); // 2초마다 다음 이미지로 (이 시간은 조절 가능)
+      } else {
+        // 모든 이미지를 보여준 후 10초 뒤에 결과 페이지로 이동
+        setTimeout(() => {
+          navigate("/game2/result");
+        }, 10000);
+      }
     };
 
-    fetchImages();
-  }, []);
+    showImages();
 
-  useEffect(() => {
-    images.forEach((image, index) => {
-      setTimeout(() => {
-        console.log(image);
-        previewImage.current.style.backgroundImage = `url(${image})`;
-        if (index === images.length - 1) {
-          setTimeout(() => {
-            navigate("/game2/result");
-          }, 5000); // 마지막 이미지 표시 시간 (5초)
-        }
-      }, index * 5000); // 0초, 5초, 10초(5초 간격으로 넘어감)
-    });
-  }, []);
+    return () => {
+      // cleanup 함수: 필요한 경우 타이머를 정리할 수 있습니다.
+    };
+  }, [generatedImages, navigate]);
 
   return (
     <div className="inner">
-      {" "}
       <div className="game container">
         <div className="left-section">
           <User />
@@ -51,11 +50,11 @@ const Game2 = () => {
           <div className="game2_border">
             <div className="titleContainer">
               <div>
-                <strong>Find Diffrence !</strong>
+                <strong>Find Difference !</strong>
               </div>
             </div>
             <div className="imageContainer">
-              <div className="findDiffrence" ref={previewImage}></div>
+              <div className="findDifference" ref={previewImage}></div>
               <div className="magnifierContainer">
                 <NewButton
                   text={

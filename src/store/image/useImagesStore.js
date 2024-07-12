@@ -1,7 +1,14 @@
 import { create } from "zustand";
 
 const useImagesStore = create((set) => ({
-  images: ["images/gen1.png", "images/gen2.png", "images/gen3.png"],
-  addImages: (image) => set((state) => ({ images: [...state.images, image] })),
+  originalImages: [],
+  generatedImages: [],
+
+  setOriginalImages: (images) => set({ originalImages: images }),
+
+  setGeneratedImages: (images) => set({ generatedImages: images }),
+
+  clearAllImages: () => set({ originalImages: [], generatedImages: [] }),
 }));
+
 export default useImagesStore;

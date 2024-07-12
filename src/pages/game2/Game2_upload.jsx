@@ -7,17 +7,29 @@ import User from "../../components/game/User";
 import "./Game2.css";
 import useRoomStore from "../../store/room/useRoomStore.js";
 import useUserStore from "../../store/user/useUserStore.js";
-
+import useGameStore from "../../store/game/useGameStore.js";
+import { Rectangle } from "../game1/canvas/tools"
 
 const Game2_upload = () => {
   const imgSelctBtn = useRef(null);
   const previewImage = useRef(null);
+
   const [selectedImage, setSelectedImage] = useState(null);
-  const { roomId } = useRoomStore();
   const [uploadForm, setUploadForm] = useState(null);
   const [inpaintForm, setInpaintForm] = useState(null);
-  const addImages = useImagesStore((state) => state.addImages);
+  const [clickSendBtn, setClickSendBtn] = useState(false);
+  const [clickUploadBtn, setClickUploadBtn] = useState(false);
+  
+  const canvasRef = useRef(null);
+  const ctxRef = useRef(null);
+  const toolRef = useRef(null); 
+  let isClick = false;
+  const [previewImageWidth, setpreviewImageWidth] = useState(0);
+  const [previewImageHeight,setpreviewImageHeight] = useState(0);
 
+  const { findDiffGameId } = useGameStore();
+  const { roomId } = useRoomStore();
+  const { setOriginalImages, setGeneratedImages } = useImagesStore();
   const { userId } = useUserStore();
 
   const navigate = useNavigate();
@@ -26,6 +38,7 @@ const Game2_upload = () => {
     if (selectedImage) {
       const imageUrl = URL.createObjectURL(selectedImage);
       previewImage.current.style.backgroundImage = `url(${imageUrl})`;
+      setClickUploadBtn(true);
 
       return () => {
         URL.revokeObjectURL(imageUrl);
@@ -37,10 +50,12 @@ const Game2_upload = () => {
   }, [selectedImage]);
 
   const sendToServer = async () => {
-    try {
+    setClickSendBtn(true);
 
+    try {
+      // 1. 원본 이미지 업로드
       const uploadRes = await axios.post(
-        "http://localhost:8080/api/image/upload",
+        "http://localhost:8080/api/findDiff/upload",
         uploadForm,
         {
           headers: {
@@ -50,32 +65,51 @@ const Game2_upload = () => {
       );
 
       if (uploadRes.status === 200) {
-        console.log("서버로 이미지 전송 성공");
+        console.log("서버로 원본 이미지 전송 성공");
 
-        navigate(`/game2/remember/`);
-
-        await axios.post(
-          "http://localhost:8080/api/image/inpaint",
-          inpaintForm,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
+        // 2. 원본 이미지 가져오기
+        const response = await axios.get(
+          `http://localhost:8080/api/findDiff/og/${findDiffGameId}/${userId}`
         );
-        // 원본 이미지와 생성된 이미지 URL 추출
-        const originalImageUrl = res.data.original.path;
-        const generatedImageUrl = res.data.generated.path;
 
-        // 원본 이미지와 생성된 이미지를 상태에 추가
-        addImages(originalImageUrl);
-        addImages(generatedImageUrl);
+        if (response.status === 200) {
+          setOriginalImages(response.data.map((item) => item.path));
+        }
 
-        console.log("Original Image URL:", originalImageUrl);
-        console.log("Generated Image URL:", generatedImageUrl);
+        // 다음 페이지로 이동
+        navigate("/game2/remember/"); // 실제 다음 페이지 경로로 변경해주세요
+
+        // 백그라운드에서 나머지 요청 실행
+        setTimeout(async () => {
+          try {
+            // 3. 인페인팅 요청
+            await axios.post(
+              "http://localhost:8080/api/findDiff/inpaint",
+              inpaintForm,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              }
+            );
+            console.log("인페인팅 요청 성공");
+
+            // 4. 생성된 이미지 가져오기
+            const genResponse = await axios.get(
+              `http://localhost:8080/api/findDiff/gen/${findDiffGameId}/${userId}`
+            );
+            const generatedImages = genResponse.data.map((item) => item.path);
+            setGeneratedImages(generatedImages);
+            console.log("Updated generatedImages:", generatedImages);
+          } catch (error) {
+            console.error("백그라운드 작업 중 오류 발생:", error);
+          }
+        }, 0);
       }
-    } catch (e) {
-      console.error("이미지 전송 중 오류 발생:", e);
+    } catch (error) {
+      console.error("이미지 처리 중 오류 발생:", error);
+      // 에러 처리 로직 (예: 에러 페이지로 이동)
+      // navigate('/error');
     }
   };
 
@@ -91,12 +125,9 @@ const Game2_upload = () => {
     inpaintForm.append("mask_y1", 200);
     inpaintForm.append("mask_x2", 600);
     inpaintForm.append("mask_y2", 600);
-    inpaintForm.append("roomId", roomId); // 실제 방 ID로 교체해야 합니다
-    inpaintForm.append("userId", userId); // 실제 사용자 ID로 교체해야 합니다
-    inpaintForm.append(
-      "prompt",
-      "Modify safely."
-    );
+    inpaintForm.append("roomId", roomId);
+    inpaintForm.append("userId", userId);
+    inpaintForm.append("prompt", "Modify safely.");
 
     uploadForm.append("image", file);
     uploadForm.append("roomId", roomId);
@@ -104,8 +135,39 @@ const Game2_upload = () => {
 
     setInpaintForm(inpaintForm);
     setUploadForm(uploadForm);
-
   };
+
+  /* 그림판 관련 함수 */
+  useEffect(() => {
+    setpreviewImageWidth(previewImage.current.clientWidth);
+    setpreviewImageHeight(previewImage.current.clientHeight);
+
+    const canvas = canvasRef.current;
+    ctxRef.current = canvas.getContext('2d');
+    toolRef.current = Rectangle(ctxRef.current);
+  }, [])
+
+  const getCursorPosition = (e) => {
+    const {top, left} = canvasRef.current.getBoundingClientRect();
+    return {
+        x: e.clientX - left,
+        y: e.clientY - top
+    }
+  }
+
+  const onMouseDown = (e) => {
+    if (!clickUploadBtn) return;
+    isClick = true;
+    ctxRef.current.clearRect(0, 0, previewImageWidth, previewImageHeight);
+    const {x, y} = getCursorPosition(e);
+    toolRef.current.onMouseDown(x, y, "black", 5, '');
+  }
+
+  const onMouseUp = (e) => {
+    isClick = false; 
+    const {x, y} = getCursorPosition(e);
+    toolRef.current.onMouseUp(x, y);
+  }
 
   return (
     <div className="inner">
@@ -120,11 +182,24 @@ const Game2_upload = () => {
           <div className="game2_border">
             <div className="titleContainer">
               <div>
-                <strong>Upload Your Image !</strong>
+                {clickUploadBtn === false ? (
+                  <strong>Upload Your Image !</strong>
+                ) : (
+                  <strong>select your masking area</strong>
+                )}
               </div>
             </div>
             <div className="imageContainer">
-              <div className="previewImage" ref={previewImage}></div>
+              <div className="previewImage" ref={previewImage}>
+                <canvas 
+                  ref={canvasRef}
+                  width={previewImageWidth}
+                  height={previewImageHeight}
+                  style={{ backgroundColor: 'transparent' }}
+                  onMouseDown={onMouseDown}
+                  onMouseUp={onMouseUp}
+                />
+              </div>
               <div className="imageBtnContainer">
                 <input
                   type="file"
@@ -135,11 +210,20 @@ const Game2_upload = () => {
                   style={{ display: "none" }}
                   multiple
                 />
-                <NewButton
-                  text={"Image Upload"}
-                  onClick={() => imgSelctBtn.current.click()}
-                ></NewButton>
-                <NewButton text={"전송하기"} onClick={sendToServer}></NewButton>
+                {clickUploadBtn === false ? (
+                  <NewButton
+                    text={"Image Upload"}
+                    onClick={() => {
+                      imgSelctBtn.current.click();
+                    }}
+                  />
+                ) : (
+                  <NewButton
+                    text={"전송하기"}
+                    onClick={sendToServer}
+                    disabled={clickSendBtn}
+                  />
+                )}
               </div>
             </div>
           </div>

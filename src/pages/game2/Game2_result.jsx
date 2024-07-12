@@ -10,24 +10,16 @@ import "swiper/css/navigation";
 
 const Game2 = () => {
   const navigate = useNavigate();
-  const images = useImagesStore((state) => state.images);
+  const { originalImages, generatedImages } = useImagesStore();
   const previewImage = useRef(null);
   const { roomId } = useParams();
-
-  // useEffect(() => {
-  //   images.forEach((image, index) => {
-  //     console.log(image);
-  //     previewImage.current.style.backgroundImage = `url(${image})`;
-  //     return () => URL.revokeObjectURL(image);
-  //   });
-  // }, []);
 
   return (
     <div className="inner">
       <div className="game2_border">
         <div className="titleContainer">
           <div>
-            <strong>Result</strong>       
+            <strong>Result</strong>
           </div>
         </div>
         <div className="imageContainer">
@@ -35,50 +27,30 @@ const Game2 = () => {
             <Swiper
               className="swiper-container"
               spaceBetween={20}
-              slidesPerView={1} // 한 번에 1개의 SwiperSlide 표시
-              slidesPerGroup={1} // 1개씩 슬라이드 이동
+              slidesPerView={1}
+              slidesPerGroup={1}
               onSlideChange={() => console.log("slide change")}
               onSwiper={(swiper) => console.log(swiper)}
               modules={[Navigation]}
               navigation={true}
               direction={"horizontal"}
             >
-              <SwiperSlide>
-                <div className="slide-container">
-                  <div
-                    className="swiperSlide"
-                    style={{ backgroundImage: 'url("/images/og1.png")' }}
-                  ></div>
-                  <div
-                    className="swiperSlide"
-                    style={{ backgroundImage: 'url("/images/gen1.png")' }}
-                  ></div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="slide-container">
-                  <div
-                    className="swiperSlide"
-                    style={{ backgroundImage: 'url("/images/og2.png")' }}
-                  ></div>
-                  <div
-                    className="swiperSlide"
-                    style={{ backgroundImage: 'url("/images/gen2.png")' }}
-                  ></div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="slide-container">
-                  <div
-                    className="swiperSlide"
-                    style={{ backgroundImage: 'url("/images/og3.png")' }}
-                  ></div>
-                  <div
-                    className="swiperSlide"
-                    style={{ backgroundImage: 'url("/images/gen3.png")' }}
-                  ></div>
-                </div>
-              </SwiperSlide>
+              {originalImages.map((originalImage, index) => (
+                <SwiperSlide key={index}>
+                  <div className="slide-container">
+                    <div
+                      className="swiperSlide"
+                      style={{ backgroundImage: `url(${originalImage})` }}
+                    ></div>
+                    <div
+                      className="swiperSlide"
+                      style={{
+                        backgroundImage: `url(${generatedImages[index] || ""})`,
+                      }}
+                    ></div>
+                  </div>
+                </SwiperSlide>
+              ))}
             </Swiper>
           </div>
           <div className="imageBtnContainer">

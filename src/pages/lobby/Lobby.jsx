@@ -14,6 +14,7 @@ import { room_create } from "../../api/home/Room.js";
 import Modal from "../../components/lobby/Modal.jsx";
 import axios from "axios";
 import useRoomStore from "../../store/room/useRoomStore.js";
+import useGameStore from "../../store/game/useGameStore.js";
 
 const textList = [
   {
@@ -36,10 +37,12 @@ const Lobby = () => {
   let modalOn = false;
   const modalRef = useRef(null);
 
-
   const { userId, isInvite, accessToken, isLogin, setIsLogin } = useUserStore();
   const { roomId } = useRoomStore();
+  const { setFindDiffGameId } = useGameStore();
   const { socket, setSocket } = useSocketStore();
+
+  const { VITE_API_SERVER_URL : api_server_url } = import.meta.env; 
 
   // 뒤로가기 방지
   useEffect(() => {
@@ -109,9 +112,28 @@ const Lobby = () => {
     navigate(`/test?gameId=${gameId}&round=1`);
   };
 
-  const findAIGeneratedImage = () => {
-    socket.emit("game_start", { mode: 2 });
-  }
+  const startFindDIff = async () => {
+    try {
+      const response = await axios({
+        method: "POST",
+        url: api_server_url + "/api/findDiff/start",
+        data: {
+          roomId,
+        },
+      });
+
+      const gameId = response.data;
+      console.log("Received gameId:", gameId);
+
+      setFindDiffGameId(gameId);
+
+      socket.emit("game_start", { mode: 2, gameId });
+      navigate("/game2/upload");
+    } catch (error) {
+      console.error("Error starting Find Diff game:", error);
+      // 에러 처리 로직 추가
+    }
+  };
 
   // 카카오 로그아웃
   const kakaoLogout = () => {
@@ -168,7 +190,7 @@ const Lobby = () => {
               min={5}
               max={25}
               text={textList[1].text}
-              onClick={() => navigate(`/game2/upload/`)}
+              onClick={startFindDIff}
             />
             <Planet
               style={{ right: "12%" }}

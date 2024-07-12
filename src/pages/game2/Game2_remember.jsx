@@ -1,6 +1,5 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import User from "../../components/game/User";
@@ -8,47 +7,22 @@ import "./Game2.css";
 import "swiper/css";
 import "swiper/css/navigation";
 import useRoomStore from "../../store/room/useRoomStore";
-import useUserStore from "../../store/user/useUserStore";
+import useImagesStore from "../../store/image/useImagesStore";
 
 const Game2_remember = () => {
   const navigate = useNavigate();
   const { roomId } = useRoomStore();
-  const { userId } = useUserStore();
-  const [images, setImages] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { originalImages  } = useImagesStore();
 
+  useEffect(() => {
+    console.log("OriginalImages : ", originalImages);
+    const timer = setTimeout(() => {
+      navigate(`/game2/`);
+    }, 10000);
+
+    return () => clearTimeout(timer);
     
-  useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        setIsLoading(true);
-        const response = await axios.get(
-          `http://localhost:8080/api/${roomId}/og`
-        );
-        setImages(response.data);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching images:", error);
-        setIsLoading(false);
-      }
-    };
-
-    fetchImages();
-  }, [roomId]);
-
-  useEffect(() => {
-    if (!isLoading && images.length > 0) {
-      const timer = setTimeout(() => {
-        navigate(`/game2/${roomId}`);
-      }, 15000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [isLoading, images, navigate]);
-
-  if (isLoading) {
-    return <div>Loading images...</div>;
-  }
+  }, [originalImages, navigate, roomId]);
 
   return (
     <div className="inner">
@@ -69,7 +43,7 @@ const Game2_remember = () => {
             <div className="imageContainer">
               <div className="previewImage">
                 <Swiper
-                  className=".swiper-container"
+                  className=".swiper-container swiper-parent"
                   spaceBetween={0}
                   slidesPerView={1}
                   onSlideChange={() => console.log("slide change")}
@@ -77,12 +51,16 @@ const Game2_remember = () => {
                   modules={[Navigation]}
                   navigation={true}
                 >
-                  {images.map((image, index) => (
+                  {originalImages.map((imagePath, index) => (
                     <SwiperSlide key={index}>
                       <div
                         className="swiperSlide"
                         style={{
-                          backgroundImage: `url("${image.path}")`,
+                          backgroundImage: `url(${imagePath})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                          width: "100%",
+                          height: "100%",
                         }}
                       ></div>
                     </SwiperSlide>

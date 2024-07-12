@@ -118,3 +118,7 @@
   height: 1rem;
   text-shadow: 3px 4px 5px blue;
 }
+
+.swiper-parent {
+  width:100%;
+}
