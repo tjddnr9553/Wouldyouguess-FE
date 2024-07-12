@@ -7,7 +7,7 @@ import Tools from './canvas/CanvasTools.jsx';
 import Clock from '../../components/game/Clock.jsx';
 import {catchLiar_info} from "../../api/game/CatchLiar.js";
 import useUserStore from "../../store/user/useUserStore.js";
-import {useSearchParams} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 import { useCanvasStore } from '../../store/canvas/useCanvasStore.js';
 

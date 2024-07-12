@@ -17,6 +17,7 @@ import Loading from "./components/loading/Loading.jsx";
 import Profile from "./pages/home/Profile.jsx";
 import LoginHandler from "./api/oauth/LoginHandler.jsx";
 import {KAKAO_AUTH_URL} from "./api/oauth/Oauth.js";
+import Vote from "./pages/game1/Vote.jsx";
 
 function App() {
 

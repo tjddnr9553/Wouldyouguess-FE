@@ -36,10 +36,10 @@ const Drawing = ({width, height}) => {
 
     useEffect(() => {
         initTool(tool);
-        if(tool == ERASE) {
+        if(tool === ERASE) {
             ctxRef.current.strokeStyle = color;
         }
-        if(tool == TOOL_CLEAR) {
+        if(tool === TOOL_CLEAR) {
             toolRef.current.clearCanvas(width, height);
             setTool(TOOL_PENCIL);
         }
@@ -73,9 +73,9 @@ const Drawing = ({width, height}) => {
         isClick = true;
         const {x, y} = getCursorPosition(e);
         console.log("onMouseDown : ", x, y);
-        if(tool == TOOL_PENCIL){
+        if(tool === TOOL_PENCIL){
             toolRef.current.onMouseDown(x, y, color, size);
-        } else if (tool == ERASE) {
+        } else if (tool === ERASE) {
             toolRef.current.onMouseDown(x, y, 'white', size);
         } else {
             toolRef.current.onMouseDown(x, y, color, size, fillColor);
