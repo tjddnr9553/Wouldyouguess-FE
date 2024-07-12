@@ -21,7 +21,6 @@ import LoginHandler from "./api/oauth/LoginHandler.jsx";
 import {KAKAO_AUTH_URL} from "./api/oauth/Oauth.js";
 
 function App() {
-
   // 초대 받은 사람은 여기서 분류
   useEffect(() => {
     const currentUrl = new URL(window.location.href);
