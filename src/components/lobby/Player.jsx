@@ -1,7 +1,7 @@
 import './Player.css'
 import styled from 'styled-components';
 
-const Player = () => {
+const Player = ({nickname, username}) => {
   return (
     <div className='player'>
       <div className="wrap">
@@ -13,8 +13,8 @@ const Player = () => {
         <Profile />
       </div>
       <div className="name-section">
-        <h1 className='nickname'> 몽땅 연필 </h1>
-        <p className="user-description">나는야 몽땅 연필</p>
+        <h1 className='nickname'>{nickname}</h1>
+        <p className="user-description">{username}</p>
       </div>
     </div>
   )

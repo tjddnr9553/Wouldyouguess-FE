@@ -1,7 +1,7 @@
-import { create } from "zustand";
+import {create} from "zustand";
 
 const useRoomStore = create((set) => ({
-    room_id: null,
-    setRoomId: (rood_id) => set({ rood_id }),
+    roomId: 0,
+    setRoomId: (roomId) => set({ roomId }),
 }));
 export default useRoomStore;

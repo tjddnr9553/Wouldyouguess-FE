@@ -1,0 +1,89 @@
+.modal-container {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    zoom: 1;
+    z-index: 5;
+  }
+  
+  .modal {
+    width: 150%;
+    background-color: rgb(255, 255, 255);
+    border-radius: 1em;
+    box-shadow: 0px 100px 48px -60px rgba(0, 0, 0, 0.1);
+    color: rgb(15, 14, 14);
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .modal-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .modal-content > *,
+  .modal > * {
+    padding: 0.875em;
+  }
+  
+  .title {
+    font-size: 1.25em;
+    font-weight: 600;
+    line-height: 1.2;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .message {
+    line-height: 1.2;
+    text-align: center;
+  }
+  
+  .actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .upload-btn {
+    background-color: transparent;
+    border: 0.125rem dashed hsla(223, 10%, 50%, 0.4);
+    flex: 1;
+    padding: 0.375rem 2rem;
+  }
+  
+  .upload-btn:hover {
+    background-color: hsla(223, 10%, 60%, 0.2);
+  }
+  
+  .close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(226, 94, 54);
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    position: absolute;
+    left: 110%;
+    top: 10px;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .copy {
+    margin-top: 4px;
+    background-color: #008cff10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-radius: 1em;
+  }
+  
+  .copy-link {
+    font-weight: 600;
+  }
+  

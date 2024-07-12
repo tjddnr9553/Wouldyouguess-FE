@@ -1,60 +1,55 @@
 import axios from 'axios';
-export const API_BASE_URL = import.meta.env.API_BASE_URL;
+export const API_SERVER_URL = import.meta.env.VITE_API_SERVER_URL;
 
 
 export const room_create = async (userId) => {
     try {
         const res = await axios({
             method: "POST",
-            url: `${API_BASE_URL}/api/room`,
+            url: `${API_SERVER_URL}/api/room`,
             data: {
                 userId
             }
         });
-
-        return res;
+        return res.data;
     } catch (error) {
-        console.error(error);
         throw new Error(error);
     }
 };
 
-export const room_delete = async (roomId) => {
+export const room_users = async (roomId) => {
     try {
         const res = await axios({
-            method: "DELETE",
-            url: `${API_BASE_URL}/api/room/${roomId}`,
+            method: "GET",
+            url: `${API_SERVER_URL}/api/room/${roomId}/users`,
         });
-        console.log(res);
-        return res;
+        return res.data;
     } catch (error) {
-        console.error(error);
         throw new Error(error);
     }
-};
+}
 
-export const room_join = async (roomId, userId) => {
+
+export const room_join = async (userId, roomId) => {
     try {
         const res = await axios({
             method: "POST",
-            url: `${API_BASE_URL}/room/${roomId}/join`,
+            url: `${API_SERVER_URL}/api/room/${roomId}/join`,
             data: {
                 userId
             }
         });
-        console.log(res);
-        return res;
+        return res.data;
     } catch (error) {
-        console.error(error);
         throw new Error(error);
     }
 };
 
-export const room_exit = async (roomId, userId) => {
+export const room_exit = async (userId, roomId) => {
     try {
         const res = await axios({
             method: "POST",
-            url: `${API_BASE_URL}/room/${roomId}/exit`,
+            url: `${API_SERVER_URL}/room/${roomId}/exit`,
             data: {
                 userId
             }
