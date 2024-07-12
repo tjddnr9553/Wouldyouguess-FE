@@ -17,9 +17,10 @@ const chunkArray = (array, size) => {
 const Palette = () => {
   const colorGroups = chunkArray(colorOptions, 3);
 
-  const { setColor, setFillColor } = useCanvasStore();
+  const { setColor, setFillColor, tool, setTool } = useCanvasStore();
 
   function changeColor(targetColor) {
+    tool == 'clear' && setTool('pencil');
     setColor(targetColor);
     setFillColor(targetColor);
   }

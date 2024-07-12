@@ -70,6 +70,8 @@ const Game1 = () => {
   const handleSaveCanvas = () => {
     const imgUrl = getSaveImg();
 
+    navigate('vote');
+
     // 서버 전달 로직 작성하기.
   }
 

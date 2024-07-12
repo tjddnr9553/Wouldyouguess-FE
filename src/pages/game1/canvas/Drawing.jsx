@@ -1,13 +1,16 @@
 import './Drawing.css'
 import { useEffect, useRef, useState } from 'react';
-import {Pencil, TOOL_PENCIL, Line, TOOL_LINE, Ellipse, TOOL_ELLIPSE, Rectangle, TOOL_RECTANGLE} from './tools';
+import {Pencil, TOOL_PENCIL, Clear, TOOL_CLEAR, Ellipse, TOOL_ELLIPSE, Rectangle, TOOL_RECTANGLE} from './tools';
 import { useCanvasStore } from '../../../store/canvas/useCanvasStore';
+
+const ERASE = 'erase';
 
 const toolsMap = {
     [TOOL_PENCIL]: Pencil,
-    [TOOL_LINE]: Line,
+    [TOOL_CLEAR]: Clear,
     [TOOL_RECTANGLE]: Rectangle,
-    [TOOL_ELLIPSE]: Ellipse
+    [TOOL_ELLIPSE]: Ellipse,
+    [ERASE]: Pencil
   };
 
 const Drawing = ({width, height}) => {
@@ -15,37 +18,36 @@ const Drawing = ({width, height}) => {
     const canvasRef = useRef(null);
     const ctxRef = useRef(null);
     const toolRef = useRef(null);
-    const {tool, color, size, fillColor, clearBtnClick, setCanvas} = useCanvasStore();
-
-    const saveCanvas = () => {
-        const  link = document.createElement("a");
-        const canvas = canvasRef.current;
-
-        link.download = "canvas.png";
-        link.href = canvas.toDataURL("image/png");
-        alert(link.href );
-        link.click();
-      }
+    const {tool, setTool, color, size, fillColor, clearBtnClick, setCanvas } = useCanvasStore();
     
     useEffect(() => { 
         const canvas = canvasRef.current;
         setCanvas(canvas);
         ctxRef.current = canvas.getContext('2d');
     }, [])
-
-    useEffect(() => {
-        initTool(tool);
-    }, [tool])
-
+    
     useEffect(() => {
         clearCanvas();
     }, [clearBtnClick])
+
 
     const clearCanvas = () => {
         ctxRef.current.clearRect(0, 0, width, height);
     }
 
+    useEffect(() => {
+        initTool(tool);
+        if(tool == ERASE) {
+            ctxRef.current.strokeStyle = color;
+        }
+        if(tool == TOOL_CLEAR) {
+            toolRef.current.clearCanvas(width, height);
+            setTool(TOOL_PENCIL);
+        }
+    }, [tool])
+
     const initTool = (tool) => {
+        console.log(tool);
         toolRef.current = toolsMap[tool](ctxRef.current);
     }
 
@@ -60,9 +62,14 @@ const Drawing = ({width, height}) => {
     // 인자가 필요 없을 경우?
     const onMouseDown = (e) => {
         const {x, y} = getCursorPosition(e);
-        tool == TOOL_PENCIL ?
-            toolRef.current.onMouseDown(x, y, color, size) :
+        if(tool == TOOL_PENCIL){
+            toolRef.current.onMouseDown(x, y, color, size);
+        } else if (tool == ERASE) {
+            toolRef.current.onMouseDown(x, y, 'white', size);
+        } else {
             toolRef.current.onMouseDown(x, y, color, size, fillColor);
+        }
+        
     }
 
     const onMouseUp = (e) => {

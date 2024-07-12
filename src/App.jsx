@@ -32,12 +32,12 @@ function App() {
         <Route path='/lobby' element={<Lobby />} />
         <Route path='/game1' element={<Game1 />} />
         <Route path='/game1/vote' element={<Vote />} />
+        <Route path='game1/result' element={<Result />} />
         <Route path="/game2" element={<Game2 />} />
         <Route path="/game2/upload" element={<Game2_upload />} />
         <Route path="/game2/remember" element={<Game2_remember />} />
         <Route path="/game2/result" element={<Game2_result />} />
         <Route path='/game3' element={<Game3 />} />
-        <Route path='/result' element={<Result />} />
         <Route path='/loading' element={<Loading />} />
         <Route path='/temp' element={<Temp />} />
         <Route path='/test' element={<TempCanvas />} />

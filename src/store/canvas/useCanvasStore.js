@@ -9,8 +9,6 @@ export const useCanvasStore = create((set, get) => ({
     setSize: (size) => set({ size }),
     fillColor: '',
     setFillColor: (fillColor) => set({ fillColor }),
-    clearBtnClick: false,
-    setClearBtnClick: (clearBtnClick) => set({ clearBtnClick }),
     canvas: '',
     setCanvas: (canvas) => set({canvas}),
     getSaveImg: () => {

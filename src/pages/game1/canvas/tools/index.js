@@ -4,9 +4,9 @@ export {
 } from './Pencil';
 
 export {
-  default as Line,
-  TOOL_LINE
-} from './Line';
+  default as Clear,
+  TOOL_CLEAR
+} from './Clear';
 
 export {
   default as Ellipse,
