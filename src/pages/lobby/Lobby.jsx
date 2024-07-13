@@ -39,26 +39,20 @@ const Lobby = () => {
   let modalOn = false;
   const modalRef = useRef(null);
 
-
-  const { userId, isInvite, accessToken, isLogin, setIsLogin } = useUserStore();
+  const { userId, isInvite, nickname, accessToken, isLogin, setIsLogin } = useUserStore();
   const { roomId } = useRoomStore();
   const { setFindDiffGameId } = useGameStore();
   const { socket, setSocket } = useSocketStore();
   const { setGameId } = useCatchLiarStore();
   const { joinRoom } = useWebrtcStore();
 
-  // 뒤로가기 방지
+
   useEffect(() => {
-    window.history.pushState(null, null, window.location.href);
-
-    window.onpopstate = () => {
-      window.history.pushState(null, null, window.location.href);
-    };
-
-    return () => {
-      window.onpopstate = null;
-    };
-  }, []);
+    // 룸에 참가시키기
+    if (roomId && nickname) {
+      joinRoom(); // 룸 접속 함수 호출
+    }
+  }, [roomId, nickname]); // 의존성 배열 추가
 
   useEffect(() => {
     const socketConnect = io(import.meta.env.VITE_SOCKET_SERVER_URL);
@@ -122,7 +116,7 @@ const Lobby = () => {
         <Header />
         <div className="modal-container" ref={modalRef}>
           <span className="close" onClick={handleModal}>X</span>
-          <Modal text={`${window.location.origin}/invite/${roomId}`} />
+          <Modal text1={`${window.location.origin}/invite/${roomId}`} />
         </div>
         <div className="content">
           <div className="side">
