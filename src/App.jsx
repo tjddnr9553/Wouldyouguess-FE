@@ -1,4 +1,4 @@
-import {Route, Routes} from "react-router-dom";
+import {Route, Routes, useNavigate} from "react-router-dom";
 import GlobalStyles from "./styles/GlobalStyles";
 import {useEffect} from "react";
 import "./App.css";
@@ -21,6 +21,8 @@ import LoginHandler from "./api/oauth/LoginHandler.jsx";
 import {KAKAO_AUTH_URL} from "./api/oauth/Oauth.js";
 
 function App() {
+  const nav = useNavigate();
+
   // 초대 받은 사람은 여기서 분류
   useEffect(() => {
     const currentUrl = new URL(window.location.href);
@@ -31,7 +33,8 @@ function App() {
       window.localStorage.setItem("inviteRoomId", inviteRoomId);
       window.localStorage.setItem("isInvited", "true");
       console.log("초대받은 주소 : ", inviteRoomId);
-      window.location.href = KAKAO_AUTH_URL;
+      nav('/temp/login');
+      // window.location.href = KAKAO_AUTH_URL;
     }
   }, []);
 
