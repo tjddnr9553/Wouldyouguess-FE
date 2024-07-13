@@ -6,6 +6,9 @@ import {
   RoomEvent,
 } from "livekit-client";
 
+const LIVEKIT_URL = import.meta.env.LIVEKIT_URL;
+const APPLICATION_SERVER_URL = import.meta.env.VITE_OPENVIDU_APP_SERVER_URL;
+
 type TrackInfo = {
   trackPublication: RemoteTrackPublication;
   participantIdentity: string;
@@ -25,30 +28,6 @@ interface WebRTCState {
   getToken: (roomName: string, participantName: string) => Promise<string>;
 }
 
-let APPLICATION_SERVER_URL = "";
-let LIVEKIT_URL = "https://openvidu.wouldyouguess.com/";
-configureUrls();
-
-function configureUrls() {
-  // If APPLICATION_SERVER_URL is not configured, use default value from local development
-  if (!APPLICATION_SERVER_URL) {
-    if (window.location.hostname === "localhost") {
-      APPLICATION_SERVER_URL = "http://localhost:6080/";
-    } else {
-      APPLICATION_SERVER_URL = "https://" + window.location.hostname + ":6080/";
-    }
-  }
-
-  // If LIVEKIT_URL is not configured, use default value from local development
-  if (!LIVEKIT_URL) {
-    if (window.location.hostname === "localhost") {
-      LIVEKIT_URL = "https://openvidu.wouldyouguess.com/";
-    } else {
-      LIVEKIT_URL = "https://openvidu.wouldyouguess.com/";
-    }
-  }
-}
-
 const useWebrtcStore = create<WebRTCState>((set, get) => {
   // 외부 상태 저장소에서 초기값 가져오기
   return {
@@ -57,6 +36,7 @@ const useWebrtcStore = create<WebRTCState>((set, get) => {
     remoteTracks: [],
     participantName: "Participant" + Math.floor(Math.random() * 100),
     roomName: "roomId",
+
     joinRoom: async () => {
       const { roomName, participantName, getToken, leaveRoom } = get(); // Get necessary values from the store
 
