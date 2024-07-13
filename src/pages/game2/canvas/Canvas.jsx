@@ -1,8 +1,19 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import './Canvas.css'
 
-const Canvas = ({selectedImage, clickUploadBtn, width, height }) => {
+const Canvas = ({width, height}) => {
   const canvasRef = useRef(null);
+  const contextRef = useRef();
+
+  useEffect(() => {
+    console.log('캔버스 리렌더링');
+  }, )
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const context = canvas.getContext("2d");
+    contextRef.current = context;
+  }, [])
 
   const getCursorPosition = (e) => {
     const { top, left } = canvasRef.current.getBoundingClientRect();
@@ -13,18 +24,22 @@ const Canvas = ({selectedImage, clickUploadBtn, width, height }) => {
   };
 
   const clickCanvas = (e) => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
-    context.clearRect(0, 0, width, height);
+    contextRef.current.clearRect(0, 0, width, height);
     const { x, y } = getCursorPosition(e);
  
     const length = 100;
-    context.strokeRect(x - length / 2, y - length / 2, length, length);
+    contextRef.current.strokeRect(x - length / 2, y - length / 2, length, length);
   }
 
+  useEffect(() => {
+    if(canvasRef.current) {
+      canvasRef.current.width = width;
+      canvasRef.current.height = height;
+    }
+  }, [width, height])
+
   return (
-  <div className="canvas-container" style={{ width, height }}>
-    {selectedImage && (
+    <>
       <canvas
         ref={canvasRef}
         style={{
@@ -35,8 +50,7 @@ const Canvas = ({selectedImage, clickUploadBtn, width, height }) => {
         }}
         onMouseDown={clickCanvas}
       />
-    )}
-  </div>
+    </>
   )
 }
 
