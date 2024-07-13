@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import NewButton from "../../components/button/newButton";
 import useImagesStore from "../../store/image/useImagesStore.js";
-import User from "../../components/game/User";
+import User from "../../components/game/User.tsx";
 import "./Game2.css";
 import "swiper/css";
 
@@ -30,9 +30,6 @@ const Game2 = () => {
       {" "}
       <div className="game container">
         <div className="left-section">
-          <User />
-          <User />
-          <User />
           <User />
         </div>
         <div className="center">

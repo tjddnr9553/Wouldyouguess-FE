@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import "./Modal.css";
-const Modal = ({ text }) => {
+const Modal = ({ text1 }) => {
   const roomUrl = useRef(null);
   const copyText = () => {
     navigator.clipboard.writeText(roomUrl.current.value);
@@ -15,7 +15,7 @@ const Modal = ({ text }) => {
           <input
             type="text"
             className="button upload-btn"
-            value={text}
+            value={text1}
             ref={roomUrl}
             readOnly
           />
