@@ -29,9 +29,6 @@ const Game2_remember = () => {
       <div className="game container">
         <div className="left-section">
           <User />
-          <User />
-          <User />
-          <User />
         </div>
         <div className="center">
           <div className="game2_border">

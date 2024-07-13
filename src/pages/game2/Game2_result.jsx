@@ -16,6 +16,9 @@ const Game2 = () => {
 
   return (
     <div className="inner">
+      <div className="left-section">
+        <User />
+      </div>
       <div className="game2_border">
         <div className="titleContainer">
           <div>

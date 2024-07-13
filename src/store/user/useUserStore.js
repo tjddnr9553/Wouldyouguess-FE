@@ -16,8 +16,8 @@ const useUserStore = create((set) => ({
   setUsername: (username) => set({ username }),
   setNickname: (nickname) => set({ nickname }),
   setAccessToken: (accessToken) => set({ accessToken }),
-  setIsLogin: (isLogin) => set({isLogin}),
-  setIsInvite: (isInvite) => set({isInvite}),
+  setIsLogin: (isLogin) => set({ isLogin }),
+  setIsInvite: (isInvite) => set({ isInvite }),
 
   setRank: (rank) => set({ rank }),
   setScore: (score) => set({ score }),

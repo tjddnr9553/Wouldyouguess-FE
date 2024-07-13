@@ -1,19 +1,20 @@
 import { useNavigate } from "react-router-dom";
 
 import "./Lobby.css";
-import "../../components/lobby/Modal.css";
 import PlayerSidebar from "./PlayerSidebar.jsx";
 import Planet from "../../components/game/Planet.jsx";
 import Header from "../../components/game/Header.jsx";
 import Invite from "../../components/lobby/Invite.jsx";
 import useSocketStore from "../../store/socket/useSocketStore.js";
 import useUserStore from "../../store/user/useUserStore.js";
-import { io, Socket } from "socket.io-client";
-import { useEffect, useRef, useState } from "react";
+import { io } from "socket.io-client";
+import { useEffect, useRef } from "react";
 import { room_create } from "../../api/home/Room.js";
 import Modal from "../../components/lobby/Modal.jsx";
-import axios from "axios";
 import useRoomStore from "../../store/room/useRoomStore.js";
+import { catchLiar_start } from "../../api/game/CatchLiar.js";
+import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
+import useWebrtcStore from "../../store/webrtc/useWebrtcStore.tsx";
 import useGameStore from "../../store/game/useGameStore.js";
 
 const textList = [
@@ -37,12 +38,15 @@ const Lobby = () => {
   let modalOn = false;
   const modalRef = useRef(null);
 
+
   const { userId, isInvite, accessToken, isLogin, setIsLogin } = useUserStore();
   const { roomId } = useRoomStore();
   const { setFindDiffGameId } = useGameStore();
   const { socket, setSocket } = useSocketStore();
+  const { setGameId } = useCatchLiarStore();
+  const { joinRoom } = useWebrtcStore();
 
-  const { VITE_API_SERVER_URL : api_server_url } = import.meta.env; 
+  const { VITE_API_SERVER_URL : api_server_url } = import.meta.env;
 
   // 뒤로가기 방지
   useEffect(() => {
@@ -53,7 +57,7 @@ const Lobby = () => {
     };
 
     return () => {
-      window.onpopstate = null; // 컴포넌트 언마운트 시 이벤트 제거
+      window.onpopstate = null;
     };
   }, []);
 
@@ -69,27 +73,18 @@ const Lobby = () => {
       }
     });
 
-    // 연결이 끊어졌을 때
-    // socketConnect.on("disconnect", async (reason) => {
-    //   socketConnect.emit("room_exit", { roomId, userId });
-    //   await room_exit(roomId, userId);
-    // });
-
     socketConnect.on("game_start", (data) => {
-      console.log(data.gameId);
-      if (data.mode ===  1) {
-        navigate(`/test?gameId=${data.gameId}&round=1`);
+      if (data.mode === 1) {
+        setGameId(data.gameId);
+        navigate(`/game1?gameId=${data.gameId}&round=1`);
       } else if (data.mode === 2) {
         navigate(`/game2/upload`);
       }
-
     });
 
-
     return () => {
-      // socketConnect.disconnect();
       socketConnect?.off("game_start", (data) => {
-        navigate(`/test?gameId=${data.gameId}&round=1`);
+        navigate(`/game1?gameId=${data.gameId}&round=1`);
       });
     };
   }, [setSocket]);
@@ -106,10 +101,11 @@ const Lobby = () => {
   };
 
   const startCatchLiar = async () => {
-    // const gameId = await catchLiar_start(roomId);
-    const gameId = 321;
-    socket.emit("game_start", { mode: 1, gameId });
-    navigate(`/test?gameId=${gameId}&round=1`);
+    const gameId = await catchLiar_start(roomId);
+    setGameId(gameId);
+
+    socket.emit("game_start", { mode: 1, userId, roomId, gameId });
+    navigate(`/game1?gameId=${gameId}&round=1`);
   };
 
   const startFindDIff = async () => {

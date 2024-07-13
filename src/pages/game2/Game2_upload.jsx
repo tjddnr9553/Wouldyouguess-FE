@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import NewButton from "../../components/button/newButton";
 import useImagesStore from "../../store/image/useImagesStore.js";
-import User from "../../components/game/User";
+import User from "../../components/game/User.tsx";
 import "./Game2.css";
 import useRoomStore from "../../store/room/useRoomStore.js";
 import useUserStore from "../../store/user/useUserStore.js";
@@ -180,9 +180,6 @@ const Game2_upload = () => {
     <div className="inner">
       <div className="game container">
         <div className="left-section">
-          <User />
-          <User />
-          <User />
           <User />
         </div>
         <div className="center">

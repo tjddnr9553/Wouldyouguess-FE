@@ -9,9 +9,9 @@ const Game1_result = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
 
-    const socket = useSocketStore(state => state.socket);
+    const { socket } = useSocketStore();
     const { userId } = useUserStore();
-    const roomId = useRoomStore(state => state.roomId);
+    const { roomId } = useRoomStore();
 
     useEffect(async () => {
         const gameId = Number(searchParams.get('gameId'));
