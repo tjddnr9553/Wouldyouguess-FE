@@ -20,7 +20,6 @@ import {KAKAO_AUTH_URL} from "./api/oauth/Oauth.js";
 import Vote from "./pages/game1/Vote.jsx";
 
 function App() {
-
   // 초대 받은 사람은 여기서 분류
   useEffect(() => {
     const currentUrl = new URL(window.location.href);
@@ -57,9 +56,11 @@ function App() {
           <Route path="/result" element={<Result />} />
           <Route path="/loading" element={<Loading />} />
 
-          <Route path="/auth/kakao/callback" element={<LoginHandler />} />
-        </Routes>
-      </>
+        <Route path="/auth/kakao/callback" element={<LoginHandler />} />
+
+        <Route path="/temp/login" element={<Login />} />
+      </Routes>
+    </>
   );
 }
 
