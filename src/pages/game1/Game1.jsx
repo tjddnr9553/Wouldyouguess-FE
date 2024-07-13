@@ -12,6 +12,7 @@ import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 
 const Game1 = () => {
   const [searchParams] = useSearchParams();
+  const round = Number(searchParams.get('round'));
 
   const containerRef = useRef(null);
 
@@ -27,8 +28,6 @@ const Game1 = () => {
 
   useEffect(() => {
     const syn_func = async () => {
-      const round = Number(searchParams.get("round"));
-
       const response = await catchLiar_info(gameId, userId, round);
       setIsDrawing(response.isDrawing);
       setIsLiar(response.isLiar);
@@ -50,7 +49,7 @@ const Game1 = () => {
   }, [windowSize]);
 
   return (
-    <div className="inner">
+    <div className="inner" key={round}>
       <div className="game container">
         <div className="left-section">
           <User />

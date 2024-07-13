@@ -34,16 +34,13 @@ const textList = [
 const Lobby = () => {
   const navigate = useNavigate();
 
+  let modalOn = false;
   const modalRef = useRef(null);
-  const currentRoomId = window.location.href.split("/").pop();
-  const roomUrl = `http://localhost:5173/invite/${currentRoomId}`;
 
-  const { userId, isInvited, nickname } = useUserStore();
+  const { userId, isInvite, nickname } = useUserStore();
   const { roomId } = useRoomStore();
   const { socket, setSocket } = useSocketStore();
-  let modalOn = false;
   const { setGameId } = useCatchLiarStore();
-
   const { joinRoom } = useWebrtcStore();
 
   // 뒤로가기 방지
@@ -59,19 +56,13 @@ const Lobby = () => {
     };
   }, []);
 
-  useEffect(() => {
-    // 룸에 참가시키기
-    if (roomId && nickname) {
-      joinRoom(); // 룸 접속 함수 호출
-    }
-  }, [roomId, nickname]); // 의존성 배열 추가
 
   useEffect(() => {
     const socketConnect = io(import.meta.env.VITE_SOCKET_SERVER_URL);
     setSocket(socketConnect);
 
     socketConnect.on("connect", () => {
-      if (isInvited) {
+      if (isInvite) {
         socketConnect.emit("room_join", { roomId, userId });
       } else {
         socketConnect.emit("room_create", { roomId, userId });
@@ -79,7 +70,6 @@ const Lobby = () => {
     });
 
     socketConnect.on("game_start", (data) => {
-      console.log(data);
       if (data.mode === 1) {
         setGameId(data.gameId);
         navigate(`/game1?gameId=${data.gameId}&round=1`);
@@ -88,27 +78,12 @@ const Lobby = () => {
       }
     });
 
-    // 연결이 끊어졌을 때
-    // socketConnect.on("disconnect", async (reason) => {
-    //   socketConnect.emit("room_exit", { roomId, userId });
-    //   await room_exit(roomId, userId);
-    // });
-
     return () => {
-      // socketConnect.disconnect();
       socketConnect?.off("game_start", (data) => {
         navigate(`/game1?gameId=${data.gameId}&round=1`);
       });
     };
   }, [setSocket]);
-
-  //   return () => {
-  //     // socketConnect.disconnect();
-  //     socketConnect?.off("game_start", (data) => {
-  //       navigate(`/test?gameId=${data.gameId}&round=1`);
-  //     });
-  //   };
-  // }, [setSocket]);
 
   // 친구 초대 모달창
   const handleModal = () => {

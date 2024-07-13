@@ -15,7 +15,7 @@ const Home = () => {
     <div className="home background">
         <button className="img-button" onClick={goToKakaoLogin}>
           <img src="/images/btn/basic_btn.png" alt="btn" className="btn-img" />
-          <div className="btn-start">START1</div>
+          <div className="btn-start">START</div>
         </button>
     </div>
   );

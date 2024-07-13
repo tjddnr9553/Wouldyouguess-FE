@@ -32,7 +32,6 @@ function App() {
     if (urlType === "invite") {
       window.localStorage.setItem("inviteRoomId", inviteRoomId);
       window.localStorage.setItem("isInvited", "true");
-      console.log("초대받은 주소 : ", inviteRoomId);
       nav('/temp/login');
       // window.location.href = KAKAO_AUTH_URL;
     }

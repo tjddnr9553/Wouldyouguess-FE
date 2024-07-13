@@ -30,14 +30,15 @@ const Login = () => {
     const onSubmitBtnClick = async () => {
         const response = await temp_login(input.username, input.nickname);
         const userId = response.user_id;
+
         setUserId(userId);
         setNickname(response.nickname);
         setUsername(response.username);
         setIsLogin(true);
-        setIsInvite(isInvited)
-
+        setIsInvite(isInvited);
         const roomId = isInvited ? await room_join(userId, inviteRoomId) : await room_create(userId);
         setRoomId(roomId);
+        window.localStorage.removeItem("inviteRoomId");
         window.localStorage.removeItem("isInvited");
         navigate(`/lobby/${roomId}`);
     };

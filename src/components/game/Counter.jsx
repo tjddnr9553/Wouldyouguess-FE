@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-const Counter = ({countDown}) => {
+const Counter = ({countDown, onCountdownComplete}) => {
   const [count, setCount] = useState(countDown);
 
   useEffect(() => {
@@ -10,6 +10,7 @@ const Counter = ({countDown}) => {
 
     if(count === 0){
       clearInterval(count_obj);
+      onCountdownComplete();
     }
 
     return () => clearInterval(count_obj);
