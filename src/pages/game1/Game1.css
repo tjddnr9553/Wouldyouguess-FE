@@ -15,10 +15,37 @@
   align-items: center;
   gap: 5px;
 }
+
 .game .center {
   width: 70%;
   height: 100%;
-  /* background-color: antiquewhite; */
+}
+.keyword {
+  height: 7%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 2rem;
+  font-weight: 700;
+
+  margin-bottom: 2%;
+
+  padding: 3%;
+  background-color: rgb(255, 255, 255);
+
+  border-radius: 10px;
+}
+.canvas-container {
+  width: 95%;
+  height: 70%;
+  background-color: white;
+  border-radius: 12px;
+}
+.canvas-tools {
+  width: 95%;
+  margin-top: 3%;
 }
 
 /* right section css */
@@ -52,15 +79,6 @@
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 20px 20px rgba(0, 0, 0, 0.22);
 
   font-size: 30px;
-}
-
-.canvas-container {
-  width: 95%;
-  height: 70%;
-  background-color: white;
-  margin: auto;
-  margin-top: 60px;
-  border-radius: 12px;
 }
 
 

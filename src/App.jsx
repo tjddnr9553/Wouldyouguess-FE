@@ -14,11 +14,10 @@ import Game3 from "./pages/game3/Game3.jsx";
 import Result from "./pages/result/Result.jsx";
 import Login from "./pages/oauth/Login.jsx";
 import Loading from "./components/loading/Loading.jsx";
-import Game1_vote from "./pages/game1/test/Game1_vote.jsx";
-import Game1_result from "./pages/game1/test/Game1_result.jsx";
 import Profile from "./pages/home/Profile.jsx";
 import LoginHandler from "./api/oauth/LoginHandler.jsx";
 import {KAKAO_AUTH_URL} from "./api/oauth/Oauth.js";
+import Vote from "./pages/game1/Vote.jsx";
 
 function App() {
   const nav = useNavigate();
@@ -38,26 +37,26 @@ function App() {
   }, []);
 
   return (
-    <>
-      <GlobalStyles />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/lobby/:roomUrl" element={<Lobby />} />
+      <>
+        <GlobalStyles />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/lobby/:roomUrl" element={<Lobby />} />
 
-        <Route path="/game1" element={<Game1 />} />
-        <Route path="/game1/vote" element={<Game1_vote />} />
-        <Route path="/game1/result" element={<Game1_result />} />
+          <Route path="/game1" element={<Game1 />} />
+          <Route path='/game1/vote' element={<Vote />} />
+          <Route path='game1/result' element={<Result />} />
 
-        <Route path="/game2" element={<Game2 />} />
-        <Route path="/game2/upload" element={<Game2_upload />} />
-        <Route path="/game2/remember" element={<Game2_remember />} />
-        <Route path="/game2/result" element={<Game2_result />} />
+          <Route path="/game2" element={<Game2 />} />
+          <Route path="/game2/upload" element={<Game2_upload />} />
+          <Route path="/game2/remember" element={<Game2_remember />} />
+          <Route path="/game2/result" element={<Game2_result />} />
 
-        <Route path="/game3" element={<Game3 />} />
-        <Route path="/result" element={<Result />} />
-        <Route path="/loading" element={<Loading />} />
+          <Route path="/game3" element={<Game3 />} />
+          <Route path="/result" element={<Result />} />
+          <Route path="/loading" element={<Loading />} />
 
         <Route path="/auth/kakao/callback" element={<LoginHandler />} />
 

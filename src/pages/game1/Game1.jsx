@@ -7,10 +7,14 @@ import Tools from "./canvas/CanvasTools.jsx";
 import Clock from "../../components/game/Clock.jsx";
 import { catchLiar_info } from "../../api/game/CatchLiar.js";
 import useUserStore from "../../store/user/useUserStore.js";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
+import { useCanvasStore } from '../../store/canvas/useCanvasStore.js';
 
 const Game1 = () => {
+  const navigate = useNavigate();
+
   const [searchParams] = useSearchParams();
   const round = Number(searchParams.get('round'));
 
@@ -25,9 +29,12 @@ const Game1 = () => {
 
   const { userId } = useUserStore();
   const { gameId, setIsDrawing, setIsLiar, setKeyword } = useCatchLiarStore();
+  const { getSaveImg } = useCanvasStore();
 
   useEffect(() => {
     const syn_func = async () => {
+      const round = Number(searchParams.get("round"));
+
       const response = await catchLiar_info(gameId, userId, round);
       setIsDrawing(response.isDrawing);
       setIsLiar(response.isLiar);
@@ -48,16 +55,40 @@ const Game1 = () => {
     setParentHeight(containerRef.current.clientHeight);
   }, [windowSize]);
 
-  return (
-    <div className="inner" key={round}>
-      <div className="game container">
-        <div className="left-section">
-          <User />
-        </div>
-        <div className="center">
-          <div ref={containerRef} className="canvas-container">
-            <Drawing width={parentwidth} height={parentheight} />
-            <Tools />
+  const handleSaveCanvas = () => {
+    const imgUrl = getSaveImg();
+
+    navigate('vote');
+
+    // 서버 전달 로직 작성하기.
+  }
+
+  return(
+      <div className="inner" key={round}>
+        <div className="game container">
+          <div className="left-section">
+            <User />
+            <User />
+            <User />
+            <User />
+          </div>
+          <div className="center">
+            <div className="keyword">
+              <div>
+                Keyword &nbsp; &nbsp; &nbsp; tiger
+              </div>
+            </div>
+            <div ref={containerRef} className="canvas-container">
+              <Drawing  width={parentwidth} height={parentheight} />
+            </div>
+            <div className="canvas-tools">
+              <Tools />
+            </div>
+          </div>
+          <div className="right-section">
+            <Clock />
+            <Palette />
+            <button className="quite-btn" onClick={handleSaveCanvas}>DONE</button>
           </div>
         </div>
         <div className="right-section">
@@ -66,8 +97,8 @@ const Game1 = () => {
           <button className="quite-btn">DONE</button>
         </div>
       </div>
-    </div>
-  );
+</div>
+);
 };
 
 export default Game1;
