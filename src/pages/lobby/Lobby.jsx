@@ -15,7 +15,6 @@ import useRoomStore from "../../store/room/useRoomStore.js";
 import { catchLiar_start } from "../../api/game/CatchLiar.js";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 import useWebrtcStore from "../../store/webrtc/useWebrtcStore.tsx";
-
 const textList = [
   {
     id: "game1",
@@ -35,29 +34,13 @@ const Lobby = () => {
   const navigate = useNavigate();
 
   const modalRef = useRef(null);
-  const currentRoomId = window.location.href.split("/").pop();
-  const roomUrl = `http://localhost:5173/invite/${currentRoomId}`;
-
   const { userId, isInvited, nickname } = useUserStore();
   const { roomId } = useRoomStore();
   const { socket, setSocket } = useSocketStore();
-  let modalOn = false;
   const { setGameId } = useCatchLiarStore();
-
   const { joinRoom } = useWebrtcStore();
 
-  // 뒤로가기 방지
-  useEffect(() => {
-    window.history.pushState(null, null, window.location.href);
-
-    window.onpopstate = () => {
-      window.history.pushState(null, null, window.location.href);
-    };
-
-    return () => {
-      window.onpopstate = null;
-    };
-  }, []);
+  let modalOn = false;
 
   useEffect(() => {
     // 룸에 참가시키기
@@ -79,7 +62,6 @@ const Lobby = () => {
     });
 
     socketConnect.on("game_start", (data) => {
-      console.log(data);
       if (data.mode === 1) {
         setGameId(data.gameId);
         navigate(`/game1?gameId=${data.gameId}&round=1`);
@@ -151,7 +133,6 @@ const Lobby = () => {
               <Invite onClick={handleModal} />
             </div>
           </div>
-
           <div className="game-content">
             <Planet
               style={{ top: "10%" }}

@@ -1,6 +1,6 @@
-import {Route, Routes} from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import GlobalStyles from "./styles/GlobalStyles";
-import {useEffect} from "react";
+import { useEffect } from "react";
 import "./App.css";
 
 import Lobby from "./pages/lobby/Lobby.jsx";
@@ -18,15 +18,28 @@ import Game1_vote from "./pages/game1/test/Game1_vote.jsx";
 import Game1_result from "./pages/game1/test/Game1_result.jsx";
 import Profile from "./pages/home/Profile.jsx";
 import LoginHandler from "./api/oauth/LoginHandler.jsx";
-import {KAKAO_AUTH_URL} from "./api/oauth/Oauth.js";
+import { KAKAO_AUTH_URL } from "./api/oauth/Oauth.js";
 
 function App() {
+  // 뒤로가기 방지
+  useEffect(() => {
+    window.history.pushState(null, null, window.location.href);
+
+    window.onpopstate = () => {
+      window.history.pushState(null, null, window.location.href);
+    };
+
+    return () => {
+      window.onpopstate = null;
+    };
+  }, []);
+
   // 초대 받은 사람은 여기서 분류
   useEffect(() => {
     const currentUrl = new URL(window.location.href);
-    const urlPaths = currentUrl.pathname.split("/");      // URL 경로를 '/'로 분할
-    const urlType = urlPaths[urlPaths.length - 2];                  // 마지막에서 두 번째 요소 가져오기
-    const inviteRoomId = urlPaths[urlPaths.length - 1];             // 마지막 요소 가져오기
+    const urlPaths = currentUrl.pathname.split("/"); // URL 경로를 '/'로 분할
+    const urlType = urlPaths[urlPaths.length - 2]; // 마지막에서 두 번째 요소 가져오기
+    const inviteRoomId = urlPaths[urlPaths.length - 1]; // 마지막 요소 가져오기
     if (urlType === "invite") {
       window.localStorage.setItem("inviteRoomId", inviteRoomId);
       window.localStorage.setItem("isInvited", "true");
