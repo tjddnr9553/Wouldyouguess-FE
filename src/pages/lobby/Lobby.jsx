@@ -47,8 +47,6 @@ const Lobby = () => {
   const { setGameId } = useCatchLiarStore();
   const { joinRoom } = useWebrtcStore();
 
-  const { VITE_API_SERVER_URL : api_server_url } = import.meta.env;
-
   // 뒤로가기 방지
   useEffect(() => {
     window.history.pushState(null, null, window.location.href);
