@@ -8,7 +8,6 @@ import Clock from "../../components/game/Clock.jsx";
 import { catchLiar_info } from "../../api/game/CatchLiar.js";
 import useUserStore from "../../store/user/useUserStore.js";
 import {useNavigate, useSearchParams} from "react-router-dom";
-import { useSearchParams } from "react-router-dom";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 import { useCanvasStore } from '../../store/canvas/useCanvasStore.js';
 
@@ -68,14 +67,11 @@ const Game1 = () => {
         <div className="game container">
           <div className="left-section">
             <User />
-            <User />
-            <User />
-            <User />
           </div>
           <div className="center">
             <div className="keyword">
               <div>
-                Keyword &nbsp; &nbsp; &nbsp; tiger
+                Keyword: &nbsp; &nbsp; &nbsp; tiger
               </div>
             </div>
             <div ref={containerRef} className="canvas-container">
@@ -91,14 +87,8 @@ const Game1 = () => {
             <button className="quite-btn" onClick={handleSaveCanvas}>DONE</button>
           </div>
         </div>
-        <div className="right-section">
-          <Clock />
-          <Palette />
-          <button className="quite-btn">DONE</button>
-        </div>
       </div>
-</div>
-);
+  );
 };
 
 export default Game1;

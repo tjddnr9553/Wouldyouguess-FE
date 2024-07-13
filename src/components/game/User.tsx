@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import VideoComponent from "../../components/webrtc/VideoComponent";
 import AudioComponent from "../../components/webrtc/AudioComponent";
 import useUserStore from "../../store/user/useUserStore";
 import useWebrtcStore from "../../store/webrtc/useWebrtcStore";
-import React from "react";
 
 const User = () => {
   const { nickname } = useUserStore();
@@ -25,13 +24,13 @@ const User = () => {
         remoteTrack.trackPublication.kind === "video" ? (
           <VideoComponent
             key={remoteTrack.trackPublication.trackSid}
-            track={remoteTrack.trackPublication.videoTrack!}
+            track={remoteTrack.trackPublication.videoTrack}
             participantIdentity={remoteTrack.participantIdentity}
           />
         ) : (
           <AudioComponent
             key={remoteTrack.trackPublication.trackSid}
-            track={remoteTrack.trackPublication.audioTrack!}
+            track={remoteTrack.trackPublication.audioTrack}
           />
         )
       )}

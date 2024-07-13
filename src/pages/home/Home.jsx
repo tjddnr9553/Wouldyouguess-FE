@@ -1,9 +1,22 @@
 import "./Home.css";
 import {KAKAO_AUTH_URL} from "../../api/oauth/Oauth";
 import {useNavigate} from "react-router-dom";
+import useWebrtcStore from "../../store/webrtc/useWebrtcStore.tsx";
+import {useEffect} from "react";
 
 const Home = () => {
+  const VITE_LIVEKIT_URL = import.meta.env.VITE_LIVEKIT_URL;
+  const VITE_OPENVIDU_APP_SERVER_URL = import.meta.env.VITE_OPENVIDU_APP_SERVER_URL;
+
   const nav = useNavigate();
+  const {setLIVEKIT_URL, setAPPLICATION_SERVER_URL} = useWebrtcStore();
+
+  useEffect(() => {
+      console.log(VITE_LIVEKIT_URL)
+      console.log(VITE_OPENVIDU_APP_SERVER_URL)
+      setLIVEKIT_URL(VITE_LIVEKIT_URL);
+      setAPPLICATION_SERVER_URL(VITE_OPENVIDU_APP_SERVER_URL);
+  }, [])
 
   const goToKakaoLogin = () => {
     nav('/temp/login')
