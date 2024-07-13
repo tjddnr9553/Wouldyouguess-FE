@@ -16,7 +16,8 @@ import { catchLiar_start } from "../../api/game/CatchLiar.js";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 import useWebrtcStore from "../../store/webrtc/useWebrtcStore.tsx";
 import useGameStore from "../../store/game/useGameStore.js";
-import {findDiff_start} from "../../api/game/FindDiff.js";
+import { findDiff_start } from "../../api/game/FindDiff.js";
+import useAudioStore from "../../store/bgm/useAudioStore.js";
 
 const textList = [
   {
@@ -39,13 +40,22 @@ const Lobby = () => {
   let modalOn = false;
   const modalRef = useRef(null);
 
-  const { userId, isInvite, nickname, accessToken, isLogin, setIsLogin } = useUserStore();
+  const { userId, isInvite, nickname, accessToken, isLogin, setIsLogin } =
+    useUserStore();
   const { roomId } = useRoomStore();
   const { setFindDiffGameId } = useGameStore();
   const { socket, setSocket } = useSocketStore();
   const { setGameId } = useCatchLiarStore();
   const { joinRoom } = useWebrtcStore();
+  const { play, stop } = useAudioStore();
 
+  useEffect(() => {
+    play("/bgm/bgm.mp3");
+
+    return () => {
+      stop();
+    };
+  }, []);
 
   useEffect(() => {
     // 룸에 참가시키기
@@ -109,13 +119,14 @@ const Lobby = () => {
     navigate("/game2/upload");
   };
 
-
   return (
     <div className="inner">
       <div className="lobby container">
         <Header />
         <div className="modal-container" ref={modalRef}>
-          <span className="close" onClick={handleModal}>X</span>
+          <span className="close" onClick={handleModal}>
+            X
+          </span>
           <Modal text1={`${window.location.origin}/invite/${roomId}`} />
         </div>
         <div className="content">
