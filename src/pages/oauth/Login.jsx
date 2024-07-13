@@ -2,7 +2,7 @@ import "./Login.css";
 import Header from "../../components/game/Header";
 import NewButton from "../../components/button/newButton";
 import useUserStore from "../../store/user/useUserStore";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useRoomStore from "../../store/room/useRoomStore.js";
 import { room_create, room_join } from "../../api/home/Room.js";
