@@ -16,6 +16,7 @@ import { catchLiar_start } from "../../api/game/CatchLiar.js";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 import useWebrtcStore from "../../store/webrtc/useWebrtcStore.tsx";
 import useGameStore from "../../store/game/useGameStore.js";
+import {findDiff_start} from "../../api/game/FindDiff.js";
 
 const textList = [
   {
@@ -109,56 +110,18 @@ const Lobby = () => {
   };
 
   const startFindDIff = async () => {
-    try {
-      const response = await axios({
-        method: "POST",
-        url: api_server_url + "/api/findDiff/start",
-        data: {
-          roomId,
-        },
-      });
+    const gameId = await findDiff_start(roomId);
+    setFindDiffGameId(gameId);
 
-      const gameId = response.data;
-      console.log("Received gameId:", gameId);
-
-      setFindDiffGameId(gameId);
-
-      socket.emit("game_start", { mode: 2, gameId });
-      navigate("/game2/upload");
-    } catch (error) {
-      console.error("Error starting Find Diff game:", error);
-      // 에러 처리 로직 추가
-    }
+    socket.emit("game_start", { mode: 2, gameId });
+    navigate("/game2/upload");
   };
 
-  // 카카오 로그아웃
-  const kakaoLogout = () => {
-    axios({
-      method: "POST",
-      url: "https://kapi.kakao.com/v1/user/logout",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Authorization: `Bearer ${accessToken}`,
-      },
-    })
-      .then(() => {
-        setIsLogin(false);
-        window.location.href = "/";
-      })
-      .catch((e) => {
-        console.log("e : ", e);
-        // 이미 만료된 토큰일 경우
-        if (e.response.data.code === -401) {
-          window.location.href = "/";
-        }
-      });
-  };
 
   return (
     <div className="inner">
       <div className="lobby container">
         <Header />
-        {isLogin && <button onClick={kakaoLogout}>로그아웃</button>}
         <div className="modal-container" ref={modalRef}>
           <span className="close" onClick={handleModal}>X</span>
           <Modal text={`${window.location.origin}/invite/${roomId}`} />

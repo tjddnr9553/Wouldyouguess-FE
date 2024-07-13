@@ -8,6 +8,7 @@ import "./Game2.css";
 import useRoomStore from "../../store/room/useRoomStore.js";
 import useUserStore from "../../store/user/useUserStore.js";
 import useGameStore from "../../store/game/useGameStore.js";
+import {findDiff_gen, findDiff_inpaint, findDiff_og, findDiff_upload} from "../../api/game/FindDiff.js";
 
 const Game2_upload = () => {
   const imgSelctBtn = useRef(null);
@@ -55,63 +56,22 @@ const Game2_upload = () => {
   const sendToServer = async () => {
     setClickSendBtn(true);
 
-    try {
-      // 1. 원본 이미지 업로드
-      const uploadRes = await axios.post(
-        "http://localhost:8080/api/findDiff/upload",
-        uploadForm,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+    const uploadRes = await findDiff_upload(uploadForm);
+    if (uploadRes.status === 200) {
+      console.log("서버로 원본 이미지 전송 성공");
 
-      if (uploadRes.status === 200) {
-        console.log("서버로 원본 이미지 전송 성공");
-
-        // 2. 원본 이미지 가져오기
-        const response = await axios.get(
-          `http://localhost:8080/api/findDiff/og/${findDiffGameId}/${userId}`
-        );
-
-        if (response.status === 200) {
-          setOriginalImages(response.data); // 여기서는 URL만 포함된 배열을 받습니다.
-        }
-
-        // 다음 페이지로 이동
-        navigate("/game2/remember/");
-
-        // 백그라운드에서 나머지 요청 실행
-        setTimeout(async () => {
-          try {
-            // 3. 인페인팅 요청
-            await axios.post(
-              "http://localhost:8080/api/findDiff/inpaint",
-              inpaintForm,
-              {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                },
-              }
-            );
-            console.log("인페인팅 요청 성공");
-
-            // 4. 생성된 이미지 가져오기
-            const genResponse = await axios.get(
-              `http://localhost:8080/api/findDiff/gen/${findDiffGameId}/${userId}`
-            );
-
-            console.log(genResponse.data)
-            setGeneratedImages(genResponse.data);
-            
-          } catch (error) {
-            console.error("백그라운드 작업 중 오류 발생:", error);
-          }
-        }, 0);
+      const response = await findDiff_og(findDiffGameId, userId);
+      if (response.status === 200) {
+        setOriginalImages(response.data); // 여기서는 URL만 포함된 배열을 받습니다.
       }
-    } catch (error) {
-      console.error("이미지 처리 중 오류 발생:", error);
+
+      navigate("/game2/remember/");
+
+      setTimeout(async () => {
+        await findDiff_inpaint(inpaintForm);
+        const genResponse = await findDiff_gen(findDiffGameId, userId);
+        setGeneratedImages(genResponse.data);
+      }, 0);
     }
   };
 
