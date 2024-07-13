@@ -15,6 +15,7 @@ const Game2 = () => {
   const previewImage = useRef(null);
   const { generatedImages } = useImagesStore();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const timeLimit = 60000;
 
   useEffect(() => {
     const showImages = () => {
@@ -26,7 +27,7 @@ const Game2 = () => {
         // 모든 이미지를 보여준 후 10초 뒤에 결과 페이지로 이동
         setTimeout(() => {
           navigate("/game2/result");
-        }, 10000);
+        }, timeLimit);
       }
     };
 

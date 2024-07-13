@@ -69,7 +69,7 @@ const Game2_remember = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div>   
       </div>
     </div>
   );
