@@ -58,6 +58,8 @@ function App() {
         <Route path="/loading" element={<Loading />} />
 
         <Route path="/auth/kakao/callback" element={<LoginHandler />} />
+
+        <Route path="/temp/login" element={<Login />} />
       </Routes>
     </>
   );

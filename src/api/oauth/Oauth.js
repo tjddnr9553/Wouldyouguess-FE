@@ -33,3 +33,21 @@ export const auth_kakao_callback = async (codeParam) => {
     throw new Error(error);
   }
 }
+
+export const temp_login = async (username, nickname) => {
+  console.log(API_SERVER_URL);
+  try {
+    const res = await axios({
+      method: "POST",
+      url: `${API_SERVER_URL}/api/temp/login`,
+      data: {
+        username,
+        nickname
+      }
+    });
+
+    return res.data;
+  } catch (error) {
+    throw new Error(error);
+  }
+}
