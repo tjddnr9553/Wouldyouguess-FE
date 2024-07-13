@@ -20,7 +20,7 @@ const Palette = () => {
   const { setColor, setFillColor, tool, setTool } = useCanvasStore();
 
   function changeColor(targetColor) {
-    tool == 'clear' && setTool('pencil');
+    tool === 'clear' && setTool('pencil');
     setColor(targetColor);
     setFillColor(targetColor);
   }

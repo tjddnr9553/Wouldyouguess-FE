@@ -11,6 +11,45 @@
   justify-content: center;
 }
 
+/* 로고 */
+.home-title {
+  height: 15%;
+  width: 70%;
+  min-width: 1060px;
+
+  position: relative;
+  top: 25%;
+
+  font-family: "keania One";
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.logo-title {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-size: 8vw;
+}
+.logo-title#black {
+  top: 20px;
+  left: 15px;
+}
+.logo-title#white {
+  color: white;
+  top: 0;
+}
+
+#home-logo {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 20%;
+  object-fit: cover;
+}
+
+
 /* 카카오 로그인 버튼 */
 .home .login-btn {
   display: inline-block;
@@ -28,10 +67,10 @@
   transition: transform 0.4s;
 }
 
-.login-btn img {
-  display: block;
-  width: 100%;
-  height: auto;  
+.img-button > img {
+  position: absolute;
+  width: 19vw;
+  aspect-ratio: 1 / .35;
 }
 
 /* 게임 시작 버튼 */
@@ -40,17 +79,16 @@
   justify-content: center;
   align-items: center; 
 
-  height: 94px;  
-  width: 280px;
+  width: 18vw;
+  aspect-ratio: 1 / .34;
   
   border: none;
   border-radius: 100px;
   cursor: pointer;
   box-sizing: border-box;
-  overflow: hidden;
 
   position: absolute;
-  bottom: 70px;
+  bottom: 13%;
 
   background-color: transparent;
   box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 20px 20px rgba(0,0,0,0.22);
@@ -59,7 +97,7 @@
 
 .home .btn-start {
   position: absolute;
-  font-size: 50px;
+  font-size: 3.5vw;
   font-weight: bold;
   color: #fff;
 }

@@ -38,7 +38,7 @@
 
   background-color: white;
   border-radius: 1rem;
-  filter: drop-shadow(0px 10px 10px #4444dd);
+  /* filter: drop-shadow(0px 10px 10px #4444dd); */
   margin: 0 auto;
 }
 
@@ -51,7 +51,7 @@
   font-size: 3rem;
   font-weight: 900;
   color: rgb(0, 0, 0);
-  filter: drop-shadow(5px 5px 5px gray);
+  /* filter: drop-shadow(5px 5px 5px gray); */
 }
 
 .imageBtnContainer {
@@ -80,8 +80,17 @@
 
   background-color: white;
   border-radius: 1rem;
-  filter: drop-shadow(0px 10px 10px #4444dd);
+  /* filter: drop-shadow(0px 10px 10px #4444dd); */
   margin-bottom: 2rem;
+}
+
+.previewImage{
+  position: relative;
+}
+
+#upload-img {
+  height: 100%;
+  width: auto;
 }
 
 .swiperSlide {
@@ -96,7 +105,7 @@
 }
 
 .findDiffrence:hover {
-  cursor: url("/images/cursor_1.png") 20 30, auto !important;
+  /* cursor: url("/images/cursor_1.png") 20 30, auto !important; */
 }
 
 .swiper-button-next {

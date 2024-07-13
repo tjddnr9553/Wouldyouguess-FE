@@ -20,7 +20,7 @@ const toolsMap = {
 const Drawing = ({width, height}) => {
     const canvasRef = useRef(null);
     const ctxRef = useRef(null);
-    const toolRef = useRef(null);
+    const toolRef = useRef(null); 
     let isClick = false;
 
     const { socket } = useSocketStore();
@@ -114,15 +114,26 @@ const Drawing = ({width, height}) => {
         toolRef.current.onMouseMove(xAxis, yAxis);
     }
 
+    const clickCanvas = (e) => {
+        const canvas = canvasRef.current;
+        const context = canvas.getContext("2d");
+        context.clearRect(0, 0, width, height);
+        const {x, y} = getCursorPosition(e);
+
+        const length = 100;
+        context.strokeRect(x - (length/2), y - (length/2), length, length);
+    }
+
     return (
         <>
             <canvas
                 width={width}
                 height={height}
                 ref={canvasRef}
-                onMouseDown={onMouseDown}
+                onMouseDown={clickCanvas}
                 onMouseUp={onMouseUp}
                 onMouseMove={onMouseMove}
+                style={{ backgroundColor: 'transparent' }}
             />
         </>
     );
