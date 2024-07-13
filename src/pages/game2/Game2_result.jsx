@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
@@ -10,16 +10,9 @@ import "swiper/css/navigation";
 
 const Game2 = () => {
   const navigate = useNavigate();
-  const images = useImagesStore((state) => state.images);
+  const { originalImages, generatedImages } = useImagesStore();
   const previewImage = useRef(null);
-
-  useEffect(() => {
-    images.forEach((image, index) => {
-      console.log(image);
-      previewImage.current.style.backgroundImage = `url(${image})`;
-      return () => URL.revokeObjectURL(image);
-    });
-  }, []);
+  const { roomId } = useParams();
 
   return (
     <div className="inner">
@@ -35,50 +28,32 @@ const Game2 = () => {
         <div className="imageContainer">
           <div className="previewImage">
             <Swiper
-              className=".swiper-container"
-              spaceBetween={0}
-              slidesPerView={2}
-              slidesPerGroup={2}
+              className="swiper-container"
+              spaceBetween={20}
+              slidesPerView={1}
+              slidesPerGroup={1}
               onSlideChange={() => console.log("slide change")}
               onSwiper={(swiper) => console.log(swiper)}
               modules={[Navigation]}
               navigation={true}
+              direction={"horizontal"}
             >
-              <SwiperSlide>
-                {" "}
-                <div
-                  className="swiperSlide"
-                  style={{
-                    backgroundImage: 'url("/images/background-img.png")',
-                  }}
-                ></div>
-              </SwiperSlide>
-              <SwiperSlide>
-                {" "}
-                <div className="swiperSlide" ref={previewImage}></div>
-              </SwiperSlide>
-              <SwiperSlide>
-                {" "}
-                <div
-                  className="swiperSlide"
-                  style={{ backgroundImage: 'url("/images/clock-planet.png")' }}
-                ></div>
-              </SwiperSlide>
-              <SwiperSlide>
-                {" "}
-                <div className="swiperSlide" ref={previewImage}></div>
-              </SwiperSlide>
-              <SwiperSlide>
-                {" "}
-                <div
-                  className="swiperSlide"
-                  style={{ backgroundImage: 'url("/images/magnifier.png")' }}
-                ></div>
-              </SwiperSlide>
-              <SwiperSlide>
-                {" "}
-                <div className="swiperSlide" ref={previewImage}></div>
-              </SwiperSlide>
+              {originalImages.map((originalImage, index) => (
+                <SwiperSlide key={index}>
+                  <div className="slide-container">
+                    <div
+                      className="swiperSlide"
+                      style={{ backgroundImage: `url(${originalImage})` }}
+                    ></div>
+                    <div
+                      className="swiperSlide"
+                      style={{
+                        backgroundImage: `url(${generatedImages[index] || ""})`,
+                      }}
+                    ></div>
+                  </div>
+                </SwiperSlide>
+              ))}
             </Swiper>
           </div>
           <div className="imageBtnContainer">

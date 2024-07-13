@@ -35,7 +35,6 @@ export const auth_kakao_callback = async (codeParam) => {
 }
 
 export const temp_login = async (username, nickname) => {
-  console.log(API_SERVER_URL);
   try {
     const res = await axios({
       method: "POST",

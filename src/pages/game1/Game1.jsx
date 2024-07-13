@@ -8,13 +8,14 @@ import Clock from "../../components/game/Clock.jsx";
 import { catchLiar_info } from "../../api/game/CatchLiar.js";
 import useUserStore from "../../store/user/useUserStore.js";
 import {useNavigate, useSearchParams} from "react-router-dom";
-import { useSearchParams } from "react-router-dom";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 import { useCanvasStore } from '../../store/canvas/useCanvasStore.js';
 
 const Game1 = () => {
   const navigate = useNavigate();
+
   const [searchParams] = useSearchParams();
+  const round = Number(searchParams.get('round'));
 
   const containerRef = useRef(null);
 
@@ -61,9 +62,8 @@ const Game1 = () => {
     // 서버 전달 로직 작성하기.
   }
 
-
   return(
-      <div className="inner">
+      <div className="inner" key={round}>
         <div className="game container">
           <div className="left-section">
             <User />
@@ -96,8 +96,7 @@ const Game1 = () => {
           <button className="quite-btn">DONE</button>
         </div>
       </div>
-    </div>
-  );
+);
 };
 
 export default Game1;

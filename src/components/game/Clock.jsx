@@ -3,10 +3,12 @@ import './Clock.css'
 import Counter from './Counter';
 import useSocketStore from "../../store/socket/useSocketStore.js";
 import {useNavigate, useSearchParams} from "react-router-dom";
+import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 
 const Clock = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const round = Number(searchParams.get('round'));
 
   const [showLeftClock, setShowLeftClock] = useState(false);
   const [showRightClock, setShowRightClock] = useState(true);
@@ -17,6 +19,7 @@ const Clock = () => {
   const semicircleLeftRef = useRef(null);
 
   const { socket } = useSocketStore();
+  const { gameId } = useCatchLiarStore();
 
   const handleTransitionEnd = () => {
     setShowLeftClock(true);
@@ -26,6 +29,16 @@ const Clock = () => {
 
   const handleLeft = () => {
     setIsDoneLeft(true);
+  }
+
+  const handleCountdownComplete = () => {
+    if (round < 5) {
+      socket?.emit("game_turn_change", { gameId, round });
+      navigate(`/game1?gameId=${gameId}&round=${round + 1}`)
+    } else {
+      socket?.emit("game_end", { round });
+      navigate(`/game1/vote`)
+    }
   }
 
   useEffect(() => {
@@ -42,12 +55,15 @@ const Clock = () => {
 
   useEffect(() => {
     socket?.on("game_turn_change", (data) => {
-      console.log(data);
+      const {gameId, round} = data;
+      navigate(`/game1?gameId=${gameId}&round=${round + 1}`)
     });
 
     socket?.on("game_end", (data) => {
-      console.log(data);
+      const { round } = data;
+      navigate(`/game1/vote`)
     });
+
     return () => {
       socket?.off("game_turn_change", (data) => {
         console.log(data)
@@ -58,17 +74,6 @@ const Clock = () => {
     }
   }, [socket])
 
-  const handleCountdownComplete = () => {
-    const round = Number(searchParams.get('round'));
-
-    if (round < 5) {
-      socket?.emit("game_turn_change", { round });
-      navigate(`/game1?round=${round + 1}`)
-    } else {
-      socket?.emit("game_end", { round });
-      navigate(`/game1/result`)
-    }
-  }
 
   return (
     <>
@@ -86,7 +91,7 @@ const Clock = () => {
             style={{display : showHiddenImg ? 'block' : 'none'}} 
             className="hidden-img"></div>
         </div>
-        <Counter countDown={30} onCountdownComplete={handleCountdownComplete} />
+        <Counter countDown={10} onCountdownComplete={handleCountdownComplete} />
       </div>
     </>
   )

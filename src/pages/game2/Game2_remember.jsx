@@ -1,25 +1,31 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import User from "../../components/game/User";
 import "./Game2.css";
 import "swiper/css";
 import "swiper/css/navigation";
+import useRoomStore from "../../store/room/useRoomStore";
+import useImagesStore from "../../store/image/useImagesStore";
 
 const Game2_remember = () => {
   const navigate = useNavigate();
+  const { roomId } = useRoomStore();
+  const { originalImages  } = useImagesStore();
 
   useEffect(() => {
-    // 추후 이미지(또는 인원수에 따라 시간조정 필요)
-    setTimeout(() => {
-      navigate("/game2");
-    }, 15000);
-  }, [navigate]);
+    console.log("OriginalImages : ", originalImages);
+    const timer = setTimeout(() => {
+      navigate(`/game2/`);
+    }, 10000);
+
+    return () => clearTimeout(timer);
+    
+  }, [originalImages, navigate, roomId]);
 
   return (
     <div className="inner">
-      {" "}
       <div className="game container">
         <div className="left-section">
           <User />
@@ -34,7 +40,7 @@ const Game2_remember = () => {
             <div className="imageContainer">
               <div className="previewImage">
                 <Swiper
-                  className=".swiper-container"
+                  className=".swiper-container swiper-parent"
                   spaceBetween={0}
                   slidesPerView={1}
                   onSlideChange={() => console.log("slide change")}
@@ -42,36 +48,25 @@ const Game2_remember = () => {
                   modules={[Navigation]}
                   navigation={true}
                 >
-                  <SwiperSlide>
-                    {" "}
-                    <div
-                      className="swiperSlide"
-                      style={{
-                        backgroundImage: 'url("/images/background-img.png")',
-                      }}
-                    ></div>
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    {" "}
-                    <div
-                      className="swiperSlide"
-                      style={{ backgroundImage: 'url("/images/clock-planet.png")' }}
-                    ></div>
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    {" "}
-                    <div
-                      className="swiperSlide"
-                      style={{
-                        backgroundImage: 'url("/images/magnifier.png")',
-                      }}
-                    ></div>
-                  </SwiperSlide>
+                  {originalImages.map((imagePath, index) => (
+                    <SwiperSlide key={index}>
+                      <div
+                        className="swiperSlide"
+                        style={{
+                          backgroundImage: `url(${imagePath})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                          width: "100%",
+                          height: "100%",
+                        }}
+                      ></div>
+                    </SwiperSlide>
+                  ))}
                 </Swiper>
               </div>
             </div>
           </div>
-        </div>
+        </div>   
       </div>
     </div>
   );

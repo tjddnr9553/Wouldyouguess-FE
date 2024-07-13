@@ -15,6 +15,8 @@ import useRoomStore from "../../store/room/useRoomStore.js";
 import { catchLiar_start } from "../../api/game/CatchLiar.js";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 import useWebrtcStore from "../../store/webrtc/useWebrtcStore.tsx";
+import useGameStore from "../../store/game/useGameStore.js";
+import {findDiff_start} from "../../api/game/FindDiff.js";
 
 const textList = [
   {
@@ -34,30 +36,16 @@ const textList = [
 const Lobby = () => {
   const navigate = useNavigate();
 
-  const modalRef = useRef(null);
-  const currentRoomId = window.location.href.split("/").pop();
-  const roomUrl = `http://localhost:5173/invite/${currentRoomId}`;
-
-  const { userId, isInvited, nickname } = useUserStore();
-  const { roomId } = useRoomStore();
-  const { socket, setSocket } = useSocketStore();
   let modalOn = false;
-  const { setGameId } = useCatchLiarStore();
+  const modalRef = useRef(null);
 
+  const { userId, isInvite, nickname, accessToken, isLogin, setIsLogin } = useUserStore();
+  const { roomId } = useRoomStore();
+  const { setFindDiffGameId } = useGameStore();
+  const { socket, setSocket } = useSocketStore();
+  const { setGameId } = useCatchLiarStore();
   const { joinRoom } = useWebrtcStore();
 
-  // 뒤로가기 방지
-  useEffect(() => {
-    window.history.pushState(null, null, window.location.href);
-
-    window.onpopstate = () => {
-      window.history.pushState(null, null, window.location.href);
-    };
-
-    return () => {
-      window.onpopstate = null;
-    };
-  }, []);
 
   useEffect(() => {
     // 룸에 참가시키기
@@ -71,7 +59,7 @@ const Lobby = () => {
     setSocket(socketConnect);
 
     socketConnect.on("connect", () => {
-      if (isInvited) {
+      if (isInvite) {
         socketConnect.emit("room_join", { roomId, userId });
       } else {
         socketConnect.emit("room_create", { roomId, userId });
@@ -79,7 +67,6 @@ const Lobby = () => {
     });
 
     socketConnect.on("game_start", (data) => {
-      console.log(data);
       if (data.mode === 1) {
         setGameId(data.gameId);
         navigate(`/game1?gameId=${data.gameId}&round=1`);
@@ -88,27 +75,12 @@ const Lobby = () => {
       }
     });
 
-    // 연결이 끊어졌을 때
-    // socketConnect.on("disconnect", async (reason) => {
-    //   socketConnect.emit("room_exit", { roomId, userId });
-    //   await room_exit(roomId, userId);
-    // });
-
     return () => {
-      // socketConnect.disconnect();
       socketConnect?.off("game_start", (data) => {
         navigate(`/game1?gameId=${data.gameId}&round=1`);
       });
     };
   }, [setSocket]);
-
-  //   return () => {
-  //     // socketConnect.disconnect();
-  //     socketConnect?.off("game_start", (data) => {
-  //       navigate(`/test?gameId=${data.gameId}&round=1`);
-  //     });
-  //   };
-  // }, [setSocket]);
 
   // 친구 초대 모달창
   const handleModal = () => {
@@ -129,19 +101,21 @@ const Lobby = () => {
     navigate(`/game1?gameId=${gameId}&round=1`);
   };
 
-  const startFindAIGeneratedImage = () => {
-    socket.emit("game_start", { mode: 2, userId, roomId });
+  const startFindDIff = async () => {
+    const gameId = await findDiff_start(roomId);
+    setFindDiffGameId(gameId);
+
+    socket.emit("game_start", { mode: 2, gameId });
     navigate("/game2/upload");
   };
+
 
   return (
     <div className="inner">
       <div className="lobby container">
         <Header />
         <div className="modal-container" ref={modalRef}>
-          <span className="close" onClick={handleModal}>
-            X
-          </span>
+          <span className="close" onClick={handleModal}>X</span>
           <Modal text1={`${window.location.origin}/invite/${roomId}`} />
         </div>
         <div className="content">
@@ -167,7 +141,7 @@ const Lobby = () => {
               min={5}
               max={25}
               text={textList[1].text}
-              onClick={startFindAIGeneratedImage}
+              onClick={startFindDIff}
             />
             <Planet
               style={{ right: "1%" }}
@@ -182,4 +156,5 @@ const Lobby = () => {
     </div>
   );
 };
+
 export default Lobby;

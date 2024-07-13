@@ -26,7 +26,7 @@ interface WebRTCState {
 }
 
 let APPLICATION_SERVER_URL = "";
-let LIVEKIT_URL = "";
+let LIVEKIT_URL = "https://openvidu.wouldyouguess.com/";
 configureUrls();
 
 function configureUrls() {
@@ -42,9 +42,9 @@ function configureUrls() {
   // If LIVEKIT_URL is not configured, use default value from local development
   if (!LIVEKIT_URL) {
     if (window.location.hostname === "localhost") {
-      LIVEKIT_URL = "ws://localhost:7880/";
+      LIVEKIT_URL = "https://openvidu.wouldyouguess.com/";
     } else {
-      LIVEKIT_URL = "wss://" + window.location.hostname + ":7443/";
+      LIVEKIT_URL = "https://openvidu.wouldyouguess.com/";
     }
   }
 }
@@ -56,11 +56,13 @@ const useWebrtcStore = create<WebRTCState>((set, get) => {
     localTrack: undefined,
     remoteTracks: [],
     participantName: "Participant" + Math.floor(Math.random() * 100),
-    roomName:"roomId",
+    roomName: "roomId",
     joinRoom: async () => {
       const { roomName, participantName, getToken, leaveRoom } = get(); // Get necessary values from the store
 
-      const room = new Room();
+      const room = new Room({
+        adaptiveStream: true, // 적응형 스트리밍 활성화
+      });
       set({ room });
 
       room.on(RoomEvent.TrackSubscribed, (_track, publication, participant) => {
