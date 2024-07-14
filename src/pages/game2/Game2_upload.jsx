@@ -9,25 +9,21 @@ import useUserStore from "../../store/user/useUserStore.js";
 import useGameStore from "../../store/game/useGameStore.js";
 import {findDiff_gen, findDiff_inpaint, findDiff_og, findDiff_upload} from "../../api/game/FindDiff.js";
 import Canvas from "./canvas/Canvas.jsx";
+import ImgResizer from "./ImgResizer.js";
 
 const Game2_upload = () => {
-  const imgSelctBtn = useRef(null);
-  const previewImage = useRef(null);
+  const imgSelectBtn = useRef(null);
+  const containerWrapper = useRef(null);
+  const uploadImgRef = useRef(null);
+  const canvasContainerRef = useRef(null);
 
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [imgFile, setImgFile] = useState(null);
+  const [containerWrapperHeight, setcontainerWrapperHeight] = useState(0);
+  const [canvasWidth, setCanvasWidth] = useState(0);
+  const [isImgUploaded, setIsImgUploaded] = useState(false);
   const [uploadForm, setUploadForm] = useState(null);
   const [inpaintForm, setInpaintForm] = useState(null);
   const [clickSendBtn, setClickSendBtn] = useState(false);
-  const [clickUploadBtn, setClickUploadBtn] = useState(false);
-
-  const [previewImageHeight, setPreviewImageHeight] = useState(0);
-
-  const [canvasWidth, setCanvasWidth] = useState(0);
-  const [canvasHeight, setCanvasHeight] = useState(0);
-  const [imgOnLoad, setImgOnLoad] = useState(false);
-
-  const uploadImgRef = useRef(null);
-  const cavasContainerRef = useRef(null);
 
   const { findDiffGameId } = useGameStore();
   const { roomId } = useRoomStore();
@@ -37,33 +33,14 @@ const Game2_upload = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setPreviewImageHeight(previewImage.current.clientHeight);
+    setcontainerWrapperHeight(containerWrapper.current.clientHeight);
   }, [])
 
   useEffect(() => {
-    if (selectedImage) {
-      const imageUrl = URL.createObjectURL(selectedImage);
-      
-      uploadImgRef.current.src = imageUrl;
-
-      uploadImgRef.current.onload = () => {
-        setImgOnLoad(true);
-        cavasContainerRef.current.style.border = '5px solid red';
-      }
-
-      return () => {
-        URL.revokeObjectURL(imageUrl);
-        console.log("이미지 URL 삭제");
-      };
-    } 
-  }, [clickUploadBtn]);
-
-  useEffect(() => {
-    if (uploadImgRef.current) {
-      setCanvasWidth(uploadImgRef.current.clientWidth);
-      setCanvasHeight(uploadImgRef.current.clientHeight);
-      }
-  }, [imgOnLoad]);
+    if(imgFile) {
+      prepareFormData(imgFile);
+    }
+  }, [canvasWidth])
 
   const sendToServer = async () => {
     setClickSendBtn(true);
@@ -87,60 +64,49 @@ const Game2_upload = () => {
     }
   };
 
-  const selectImage = (event) => {
+  const createImgEl = (event) => {
     const file = event.target.files[0];
+    setImgFile(file);
+
+    if (file) {
+      setIsImgUploaded(true);
+
+      const imageUrl = URL.createObjectURL(file);
+      
+      uploadImgRef.current.src = imageUrl;
+
+      uploadImgRef.current.onload = () => {
+        setCanvasWidth(uploadImgRef.current.clientWidth);
+        canvasContainerRef.current.style.border = '5px solid red';
+      }
+
+      return () => {
+        URL.revokeObjectURL(imageUrl);
+        console.log("이미지 URL 삭제");
+      };
+    } 
+  }
+
+  const prepareFormData = async (file) => {
+    const resizingImg = await ImgResizer(file, canvasWidth, containerWrapperHeight);
+
+    console.log("resizingImg" ,resizingImg);
+    
     const uploadForm = new FormData();
     const inpaintForm = new FormData();
 
-    setSelectedImage(file);
-
-    inpaintForm.append("image", file);
+    inpaintForm.append("image", resizingImg);
     inpaintForm.append("roomId", roomId);
     inpaintForm.append("userId", userId);
     inpaintForm.append("prompt", "Modify safely.");
 
-    uploadForm.append("image", file);
+    uploadForm.append("image", resizingImg);
     uploadForm.append("roomId", roomId);
     uploadForm.append("userId", userId);
 
     setInpaintForm(inpaintForm);
     setUploadForm(uploadForm);
-
-    setClickUploadBtn(true);
   };
-
-//  const clickCanvas = (e) => {
-//    const canvas = canvasRef.current;
-//    const context = canvas.getContext("2d");
-//    context.clearRect(0, 0, previewImageWidth, previewImageHeight);
-//    const { x, y } = getCursorPosition(e);
-
-//    const length = 100;
-//    context.strokeRect(x - length / 2, y - length / 2, length, length);
-
-//    // 마스킹 영역 업데이트
-//    const updatedInpaintForm = new FormData();
-
-//    // 기존 inpaintForm의 모든 데이터를 새 FormData 객체에 복사
-//    for (let [key, value] of inpaintForm.entries()) {
-//      updatedInpaintForm.append(key, value);
-//    }
-
-//    // 새로운 마스킹 좌표 설정
-//    updatedInpaintForm.set("maskX1", Math.round(x - length / 2));
-//    updatedInpaintForm.set("maskY1", Math.round(y - length / 2));
-//    updatedInpaintForm.set("maskX2", Math.round(x + length / 2));
-//    updatedInpaintForm.set("maskY2", Math.round(y + length / 2));
-
-//    console.log("Updated mask coordinates:", {
-//      maskX1: Math.round(x - length / 2),
-//      maskY1: Math.round(y - length / 2),
-//      maskX2: Math.round(x + length / 2),
-//      maskY2: Math.round(y + length / 2),
-//    });
-
-//    setInpaintForm(updatedInpaintForm);
-//  };
 
   return (
     <div className="inner">
@@ -152,7 +118,7 @@ const Game2_upload = () => {
           <div className="game2_border">
             <div className="titleContainer">
               <div>
-                {clickUploadBtn === false ? (
+                {isImgUploaded === false ? (
                   <strong>Upload Your Image !</strong>
                 ) : (
                   <strong>Select your masking area</strong>
@@ -160,34 +126,34 @@ const Game2_upload = () => {
               </div>
             </div>
             <div className="imageContainer">
-              <div className="previewImage" ref={previewImage}>
-              {clickUploadBtn && (
+              <div className="containerWrapper" ref={containerWrapper}>
                 <div 
                   className="game2-canvas-container"
-                  ref={cavasContainerRef}
+                  ref={canvasContainerRef}
                 >
-                  <img ref={uploadImgRef} src="" id="upload-img" style={{maxHeight: previewImageHeight}}/>
+                  <img ref={uploadImgRef} src="" id="upload-img" style={{height: containerWrapperHeight}}/>
                   <Canvas 
-                    width={canvasWidth}
-                    height={canvasHeight}
+                    width={isImgUploaded? canvasWidth : 0}
+                    height={containerWrapperHeight}
+                    inpaintForm={inpaintForm}
+                    setInpaintForm={setInpaintForm}
                   />
                 </div>
-              )}
               </div>
               <div className="imageBtnContainer">
                 <input
                   type="file"
                   id="imageFile"
-                  ref={imgSelctBtn}
-                  onChange={selectImage}
+                  ref={imgSelectBtn}
+                  onChange={createImgEl}
                   accept="image/png"
                   style={{ display: "none" }}
                 />
-                {clickUploadBtn === false ? (
+                {isImgUploaded === false ? (
                   <NewButton
                     text={"Image Upload"}
                     onClick={() => {
-                      imgSelctBtn.current.click();
+                      imgSelectBtn.current.click();
                     }}
                   />
                 ) : (
