@@ -55,25 +55,19 @@ const Game2 = () => {
               </div>
             </div>
             <div className="imageContainer">
-              <div className="findDifference" ref={previewImage}></div>
+              <div className="findDifference" ref={previewImage}>
+
+                
+              </div>
               <div className="magnifierContainer">
                 <NewButton
                   text={
-                    <div>
-                      <img
-                        src="/images/magnifier.png"
-                        style={{ width: "2rem" }}
-                      />
-                      <img
-                        src="/images/magnifier.png"
-                        style={{ width: "2rem" }}
-                      />
-                      <img
-                        src="/images/magnifier.png"
-                        style={{ width: "2rem" }}
-                      />
-                    </div>
+                    <img
+                      src="/images/magnifier.png"
+                      style={{ width: "2rem" }}
+                    />
                   }
+                  count={3}
                 ></NewButton>
               </div>
             </div>

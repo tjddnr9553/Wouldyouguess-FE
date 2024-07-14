@@ -8,21 +8,16 @@ import useRoomStore from "../../store/room/useRoomStore.js";
 import useUserStore from "../../store/user/useUserStore.js";
 import useGameStore from "../../store/game/useGameStore.js";
 import {findDiff_gen, findDiff_inpaint, findDiff_og, findDiff_upload} from "../../api/game/FindDiff.js";
-import Canvas from "./canvas/Canvas.jsx";
 import ImgResizer from "./ImgResizer.js";
+import CanvasContainer from "./canvas/CanvasContainer.jsx";
+import { useCanvasStore, useFileStore } from "../../store/game/game2/useGame2Store.js";
 
 const Game2_upload = () => {
+  const {canvasWrapperHeight, canvasWrapperWidth, isImgUploaded} = useCanvasStore();
+  const {file, setFile, uploadForm, setUploadForm, inpaintForm, setInpaintForm} = useFileStore();
+  
   const imgSelectBtn = useRef(null);
-  const containerWrapper = useRef(null);
-  const uploadImgRef = useRef(null);
-  const canvasContainerRef = useRef(null);
 
-  const [imgFile, setImgFile] = useState(null);
-  const [containerWrapperHeight, setcontainerWrapperHeight] = useState(0);
-  const [canvasWidth, setCanvasWidth] = useState(0);
-  const [isImgUploaded, setIsImgUploaded] = useState(false);
-  const [uploadForm, setUploadForm] = useState(null);
-  const [inpaintForm, setInpaintForm] = useState(null);
   const [clickSendBtn, setClickSendBtn] = useState(false);
 
   const { findDiffGameId } = useGameStore();
@@ -33,14 +28,10 @@ const Game2_upload = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setcontainerWrapperHeight(containerWrapper.current.clientHeight);
-  }, [])
-
-  useEffect(() => {
-    if(imgFile) {
-      prepareFormData(imgFile);
+    if(file) {
+      prepareFormData(file);
     }
-  }, [canvasWidth])
+  }, [canvasWrapperWidth])
 
   const sendToServer = async () => {
     setClickSendBtn(true);
@@ -64,31 +55,8 @@ const Game2_upload = () => {
     }
   };
 
-  const createImgEl = (event) => {
-    const file = event.target.files[0];
-    setImgFile(file);
-
-    if (file) {
-      setIsImgUploaded(true);
-
-      const imageUrl = URL.createObjectURL(file);
-      
-      uploadImgRef.current.src = imageUrl;
-
-      uploadImgRef.current.onload = () => {
-        setCanvasWidth(uploadImgRef.current.clientWidth);
-        canvasContainerRef.current.style.border = '5px solid red';
-      }
-
-      return () => {
-        URL.revokeObjectURL(imageUrl);
-        console.log("이미지 URL 삭제");
-      };
-    } 
-  }
-
   const prepareFormData = async (file) => {
-    const resizingImg = await ImgResizer(file, canvasWidth, containerWrapperHeight);
+    const resizingImg = await ImgResizer(file, canvasWrapperWidth, canvasWrapperHeight);
 
     // 확인용
     console.log("Image URL:", resizingImg);
@@ -109,6 +77,10 @@ const Game2_upload = () => {
     setUploadForm(uploadForm);
   };
 
+  const changeInput = (e) => {
+    setFile(e.target.files[0])
+  }
+
   return (
     <div className="inner">
       <div className="game container">
@@ -127,32 +99,21 @@ const Game2_upload = () => {
               </div>
             </div>
             <div className="imageContainer">
-              <div className="containerWrapper" ref={containerWrapper}>
-                <div 
-                  className="game2-canvas-container"
-                  ref={canvasContainerRef}
-                >
-                  <img ref={uploadImgRef} src="" id="upload-img" style={{height: containerWrapperHeight}}/>
-                  <Canvas 
-                    width={isImgUploaded? canvasWidth : 0}
-                    height={containerWrapperHeight}
-                    inpaintForm={inpaintForm}
-                    setInpaintForm={setInpaintForm}
-                  />
-                </div>
-              </div>
+              <CanvasContainer />
+
               <div className="imageBtnContainer">
                 <input
                   type="file"
                   id="imageFile"
                   ref={imgSelectBtn}
-                  onChange={createImgEl}
+                  onChange={changeInput}
                   accept="image/png"
                   style={{ display: "none" }}
                 />
                 {isImgUploaded === false ? (
                   <NewButton
                     text={"Image Upload"}
+                    count={1}
                     onClick={() => {
                       imgSelectBtn.current.click();
                     }}
@@ -160,6 +121,7 @@ const Game2_upload = () => {
                 ) : (
                   <NewButton
                     text={"전송하기"}
+                    count={1}
                     onClick={sendToServer}
                     disabled={clickSendBtn}
                   />

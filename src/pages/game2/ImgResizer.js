@@ -11,7 +11,10 @@ export default async (file, width, height) =>{
       0,
       (uri) => {
         /* resize new image with url*/
-        resolve(uri);
+        resolve({
+          uri: uri,
+          width: width, // 리사이징된 이미지의 너비
+        });
       },
       "base64",
       width,

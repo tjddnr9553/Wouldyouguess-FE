@@ -17,7 +17,7 @@ const Game2 = () => {
   return (
     <div className="inner">
       <div className="left-section">
-        <User />
+        {/* <User /> */}
       </div>
       <div className="game2_border">
         <div className="titleContainer">
@@ -59,6 +59,7 @@ const Game2 = () => {
           <div className="imageBtnContainer">
             <NewButton
               text={"랭킹 확인"}
+              count={1}
               onClick={() => navigate("/lobby")}
             ></NewButton>
           </div>
