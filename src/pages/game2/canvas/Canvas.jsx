@@ -1,7 +1,10 @@
 import { useEffect, useRef } from 'react';
 import './Canvas.css'
+import { useCanvasStore} from '../../../store/game/useGameStore';
 
-const Canvas = ({width, height, inpaintForm, setInpaintForm}) => {
+const Canvas = () => {
+  const {canvasWrapperWidth, canvasWrapperHeight, mode, setX, setY} = useCanvasStore();
+
   const canvasRef = useRef(null);
   const contextRef = useRef();
 
@@ -20,42 +23,17 @@ const Canvas = ({width, height, inpaintForm, setInpaintForm}) => {
   };
 
   const clickCanvas = (e) => {
-    contextRef.current.clearRect(0, 0, width, height);
+    contextRef.current.clearRect(0, 0, canvasWrapperWidth, canvasWrapperHeight);
     const { x, y } = getCursorPosition(e);
- 
-    const length = 100;
-    contextRef.current.strokeRect(x - length / 2, y - length / 2, length, length);
-
-       // 마스킹 영역 업데이트
-    const updatedInpaintForm = new FormData();
-
-    // 기존 inpaintForm의 모든 데이터를 새 FormData 객체에 복사
-    for (let [key, value] of inpaintForm.entries()) {
-      updatedInpaintForm.append(key, value);
-    }
-
-    // 새로운 마스킹 좌표 설정
-    updatedInpaintForm.set("maskX1", (x - length / 2)> 0 ? Math.round(x - length / 2) : 0);
-    updatedInpaintForm.set("maskY1", (y - length / 2) > 0 ? Math.round(y - length / 2) : 0);
-    updatedInpaintForm.set("maskX2", Math.round(x + length / 2));
-    updatedInpaintForm.set("maskY2", Math.round(y + length / 2));
-
-    console.log("Updated mask coordinates:", {
-      maskX1: (x - length / 2) > 0 ? Math.round(x - length / 2) : 0,
-      maskY1: (y - length / 2) > 0 ? Math.round(y - length / 2) : 0,
-      maskX2: Math.round(x + length / 2),
-      maskY2: Math.round(y + length / 2),
-    });
-
-    setInpaintForm(updatedInpaintForm);
+    
+    if (mode === 'upload') {
+      const length = 100;
+      contextRef.current.strokeRect(x - length / 2, y - length / 2, length, length);
+    } 
+    
+    setX(x);
+    setY(y);
   }
-
-  useEffect(() => {
-    if(canvasRef.current) {
-      canvasRef.current.width = width;
-      canvasRef.current.height = height;
-    }
-  }, [width, height])
 
   return (
     <>
@@ -67,6 +45,8 @@ const Canvas = ({width, height, inpaintForm, setInpaintForm}) => {
           left: 0,
           backgroundColor: "transparent",
         }}
+        width={canvasWrapperWidth}
+        height={canvasWrapperHeight}
         onMouseDown={clickCanvas}
       />
     </>

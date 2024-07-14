@@ -1,11 +1,11 @@
 import { useRef, useState } from "react";
 import { useEffect } from "react";
-import { useCanvasStore, useFileStore} from "../../../store/game/game2/useGame2Store";
+import { useCanvasStore, useFileStore} from "../../../store/game/useGameStore";
 import Canvas from "./Canvas";
 
 const CanvasContainer = () => {
-  const {canvasWrapperHeight, setCanvasWrapperHeight, canvasWrapperWidth, setCanvasWrapperWidth, isImgUploaded, setIsImgUploaded} = useCanvasStore();
-  const {file, setInpaintForm, inpaintForm} = useFileStore();
+  const {canvasWrapperHeight, setCanvasWrapperHeight, setCanvasWrapperWidth, canvasWrapperWidth, setIsImgUploaded} = useCanvasStore();
+  const {file} = useFileStore();
 
   const containerWrapper = useRef(null);
   const canvasContainerRef = useRef(null);
@@ -47,12 +47,7 @@ const CanvasContainer = () => {
           ref={canvasContainerRef}
         >
           <img ref={uploadImgRef} src="" id="upload-img" style={{height: canvasWrapperHeight}}/>
-          <Canvas
-            width={isImgUploaded? canvasWrapperWidth : 0}
-            height={canvasWrapperHeight}
-            inpaintForm={inpaintForm}
-            setInpaintForm={setInpaintForm}
-          />
+          <Canvas/>
         </div>
       </div>
     </>

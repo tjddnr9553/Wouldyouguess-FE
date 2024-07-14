@@ -10,12 +10,12 @@ import useGameStore from "../../store/game/useGameStore.js";
 import {findDiff_gen, findDiff_inpaint, findDiff_og, findDiff_upload} from "../../api/game/FindDiff.js";
 import ImgResizer from "./ImgResizer.js";
 import CanvasContainer from "./canvas/CanvasContainer.jsx";
-import { useCanvasStore, useFileStore } from "../../store/game/game2/useGame2Store.js";
+import { useCanvasStore, useFileStore } from "../../store/game/useGameStore.js";
 
 const Game2_upload = () => {
-  const {canvasWrapperHeight, canvasWrapperWidth, isImgUploaded} = useCanvasStore();
+  const {canvasWrapperHeight, canvasWrapperWidth, isImgUploaded, x, y} = useCanvasStore();
   const {file, setFile, uploadForm, setUploadForm, inpaintForm, setInpaintForm} = useFileStore();
-  
+
   const imgSelectBtn = useRef(null);
 
   const [clickSendBtn, setClickSendBtn] = useState(false);
@@ -35,6 +35,8 @@ const Game2_upload = () => {
 
   const sendToServer = async () => {
     setClickSendBtn(true);
+
+    updateForm();
 
     const uploadRes = await findDiff_upload(uploadForm);
     if (uploadRes.status === 200) {
@@ -77,6 +79,31 @@ const Game2_upload = () => {
     setUploadForm(uploadForm);
   };
 
+  const updateForm = () => {
+    // 마스킹 영역 업데이트
+    const updatedInpaintForm = new FormData();
+
+    // 기존 inpaintForm의 모든 데이터를 새 FormData 객체에 복사
+    for (let [key, value] of inpaintForm.entries()) {
+      updatedInpaintForm.append(key, value);
+    }
+
+    // 새로운 마스킹 좌표 설정
+    updatedInpaintForm.set("maskX1", (x - length / 2)> 0 ? Math.round(x - length / 2) : 0);
+    updatedInpaintForm.set("maskY1", (y - length / 2) > 0 ? Math.round(y - length / 2) : 0);
+    updatedInpaintForm.set("maskX2", Math.round(x + length / 2));
+    updatedInpaintForm.set("maskY2", Math.round(y + length / 2));
+
+    console.log("Updated mask coordinates:", {
+      maskX1: (x - length / 2) > 0 ? Math.round(x - length / 2) : 0,
+      maskY1: (y - length / 2) > 0 ? Math.round(y - length / 2) : 0,
+      maskX2: Math.round(x + length / 2),
+      maskY2: Math.round(y + length / 2),
+    });
+
+    setInpaintForm(updatedInpaintForm);
+  }
+
   const changeInput = (e) => {
     setFile(e.target.files[0])
   }
@@ -113,7 +140,6 @@ const Game2_upload = () => {
                 {isImgUploaded === false ? (
                   <NewButton
                     text={"Image Upload"}
-                    count={1}
                     onClick={() => {
                       imgSelectBtn.current.click();
                     }}
@@ -121,8 +147,8 @@ const Game2_upload = () => {
                 ) : (
                   <NewButton
                     text={"전송하기"}
-                    count={1}
-                    onClick={sendToServer}
+                    // onClick={sendToServer}
+                    onClick={() => navigate("/game2")}
                     disabled={clickSendBtn}
                   />
                 )}

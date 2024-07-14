@@ -7,6 +7,7 @@ import useImagesStore from "../../store/image/useImagesStore.js";
 import "./Game2.css";
 import "swiper/css";
 import "swiper/css/navigation";
+import useGameStore, { useFileStore } from "../../store/game/useGameStore.js";
 
 const Game2 = () => {
   const navigate = useNavigate();
@@ -59,7 +60,6 @@ const Game2 = () => {
           <div className="imageBtnContainer">
             <NewButton
               text={"랭킹 확인"}
-              count={1}
               onClick={() => navigate("/lobby")}
             ></NewButton>
           </div>

@@ -1,9 +1,9 @@
 import "./NewButton.css";
 
-const NewButton = ({ text, count, onClick, ...props }) => {
+const NewButton = ({ text, onClick, ...props }) => {
   return (
     <button className="btn" {...props} onClick={onClick}>
-      <strong>{Array.from({ length: count }, (_, index) => (text))}</strong>
+      <strong>{text}</strong>
       <div id="container-stars">
         <div id="stars"></div>
       </div>
