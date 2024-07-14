@@ -13,7 +13,9 @@ export default async (file, width, height) =>{
         /* resize new image with url*/
         resolve(uri);
       },
-      "blob" /* output Type */                 //"blob"으로 정의할 수 있다.
+      "base64",
+      width,
+      height
     );
   });
 }

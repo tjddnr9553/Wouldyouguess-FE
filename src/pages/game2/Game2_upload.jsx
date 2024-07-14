@@ -90,7 +90,8 @@ const Game2_upload = () => {
   const prepareFormData = async (file) => {
     const resizingImg = await ImgResizer(file, canvasWidth, containerWrapperHeight);
 
-    console.log("resizingImg" ,resizingImg);
+    // 확인용
+    console.log("Image URL:", resizingImg);
     
     const uploadForm = new FormData();
     const inpaintForm = new FormData();
