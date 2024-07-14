@@ -6,18 +6,26 @@ import {
   RoomEvent,
 } from "livekit-client";
 
+const LIVEKIT_URL = import.meta.env.LIVEKIT_URL;
+const APPLICATION_SERVER_URL = import.meta.env.VITE_OPENVIDU_APP_SERVER_URL;
+
 type TrackInfo = {
   trackPublication: RemoteTrackPublication;
   participantIdentity: string;
 };
 
 interface WebRTCState {
+  LIVEKIT_URL: string;
+  APPLICATION_SERVER_URL: string;
+
   room: Room | undefined;
   localTrack: LocalVideoTrack | undefined;
   remoteTracks: TrackInfo[];
   participantName: string;
   roomName: string;
 
+  setLIVEKIT_URL: (url: string) => void;
+  setAPPLICATION_SERVER_URL: (url: string) => void;
   joinRoom: () => Promise<void>;
   leaveRoom: () => Promise<void>;
   setParticipantName: (name: string) => void;
@@ -25,38 +33,20 @@ interface WebRTCState {
   getToken: (roomName: string, participantName: string) => Promise<string>;
 }
 
-let APPLICATION_SERVER_URL = "";
-let LIVEKIT_URL = "https://openvidu.wouldyouguess.com/";
-configureUrls();
-
-function configureUrls() {
-  // If APPLICATION_SERVER_URL is not configured, use default value from local development
-  if (!APPLICATION_SERVER_URL) {
-    if (window.location.hostname === "localhost") {
-      APPLICATION_SERVER_URL = "http://localhost:6080/";
-    } else {
-      APPLICATION_SERVER_URL = "https://" + window.location.hostname + ":6080/";
-    }
-  }
-
-  // If LIVEKIT_URL is not configured, use default value from local development
-  if (!LIVEKIT_URL) {
-    if (window.location.hostname === "localhost") {
-      LIVEKIT_URL = "https://openvidu.wouldyouguess.com/";
-    } else {
-      LIVEKIT_URL = "https://openvidu.wouldyouguess.com/";
-    }
-  }
-}
-
 const useWebrtcStore = create<WebRTCState>((set, get) => {
   // 외부 상태 저장소에서 초기값 가져오기
   return {
+    LIVEKIT_URL: '',
+    APPLICATION_SERVER_URL: '',
     room: undefined,
     localTrack: undefined,
     remoteTracks: [],
     participantName: "Participant" + Math.floor(Math.random() * 100),
     roomName: "roomId",
+
+    setLIVEKIT_URL: (LIVEKIT_URL) => set({ LIVEKIT_URL }),
+    setAPPLICATION_SERVER_URL: (APPLICATION_SERVER_URL) => set({ APPLICATION_SERVER_URL }),
+
     joinRoom: async () => {
       const { roomName, participantName, getToken, leaveRoom } = get(); // Get necessary values from the store
 
@@ -87,7 +77,7 @@ const useWebrtcStore = create<WebRTCState>((set, get) => {
 
       try {
         const token = await getToken(roomName, participantName);
-        await room.connect(LIVEKIT_URL, token);
+        await room.connect(get().LIVEKIT_URL, token);
 
         await room.localParticipant.enableCameraAndMicrophone();
         set({
@@ -108,7 +98,7 @@ const useWebrtcStore = create<WebRTCState>((set, get) => {
     setParticipantName: (name: string) => set({ participantName: name }),
     setRoomName: (name: string) => set({ roomName: name }),
     getToken: async (roomName: string, participantName: string) => {
-      const response = await fetch(APPLICATION_SERVER_URL + "token", {
+      const response = await fetch(get().APPLICATION_SERVER_URL + "/token", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,5 +1,5 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import {useNavigate, useParams} from "react-router-dom";
+import {useEffect, useRef, useState} from "react";
 import NewButton from "../../components/button/newButton";
 import axios from "axios";
 import User from "../../components/game/User";
@@ -108,9 +108,6 @@ const Game2 = () => {
     <div className="inner">
       <div className="game container">
         <div className="left-section">
-          <User />
-          <User />
-          <User />
           <User />
         </div>
         <div className="center">

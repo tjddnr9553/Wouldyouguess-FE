@@ -67,14 +67,11 @@ const Game1 = () => {
         <div className="game container">
           <div className="left-section">
             <User />
-            <User />
-            <User />
-            <User />
           </div>
           <div className="center">
             <div className="keyword">
               <div>
-                Keyword &nbsp; &nbsp; &nbsp; tiger
+                Keyword: &nbsp; &nbsp; &nbsp; tiger
               </div>
             </div>
             <div ref={containerRef} className="canvas-container">
@@ -89,11 +86,6 @@ const Game1 = () => {
             <Palette />
             <button className="quite-btn" onClick={handleSaveCanvas}>DONE</button>
           </div>
-        </div>
-        <div className="right-section">
-          <Clock />
-          <Palette />
-          <button className="quite-btn">DONE</button>
         </div>
       </div>
 );

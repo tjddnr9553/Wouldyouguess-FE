@@ -18,12 +18,18 @@ import Profile from "./pages/home/Profile.jsx";
 import LoginHandler from "./api/oauth/LoginHandler.jsx";
 import {KAKAO_AUTH_URL} from "./api/oauth/Oauth.js";
 import Vote from "./pages/game1/Vote.jsx";
+import useWebrtcStore from "./store/webrtc/useWebrtcStore.js";
 
 function App() {
   const nav = useNavigate();
+  const VITE_LIVEKIT_URL = import.meta.env.VITE_LIVEKIT_URL;
+  const VITE_SOCKET_SERVER_URL = import.meta.env.VITE_SOCKET_SERVER_URL;
+  const {setLIVEKIT_URL, setAPPLICATION_SERVER_URL} = useWebrtcStore();
 
-  // 초대 받은 사람은 여기서 분류
   useEffect(() => {
+    setLIVEKIT_URL(VITE_LIVEKIT_URL);
+    setAPPLICATION_SERVER_URL(VITE_SOCKET_SERVER_URL);
+
     const currentUrl = new URL(window.location.href);
     const urlPaths = currentUrl.pathname.split("/");      // URL 경로를 '/'로 분할
     const urlType = urlPaths[urlPaths.length - 2];                  // 마지막에서 두 번째 요소 가져오기
