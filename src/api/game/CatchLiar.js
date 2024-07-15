@@ -41,7 +41,7 @@ export const catchLiar_vote_candidates = async (gameId) => {
         const res = await axios({
             method: "GET",
             url: `${API_SERVER_URL}/api/catchLiar/candidates`,
-            data: {
+            params: {
                 catchLiarGameId: gameId
             }
         });
@@ -85,3 +85,41 @@ export const catchLiar_result = async (gameId, userId) => {
         throw new Error(error);
     }
 };
+
+export const catchLiar_image_upload = async (formData) => {
+    try {
+        const res = await axios({
+            method: "POST",
+            url: `${API_SERVER_URL}/api/catchLiar/image`,
+            // headers: {
+            //     "Content-Type": "multipart/form-data",
+            // },
+            data: formData
+        });
+
+        return res.data;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
+export const catchLiar_image_delete = async (gameId, key, path) => {
+    try {
+        const res = await axios({
+            method: "DELETE",
+            url: `${API_SERVER_URL}/api/catchLiar/image`,
+            data: {
+                catchLiarGameId: gameId,
+                key,
+                path
+            }
+        });
+
+        return res.data;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
+
+

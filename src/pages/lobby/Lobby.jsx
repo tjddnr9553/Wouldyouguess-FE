@@ -115,7 +115,7 @@ const Lobby = () => {
     const gameId = await findDiff_start(roomId);
     setFindDiffGameId(gameId);
 
-    socket.emit("game_start", { mode: 2, gameId });
+    socket?.emit("game_start", { mode: 2, gameId });
     navigate("/game2/upload");
   };
 

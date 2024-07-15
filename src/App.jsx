@@ -11,11 +11,11 @@ import Game2_upload from "./pages/game2/Game2_upload.jsx";
 import Game2_remember from "./pages/game2/Game2_remember.jsx";
 import Game2_result from "./pages/game2/Game2_result.jsx";
 import Game3 from "./pages/game3/Game3.jsx";
-import Result from "./pages/result/Result.jsx";
+import Result from "./pages/game1/Result.jsx";
 import Login from "./pages/oauth/Login.jsx";
 import Loading from "./components/loading/Loading.jsx";
 import Profile from "./pages/home/Profile.jsx";
-import LoginHandler from "./api/oauth/LoginHandler.jsx";
+import LoginHandler from "./pages/oauth/LoginHandler.jsx";
 import { KAKAO_AUTH_URL } from "./api/oauth/Oauth.js";
 import Vote from "./pages/game1/Vote.jsx";
 import useWebrtcStore from "./store/webrtc/useWebrtcStore.tsx";
@@ -61,7 +61,7 @@ function App() {
 
         <Route path="/game1" element={<Game1 />} />
         <Route path="/game1/vote" element={<Vote />} />
-        <Route path="game1/result" element={<Result />} />
+        <Route path="/game1/result" element={<Result />} />
 
         <Route path="/game2" element={<Game2 />} />
         <Route path="/game2/upload" element={<Game2_upload />} />
@@ -73,7 +73,6 @@ function App() {
         <Route path="/loading" element={<Loading />} />
 
         <Route path="/auth/kakao/callback" element={<LoginHandler />} />
-
         <Route path="/temp/login" element={<Login />} />
       </Routes>
     </>
