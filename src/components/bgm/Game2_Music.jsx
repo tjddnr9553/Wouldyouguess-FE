@@ -6,6 +6,7 @@ const Game2_Music = () => (
     autoPlay={true}
     src="/bgm/Game2_bgm.mp3"
     style={{ display: "none" }}
+    preload={"auto"}
     loop={true}
     volume={0.4}
   />

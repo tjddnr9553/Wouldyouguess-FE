@@ -6,6 +6,7 @@ const LobbyMusic = () => (
     autoPlay={true}
     src="/bgm/bgm.mp3"
     style={{ display: "none" }}
+    preload={"auto"}
     loop={true}
     volume={0.4}
   />

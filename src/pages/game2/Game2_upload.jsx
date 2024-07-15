@@ -15,7 +15,6 @@ import {
   findDiff_og,
   findDiff_upload,
 } from "../../api/game/FindDiff.js";
-import Game2_Music from "../../components/bgm/Game2_Music.jsx";
 
 const Game2_upload = () => {
   const imgSelctBtn = useRef(null);
