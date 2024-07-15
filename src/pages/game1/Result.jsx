@@ -1,5 +1,5 @@
 import './Result.css'
-import PlayerResult from '../../components/game/PlayerResult';
+import PlayerResult from '../../components/game/PlayerResult.jsx';
 
 const dummy = [
     {
