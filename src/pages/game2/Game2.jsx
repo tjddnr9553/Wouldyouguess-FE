@@ -1,20 +1,34 @@
-import {useNavigate} from "react-router-dom";
-import {useEffect, useRef, useState} from "react";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import NewButton from "../../components/button/newButton";
 import User from "../../components/game/User";
 import useImagesStore from "../../store/image/useImagesStore";
 import useRoomStore from "../../store/room/useRoomStore";
+import useAudioStore from "../../store/bgm/useAudioStore";
 
 import "./Game2.css";
 import "swiper/css";
 
 const Game2 = () => {
   const navigate = useNavigate();
-  const { roomId } = useRoomStore();
+
   const previewImage = useRef(null);
-  const { generatedImages } = useImagesStore();
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
   const timeLimit = 60000;
+
+  const { generatedImages } = useImagesStore();
+  const { roomId } = useRoomStore();
+  const { play, stop } = useAudioStore();
+
+  useEffect(() => {
+    play("/bgm/Game2_bgm.mp3");
+
+    return () => {
+      stop();
+    };
+  }, []);
 
   useEffect(() => {
     const showImages = () => {

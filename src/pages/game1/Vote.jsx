@@ -1,35 +1,44 @@
-import './Vote.css';
+import "./Vote.css";
 import { useEffect, useRef } from "react";
 import User from "../../components/game/User";
+import useAudioStore from "../../store/bgm/useAudioStore";
 
-const dummyImg = 
-[ {
-  userID: 1,
-  path: '/images/characters/1.png', 
+const dummyImg = [
+  {
+    userID: 1,
+    path: "/images/characters/1.png",
   },
   {
     userID: 2,
-    path: '/images/characters/2.png', 
-  } ,
+    path: "/images/characters/2.png",
+  },
   {
     userID: 3,
-    path: '/images/characters/3.png', 
-  } ,
+    path: "/images/characters/3.png",
+  },
   {
     userID: 4,
-    path: '/images/characters/1.png' 
-}]
+    path: "/images/characters/1.png",
+  },
+];
 
 const Result1 = () => {
   const previewImage = useRef(null);
+
+  const { play, stop } = useAudioStore();
+
+  useEffect(() => {
+    play("/bgm/Game1_bgm.mp3");
+
+    return () => {
+      stop();
+    };
+  }, []);
 
   return (
     <div className="inner">
       <div className="game container">
         <div className="left-section">
-          <User />
-          <User />
-          <User />
           <User />
         </div>
         <div className="center">
@@ -43,8 +52,8 @@ const Result1 = () => {
               <div className="findDiffrence" ref={previewImage}>
                 {dummyImg.map((img, index) => (
                   <div key={img.userID} className="user-painting">
-                    <div id={`image${index}`} className='img-border'>                    
-                      <img src={img.path} alt={`${img.userID} image`}/>
+                    <div id={`image${index}`} className="img-border">
+                      <img src={img.path} alt={`${img.userID} image`} />
                     </div>
                   </div>
                 ))}
