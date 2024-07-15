@@ -23,6 +23,7 @@ import useAudioStore from "./store/bgm/useAudioStore.js";
 import Game1_Music from "./components/bgm/Game1_Music.jsx";
 import Game2_Music from "./components/bgm/Game2_Music.jsx";
 import LobbyMusic from "./components/bgm/LobbyMusic.jsx";
+import LaserPointer from "./pages/game1/LaserPointer.jsx";
 
 function App() {
   const nav = useNavigate();
@@ -75,6 +76,8 @@ function App() {
         <Route path="/auth/kakao/callback" element={<LoginHandler />} />
 
         <Route path="/temp/login" element={<Login />} />
+
+        <Route path="/laser" element={<LaserPointer />} />
       </Routes>
     </>
   );
