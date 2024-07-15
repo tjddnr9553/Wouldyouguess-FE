@@ -16,7 +16,6 @@ const toolsMap = {
     [ERASE]: Pencil
 };
 
-
 const Drawing = ({width, height}) => {
     const canvasRef = useRef(null);
     const ctxRef = useRef(null);
