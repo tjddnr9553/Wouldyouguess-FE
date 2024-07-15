@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import useUserStore from "../../store/user/useUserStore.js";
-import { auth_kakao_callback } from "./Oauth.js";
-import { room_create, room_join } from "../home/Room.js";
+import { auth_kakao_callback } from "../../api/oauth/Oauth.js";
+import { room_create, room_join } from "../../api/home/Room.js";
 import useRoomStore from "../../store/room/useRoomStore.js";
 
 const LoginHandler = () => {
