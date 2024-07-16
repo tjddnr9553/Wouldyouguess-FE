@@ -45,26 +45,26 @@ const Game2_upload = () => {
 
     setClickSendBtn(true);
 
-    navigate("/game2")
+    // navigate("/game2")
 
 
-    // const uploadRes = await findDiff_upload(uploadForm);
-    // if (uploadRes.status === 200) {
-    //   console.log("서버로 원본 이미지 전송 성공");
+    const uploadRes = await findDiff_upload(uploadForm);
+    if (uploadRes.status === 200) {
+      console.log("서버로 원본 이미지 전송 성공");
 
-    //   const response = await findDiff_og(findDiffGameId, userId);
-    //   if (response.status === 200) {
-    //     setOriginalImages(response.data); // 여기서는 URL만 포함된 배열을 받습니다.
-    //   }
+      const response = await findDiff_og(findDiffGameId, userId);
+      if (response.status === 200) {
+        setOriginalImages(response.data); // 여기서는 URL만 포함된 배열을 받습니다.
+      }
 
-    //   navigate("/game2/remember/");
+      navigate("/game2/remember/");
 
-    //   setTimeout(async () => {
-    //     await findDiff_inpaint(inpaintForm);
-    //     const genResponse = await findDiff_gen(findDiffGameId, userId);
-    //     setGeneratedImages(genResponse.data);
-    //   }, 0);
-    // }
+      setTimeout(async () => {
+        await findDiff_inpaint(inpaintForm);
+        const genResponse = await findDiff_gen(findDiffGameId, userId);
+        setGeneratedImages(genResponse.data);
+      }, 0);
+    }
   };
 
   const prepareFormData = async (file) => {

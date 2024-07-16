@@ -56,16 +56,16 @@ const Game2 = () => {
   }, [gameState])
   
   const checkAnswerAndCondition = () => {
-    // const maskX1 = generatedImages[round].maskX1;
-    // const maskY1 = generatedImages[round].maskY1;
-    // const maskX2 = generatedImages[round].maskX2;
-    // const maskY2 = generatedImages[round].maskY2;
+    const maskX1 = generatedImages[round].maskX1;
+    const maskY1 = generatedImages[round].maskY1;
+    const maskX2 = generatedImages[round].maskX2;
+    const maskY2 = generatedImages[round].maskY2;
 
     // 테스트용
-    const maskX1 = inpaintForm.get('maskX1');
-    const maskY1 = inpaintForm.get('maskY1');
-    const maskX2 = inpaintForm.get('maskX2');
-    const maskY2 = inpaintForm.get('maskY2');
+    // const maskX1 = inpaintForm.get('maskX1');
+    // const maskY1 = inpaintForm.get('maskY1');
+    // const maskX2 = inpaintForm.get('maskX2');
+    // const maskY2 = inpaintForm.get('maskY2');
 
     console.log('x ', x, 'y ', y);
 
@@ -117,8 +117,8 @@ const Game2 = () => {
   const nextImage = () => {   
     if (currentImageIndex < generatedImages.length) {
       console.log(generatedImages[currentImageIndex].generatedUrl);
-      // generatedImg.current.style.backgroundImage = `url(${generatedImages[currentImageIndex].generatedUrl})`;
-      generatedImg.current.style.backgroundImage = `url(${uploadForm.get('image')})`;
+      generatedImg.current.style.backgroundImage = `url(${generatedImages[currentImageIndex].generatedUrl})`;
+      // generatedImg.current.style.backgroundImage = `url(${uploadForm.get('image')})`;
 
       setCurrentImageIndex((prevIndex) => prevIndex + 1);
       setNextRound();

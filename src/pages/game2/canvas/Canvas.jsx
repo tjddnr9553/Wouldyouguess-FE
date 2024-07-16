@@ -36,7 +36,7 @@ const Canvas = () => {
       const imgUrl = canvas.toDataURL("image/png");
 
       updateUploadForm('image', imgUrl);
-      updateInpaintForm('originImage', imgUrl);
+      updateInpaintForm('image', imgUrl);
     }
   }, [isImgUploaded])
 
@@ -46,8 +46,8 @@ const Canvas = () => {
       toolRef.current.Masking(canvasRef.current.width, canvasRef.current.height, x, y, 100);
 
       const canvas = canvasRef.current;
-      const imgURL = canvas.toDataURL("maskingImage/png");
-      updateInpaintForm("maskingImage", imgURL);
+      const imgURL = canvas.toDataURL("image/png");
+      updateInpaintForm("mask", imgURL);
 
       setIsMaskingComplete(true);
     }
