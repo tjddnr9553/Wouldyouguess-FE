@@ -31,7 +31,6 @@ export default (context) => {
 
   const onMouseMove = (x, y) => {
     if (!drawItem) return [];
-    console.log('pencil move');
 
     const newPoint = {x, y};
     const start = drawItem.points.slice(-1)[0]; // 마지막 요소 추출

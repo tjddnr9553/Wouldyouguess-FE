@@ -5,6 +5,7 @@ import axios from "axios";
 import User from "../../components/game/User";
 import useImagesStore from "../../store/image/useImagesStore";
 import useRoomStore from "../../store/room/useRoomStore";
+import useAudioStore from "../../store/bgm/useAudioStore";
 
 import "./Game2.css";
 import "swiper/css";
@@ -50,6 +51,18 @@ const Game2 = () => {
       checkAnswerAndCondition();
     }
   }, [x, y])
+
+  const { generatedImages } = useImagesStore();
+  const { roomId } = useRoomStore();
+  const { play, stop } = useAudioStore();
+
+  useEffect(() => {
+    play("/bgm/Game2_bgm.mp3");
+
+    return () => {
+      stop();
+    };
+  }, []);
 
   useEffect(() => {
     nextImage();

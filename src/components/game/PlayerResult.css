@@ -4,6 +4,7 @@
 
   display: flex;
   height: 20%;
+  margin-bottom: 14px;
 }
 .game1-result .win, .lose {
   display: flex;

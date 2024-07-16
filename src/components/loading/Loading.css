@@ -1,10 +1,11 @@
 .loading {
-    background-image: url('../../public/images/background-img.png');
+    background-image: url('/images/background-img.png');
     width: 100vw;
     height: 100vh;
     background-position: center;
     background-size: cover;
 }
+
 @keyframes snow {
     0% {
         opacity: 0;
@@ -129,6 +130,15 @@
 .star-position7 {
     top: 30px;
     left: 1480px;
+}
+
+.loading-title {
+    position: absolute;
+    top: calc(50% - 200px);
+    left: calc(50% - 200px);
+    color: white;
+    font-size: 50px;
+    font-weight: bold;
 }
 
 .astronaut {

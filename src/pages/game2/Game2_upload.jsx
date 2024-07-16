@@ -6,10 +6,16 @@ import User from "../../components/game/User.tsx";
 import "./Game2.css";
 import useRoomStore from "../../store/room/useRoomStore.js";
 import useUserStore from "../../store/user/useUserStore.js";
-import {findDiff_gen, findDiff_inpaint, findDiff_og, findDiff_upload} from "../../api/game/FindDiff.js";
 import useGameStore, { useCanvasStore, useFileStore } from "../../store/game/useGameStore.js";
 import Canvas from "./canvas/Canvas.jsx";
 import ImgResizer from "./ImgResizer.js"
+import useAudioStore from "../../store/bgm/useAudioStore";
+import {
+  findDiff_gen,
+  findDiff_inpaint,
+  findDiff_og,
+  findDiff_upload,
+} from "../../api/game/FindDiff.js";
 
 const Game2_upload = () => {
   const { isImgUploaded, x, y, isMaskingComplete} = useCanvasStore();
@@ -20,12 +26,38 @@ const Game2_upload = () => {
   const { roomId } = useRoomStore();
   const { setOriginalImages, setGeneratedImages } = useImagesStore();
   const { userId } = useUserStore();
-
+  const { play, stop } = useAudioStore();
   const navigate = useNavigate();
 
   useEffect(() => {
     if(isMaskingComplete) {
       sendToServer();
+    play("/bgm/Game2_bgm.mp3"); // 게임2 시작 시 음악 재생
+
+    return () => {
+      stop();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (selectedImage) {
+      const imageUrl = URL.createObjectURL(selectedImage);
+      previewImage.current.style.backgroundImage = `url(${imageUrl})`;
+      setClickUploadBtn(true);
+
+      return () => {
+        URL.revokeObjectURL(imageUrl);
+        console.log("이미지 URL 삭제");
+      };
+    } else {
+      previewImage.current.style.backgroundImage = "";
+    }
+  }, [selectedImage]);
+
+  useEffect(() => {
+    if (previewImage.current) {
+      setPreviewImageWidth(previewImage.current.clientWidth);
+      setPreviewImageHeight(previewImage.current.clientHeight);
     }
   }, [isMaskingComplete])
 
