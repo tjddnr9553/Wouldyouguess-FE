@@ -42,27 +42,24 @@ const Clock = () => {
   }
 
   const handleCountdownComplete = async () => {
-    console.log(isDrawing);
-    if (isDrawing) {
-      await canvas.toBlob( async (blob) => {
-        const formData = new FormData();
-        formData.append('userId', userId);
-        formData.append('catchLiarGameId', gameId);
-        formData.append('file', blob, 'image.png');
+    if (!isDrawing) return ;
 
-        const res = await catchLiar_image_upload(formData);
-        setImageKey(res.imageKey);
-        setImagePath(res.imagePath);
-      }, 'image/png');
+    await canvas.toBlob( async (blob) => {
+      const formData = new FormData();
+      formData.append('userId', userId);
+      formData.append('catchLiarGameId', gameId);
+      formData.append('file', blob, 'image.png');
 
+      const res = await catchLiar_image_upload(formData);
+      setImageKey(res.imageKey);
+      setImagePath(res.imagePath);
 
       if (round < totalRound) {
         socket?.emit("game_round_change", { roomId, gameId, round });
-        navigate(`/game1?gameId=${gameId}&round=${round + 1}`);
       } else {
-        navigate(`/game1/vote`);
+        socket?.emit("game_end", { roomId });
       }
-    }
+    }, 'image/png');
   }
 
   useEffect(() => {

@@ -4,13 +4,11 @@
   font-family: "Keania One";
 }
 .player-list {
-  width: 45%;
+  width: 50%;
   height: 50%;
 
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .result > .homeBtn {

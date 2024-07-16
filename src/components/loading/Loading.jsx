@@ -10,12 +10,12 @@ const Loading = () => {
 
     useEffect(() => {
         socket?.on("game_result", () => {
-            navigate(`/game/result`)
+            navigate(`/game1/result`)
         });
 
         return () => {
             socket?.off("game_result", () => {
-                navigate(`/game/result`)
+                navigate(`/game1/result`)
             });
         }
     }, [socket])

@@ -40,7 +40,7 @@ const Result1 = () => {
 
   const { userId } = useUserStore();
   const { roomId } = useRoomStore();
-  const { gameId, imageKey, imagePath } = useCatchLiarStore();
+  const { gameId } = useCatchLiarStore();
   const { socket } = useSocketStore();
   const { play, stop } = useAudioStore();
 
@@ -55,12 +55,10 @@ const Result1 = () => {
     const sync_func = async () => {
       const res = await catchLiar_vote_candidates(gameId);
       setPlayers(res);
-
-      socket?.emit("game_end", { roomId });
-    };
+    }
 
     sync_func();
-  }, [imagePath]);
+  }, []);
 
   const liarVote = async (e) => {
     const votingUserId = Number(e.currentTarget.getAttribute("data-user-id"));

@@ -3,7 +3,8 @@
   font-family: "Keania One";
 
   display: flex;
-  height: 18%;
+  height: 20%;
+  margin-bottom: 14px;
   width: 110%;
 }
 .game1-result .win,
