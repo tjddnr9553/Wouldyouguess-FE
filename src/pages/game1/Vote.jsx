@@ -11,20 +11,20 @@ import useRoomStore from "../../store/room/useRoomStore.js";
 
 const dummyImg = [
   {
-    userID: 1,
-    path: "/images/characters/1.png",
+    userId: 1,
+    imagePath: "/images/characters/1.png",
   },
   {
-    userID: 2,
-    path: "/images/characters/2.png",
+    userId: 2,
+    imagePath: "/images/characters/2.png",
   },
   {
-    userID: 3,
-    path: "/images/characters/3.png",
+    userId: 3,
+    imagePath: "/images/characters/3.png",
   },
   {
-    userID: 4,
-    path: "/images/characters/1.png",
+    userId: 4,
+    imagePath: "/images/characters/1.png",
   },
 ];
 
@@ -80,6 +80,15 @@ const Result1 = () => {
             </div>
             <div className="imageContainer">
               <div className="findDiffrence" ref={previewImage}>
+
+                {/*{dummyImg && dummyImg.map((player, index) => (*/}
+                {/*    <div key={index} data-user-id={player.userId} className="user-painting" onClick={liarVote}>*/}
+                {/*      <div id={`image${index}`} className="img-border">*/}
+                {/*        <img src={player.imagePath} alt={`${player.userId} image`} />*/}
+                {/*      </div>*/}
+                {/*    </div>*/}
+                {/*))}*/}
+
                 {players && players.map((player, index) => (
                     <div key={index} data-user-id={player.userId} className="user-painting" onClick={liarVote}>
                       <div id={`image${index}`} className="img-border">
@@ -87,6 +96,7 @@ const Result1 = () => {
                       </div>
                     </div>
                 ))}
+
               </div>
             </div>
           </div>
