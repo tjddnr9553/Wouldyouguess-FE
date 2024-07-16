@@ -60,12 +60,11 @@ const Game2_upload = () => {
     setClickSendBtn(true);
 
     // navigate("/game2")
-
-
+    
     const uploadRes = await findDiff_upload(uploadForm);
     if (uploadRes.status === 200) {
       console.log("서버로 원본 이미지 전송 성공");
-
+      
       const response = await findDiff_og(findDiffGameId, userId);
       if (response.status === 200) {
         setOriginalImages(response.data); // 여기서는 URL만 포함된 배열을 받습니다.
@@ -158,7 +157,6 @@ const Game2_upload = () => {
                     onClick={() => {
                       setClickSendBtn(true);
                     }}
-                    // onClick={() => navigate("/game2")}
                     disabled={clickSendBtn}
                   />
                 )}

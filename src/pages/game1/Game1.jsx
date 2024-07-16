@@ -86,7 +86,6 @@ const Game1 = () => {
           <div className="right-section">
             <Clock />
             <Palette />
-            <button className="quite-btn" onClick={handleSaveCanvas}>DONE</button>
           </div>
         </div>
       </div>
