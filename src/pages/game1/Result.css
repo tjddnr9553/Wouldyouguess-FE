@@ -1,0 +1,27 @@
+.result > .title {
+  font-size: 3rem;
+  margin-bottom: 3%;
+  font-family: "Keania One";
+}
+.player-list {
+  width: 50%;
+  height: 50%;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.result > .homeBtn {
+  margin-top: 3%;
+
+  width: 160px;
+  height: 45px;
+
+  border-radius: 15px;
+  border: none;
+
+  font-weight: 700;
+  font-size: 1.3rem;
+
+  background-color: rgba(145, 161, 175, 0.704);
+}

@@ -1,10 +1,11 @@
-import {useNavigate, useParams} from "react-router-dom";
-import {useEffect, useRef, useState} from "react";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import NewButton from "../../components/button/newButton";
 import axios from "axios";
 import User from "../../components/game/User";
 import useImagesStore from "../../store/image/useImagesStore";
 import useRoomStore from "../../store/room/useRoomStore";
+import useAudioStore from "../../store/bgm/useAudioStore";
 
 import "./Game2.css";
 import "swiper/css";
@@ -25,7 +26,6 @@ const Game2 = () => {
   const {round,  setNextRound, remainingTime, setRemainingTime, correctCount, setCorrectCount, 
         setRemainingChance, chance, setChance, mode, setMode} = useGameStore();
 
-  const { roomId } = useRoomStore();
   const { generatedImages } = useImagesStore();
   const {inpaintForm, uploadForm} = useFileStore();
 
@@ -50,6 +50,18 @@ const Game2 = () => {
       checkAnswerAndCondition();
     }
   }, [x, y])
+
+  const { generatedImages } = useImagesStore();
+  const { roomId } = useRoomStore();
+  const { play, stop } = useAudioStore();
+
+  useEffect(() => {
+    play("/bgm/Game2_bgm.mp3");
+
+    return () => {
+      stop();
+    };
+  }, []);
 
   useEffect(() => {
     nextImage();

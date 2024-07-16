@@ -8,11 +8,22 @@ import "swiper/css";
 import "swiper/css/navigation";
 import useRoomStore from "../../store/room/useRoomStore";
 import useImagesStore from "../../store/image/useImagesStore";
+import useAudioStore from "../../store/bgm/useAudioStore";
 
 const Game2_remember = () => {
   const navigate = useNavigate();
+
   const { roomId } = useRoomStore();
-  const { originalImages  } = useImagesStore();
+  const { originalImages } = useImagesStore();
+  const { play, stop } = useAudioStore();
+
+  useEffect(() => {
+    play("/bgm/Game2_bgm.mp3");
+
+    return () => {
+      stop();
+    };
+  }, []);
 
   useEffect(() => {
     console.log("OriginalImages : ", originalImages);
@@ -21,7 +32,6 @@ const Game2_remember = () => {
     }, 10000);
 
     return () => clearTimeout(timer);
-    
   }, [originalImages, navigate, roomId]);
 
   return (
@@ -66,7 +76,7 @@ const Game2_remember = () => {
               </div>
             </div>
           </div>
-        </div>   
+        </div>
       </div>
     </div>
   );

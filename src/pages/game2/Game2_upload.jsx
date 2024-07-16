@@ -6,7 +6,13 @@ import User from "../../components/game/User.tsx";
 import "./Game2.css";
 import useRoomStore from "../../store/room/useRoomStore.js";
 import useUserStore from "../../store/user/useUserStore.js";
-import {findDiff_gen, findDiff_inpaint, findDiff_og, findDiff_upload} from "../../api/game/FindDiff.js";
+import useAudioStore from "../../store/bgm/useAudioStore";
+import {
+  findDiff_gen,
+  findDiff_inpaint,
+  findDiff_og,
+  findDiff_upload,
+} from "../../api/game/FindDiff.js";
 import useGameStore, { useCanvasStore, useFileStore } from "../../store/game/useGameStore.js";
 import Canvas from "./canvas/Canvas.jsx";
 import ImgResizer from "./ImgResizer.js"
@@ -20,8 +26,16 @@ const Game2_upload = () => {
   const { roomId } = useRoomStore();
   const { setOriginalImages, setGeneratedImages } = useImagesStore();
   const { userId } = useUserStore();
-
+  const { play, stop } = useAudioStore();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    play("/bgm/Game2_bgm.mp3"); // 게임2 시작 시 음악 재생
+
+    return () => {
+      stop();
+    };
+  }, []);
 
   useEffect(() => {
     if(isMaskingComplete) {
@@ -98,6 +112,14 @@ const Game2_upload = () => {
   const changeInput = (e) => {
     prepareFormData(e.target.files[0]);
   }
+  const getCursorPosition = (e) => {
+    const { top, left } = canvasRef.current.getBoundingClientRect();
+    return {
+      x: e.clientX - left,
+      y: e.clientY - top,
+    };
+  };
+
 
   return (
     <div className="inner">

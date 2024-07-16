@@ -1,21 +1,23 @@
 import "./Game1.css";
+
+import {useEffect, useRef, useState} from "react";
+import {useSearchParams} from "react-router-dom";
+
 import User from "../../components/game/User.tsx";
 import Drawing from "./canvas/Drawing.jsx";
 import Palette from "./canvas/Palette.jsx";
-import { useEffect, useRef, useState } from "react";
 import Tools from "./canvas/CanvasTools.jsx";
 import Clock from "../../components/game/Clock.jsx";
-import { catchLiar_info } from "../../api/game/CatchLiar.js";
+
+import {catchLiar_info} from "../../api/game/CatchLiar.js";
+
 import useUserStore from "../../store/user/useUserStore.js";
-import {useNavigate, useSearchParams} from "react-router-dom";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
-import { useCanvasStore } from '../../store/canvas/useCanvasStore.js';
+import useAudioStore from "../../store/bgm/useAudioStore.js";
 
 const Game1 = () => {
-  const navigate = useNavigate();
-
   const [searchParams] = useSearchParams();
-  const round = Number(searchParams.get('round'));
+  const round = Number(searchParams.get("round"));
 
   const containerRef = useRef(null);
 
@@ -27,20 +29,27 @@ const Game1 = () => {
   });
 
   const { userId } = useUserStore();
-  const { gameId, setIsDrawing, setIsLiar, setKeyword } = useCatchLiarStore();
-  const { getSaveImg } = useCanvasStore();
+  const { gameId, keyword, setIsDrawing, setIsLiar, setKeyword, setTotalRound } = useCatchLiarStore();
+  const { play, stop } = useAudioStore();
 
   useEffect(() => {
-    const syn_func = async () => {
-      const round = Number(searchParams.get("round"));
+    play("/bgm/Game1_bgm.mp3");
 
+    return () => {
+      stop();
+    };
+  }, [])
+
+  useEffect(() => {
+    const sync_func = async () => {
       const response = await catchLiar_info(gameId, userId, round);
       setIsDrawing(response.isDrawing);
       setIsLiar(response.isLiar);
       setKeyword(response.keyword);
+      setTotalRound(response.totalRound);
     };
-    syn_func();
-  }, []);
+    sync_func();
+  }, [round]);
 
   // window size 변경 시 캔버스 좌표 수정을 위한 resize
   useEffect(() => {
@@ -54,13 +63,6 @@ const Game1 = () => {
     setParentHeight(containerRef.current.clientHeight);
   }, [windowSize]);
 
-  const handleSaveCanvas = () => {
-    const imgUrl = getSaveImg();
-
-    navigate('vote');
-
-    // 서버 전달 로직 작성하기.
-  }
 
   return(
       <div className="inner" key={round}>

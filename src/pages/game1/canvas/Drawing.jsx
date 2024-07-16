@@ -16,7 +16,6 @@ const toolsMap = {
     [ERASE]: Pencil
 };
 
-
 const Drawing = ({width, height}) => {
     const canvasRef = useRef(null);
     const ctxRef = useRef(null);
@@ -45,14 +44,17 @@ const Drawing = ({width, height}) => {
         }
     }, [tool]);
 
-
     useEffect(() => {
-        socket?.on('drawer_draw_start', handleDrawStart);
-        socket?.on('drawer_draw_move', handleDrawMove);
+        socket?.on('drawer_draw_start', handleDrawerDrawStart);
+        socket?.on('drawer_draw_move', handleDrawerDrawMove);
+        socket?.on('watcher_draw_start', handleWatcherDrawStart);
+        socket?.on('watcher_draw_move', handleWatcherDrawMove);
 
         return () => {
-            socket?.off("drawer_draw_start", handleDrawStart);
-            socket?.off("drawer_draw_move", handleDrawMove);
+            socket?.off("drawer_draw_start", handleDrawerDrawStart);
+            socket?.off("drawer_draw_move", handleDrawerDrawMove);
+            socket?.off('watcher_draw_start', handleWatcherDrawStart);
+            socket?.off('watcher_draw_move', handleWatcherDrawMove);
         };
     }, [socket]);
 
@@ -72,7 +74,7 @@ const Drawing = ({width, height}) => {
     const onMouseDown = (e) => {
         isClick = true;
         const {x, y} = getCursorPosition(e);
-        console.log("onMouseDown : ", x, y);
+
         if(tool === TOOL_PENCIL){
             toolRef.current.onMouseDown(x, y, color, size);
         } else if (tool === ERASE) {
@@ -80,26 +82,33 @@ const Drawing = ({width, height}) => {
         } else {
             toolRef.current.onMouseDown(x, y, color, size, fillColor);
         }
-        socket?.emit('drawer_draw_start', { tool, xAxis: x, yAxis: y, color, size, fillColor, roomId });
+
+        if(isDrawing) {
+            socket?.emit('drawer_draw_start', { tool, xAxis: x, yAxis: y, color, size, fillColor, roomId });
+        } else {
+            socket?.emit('watcher_draw_start', { tool, xAxis: x, yAxis: y, color, size, fillColor, roomId });
+        }
     }
 
     const onMouseUp = (e) => {
         isClick = false;
         const {x, y} = getCursorPosition(e);
-        console.log("onMouseUp : ", x, y);
         toolRef.current.onMouseUp(x, y);
     }
 
     const onMouseMove = (e) => {
         if (!isClick) return;
         const {x, y} = getCursorPosition(e);
-        console.log("onMouseMove : ", x, y);
         toolRef.current.onMouseMove(x, y);
-        socket?.emit('drawer_draw_move', { tool, xAxis: x, yAxis: y, color, size, fillColor, roomId });
+
+        if(isDrawing) {
+            socket?.emit('drawer_draw_move', { tool, xAxis: x, yAxis: y, color, size, fillColor, roomId });
+        } else {
+            socket?.emit('watcher_draw_move', { tool, xAxis: x, yAxis: y, color, size, fillColor, roomId });
+        }
     }
 
-    const handleDrawStart = (data) => {
-        console.log(data);
+    const handleDrawerDrawStart = (data) => {
         const {tool, xAxis, yAxis, color, size, fillColor} = data;
 
         setTool(tool);
@@ -108,8 +117,21 @@ const Drawing = ({width, height}) => {
             toolRef.current.onMouseDown(xAxis, yAxis, color, size, fillColor);
     }
 
-    const handleDrawMove = (data) => {
-        console.log(data);
+    const handleDrawerDrawMove = (data) => {
+        const {tool, xAxis, yAxis, color, size, fillColor} = data;
+        toolRef.current.onMouseMove(xAxis, yAxis);
+    }
+
+    const handleWatcherDrawStart = (data) => {
+        const {tool, xAxis, yAxis, color, size, fillColor} = data;
+
+        setTool(tool);
+        tool === TOOL_PENCIL ?
+            toolRef.current.onMouseDown(xAxis, yAxis, color, size) :
+            toolRef.current.onMouseDown(xAxis, yAxis, color, size, fillColor);
+    }
+
+    const handleWatcherDrawMove = (data) => {
         const {tool, xAxis, yAxis, color, size, fillColor} = data;
         toolRef.current.onMouseMove(xAxis, yAxis);
     }
