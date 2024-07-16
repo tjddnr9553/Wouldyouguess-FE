@@ -6,6 +6,9 @@ import User from "../../components/game/User.tsx";
 import "./Game2.css";
 import useRoomStore from "../../store/room/useRoomStore.js";
 import useUserStore from "../../store/user/useUserStore.js";
+import useGameStore, { useCanvasStore, useFileStore } from "../../store/game/useGameStore.js";
+import Canvas from "./canvas/Canvas.jsx";
+import ImgResizer from "./ImgResizer.js"
 import useAudioStore from "../../store/bgm/useAudioStore";
 import {
   findDiff_gen,
@@ -13,9 +16,6 @@ import {
   findDiff_og,
   findDiff_upload,
 } from "../../api/game/FindDiff.js";
-import useGameStore, { useCanvasStore, useFileStore } from "../../store/game/useGameStore.js";
-import Canvas from "./canvas/Canvas.jsx";
-import ImgResizer from "./ImgResizer.js"
 
 const Game2_upload = () => {
   const { isImgUploaded, x, y, isMaskingComplete} = useCanvasStore();

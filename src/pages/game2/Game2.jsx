@@ -1,5 +1,6 @@
-import { useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+
+import {useNavigate, useParams} from "react-router-dom";
+import {useEffect, useRef, useState} from "react";
 import NewButton from "../../components/button/newButton";
 import axios from "axios";
 import User from "../../components/game/User";
