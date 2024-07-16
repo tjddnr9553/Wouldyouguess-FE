@@ -9,48 +9,79 @@ import useRoomStore from "../../store/room/useRoomStore";
 import "./Game2.css";
 import "swiper/css";
 import Canvas from "./canvas/Canvas";
-import { useCanvasStore, useFileStore } from "../../store/game/useGameStore";
-import useGameStore from "../../store/game/useGameStore";
+import useGameStore, { useCanvasStore, useFileStore }  from "../../store/game/useGameStore";
+
+const STATUS = {
+  START: 'start',
+  SUCCESS: 'success', // round 성공
+  FAIL: 'fail', // 기회 세 번 모두 사용
+  END: 'end' // 시간 초과
+};
 
 const Game2 = () => {
   const navigate = useNavigate();
 
-  const {x, y, canvasWrapperWidth, canvasWrapperHeight} =useCanvasStore();
-  const {round,  setRound, remainingTime, setRemainingTime, correctCount, setCorrectCount, 
+  const {x, y} = useCanvasStore();
+  const {round,  setNextRound, remainingTime, setRemainingTime, correctCount, setCorrectCount, 
         setRemainingChance, chance, setChance, mode, setMode} = useGameStore();
-  const {inpaintForm} = useFileStore();
 
   const { roomId } = useRoomStore();
   const { generatedImages } = useImagesStore();
+  const {inpaintForm, uploadForm} = useFileStore();
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
+  const [gameState, setGameState] = useState(STATUS.START);
+  
   const generatedImg = useRef(null);
-  const timeLimit = 60000;
 
+  const timeLimit = 60000;
+  
   useEffect(() => {
     setMode('difference');
+    
+    setTimeout(() => { 
+      navigate("/game2/result");
+    }, timeLimit);
   }, [])
-
+  
+  // 캔버스 좌표 값 변경 시 정답 확인
   useEffect(() => {
     if (mode === 'difference') {
-      checkAnswer();
+      checkAnswerAndCondition();
     }
   }, [x, y])
 
+  useEffect(() => {
+    nextImage();
+  }, [gameState])
   
-  const checkAnswer = () => {
-    const maskX1 = inpaintForm.get("maskX1");
-    const maskY1 = inpaintForm.get("maskY1");
-    const maskX2 = inpaintForm.get("maskX2");
-    const maskY2 = inpaintForm.get("maskY2");
+  const checkAnswerAndCondition = () => {
+    // const maskX1 = generatedImages[round].maskX1;
+    // const maskY1 = generatedImages[round].maskY1;
+    // const maskX2 = generatedImages[round].maskX2;
+    // const maskY2 = generatedImages[round].maskY2;
 
-    if (maskX1 <= x <= maskX2 && maskY1 <= y <= maskY2) {
+    // 테스트용
+    const maskX1 = inpaintForm.get('maskX1');
+    const maskY1 = inpaintForm.get('maskY1');
+    const maskX2 = inpaintForm.get('maskX2');
+    const maskY2 = inpaintForm.get('maskY2');
+
+    console.log('x ', x, 'y ', y);
+
+    if (maskX1 <= x && x <= maskX2 && maskY1 <= y && y <= maskY2) {
       alert('성공');
+      
+      // 점수 계산을 위해 셋팅
       setRemainingChance(`round${round}`, chance);
       setCorrectCount();
-      setChance(3);
       showScore();
+
+      // 다음 라운드를 위해 chance 초기화
+      setChance(3);
+
+      // 게임 상태 return
+      return STATUS.SUCCESS;
     } else {
       alert(`실패 남은 기회 : ${chance - 1}`);
       setChance(chance - 1);
@@ -59,11 +90,9 @@ const Game2 = () => {
         alert('기회 끝');
         setRemainingChance(`round${round}`, chance);
         setChance(3);
-      }
-    }
 
-    if (round === 3) {
-      calculateScore();
+        return STATUS.FAIL;
+      }
     }
   }
   
@@ -83,26 +112,29 @@ const Game2 = () => {
     console.log("remainingTime ", remainingTime);
   }
 
+  // x 초마다 이미지 전환
+  // 조건이 만족되면 즉시 다음 이미지로 전환
+  const nextImage = () => {   
+    if (currentImageIndex < generatedImages.length) {
+      console.log(generatedImages[currentImageIndex].generatedUrl);
+      // generatedImg.current.style.backgroundImage = `url(${generatedImages[currentImageIndex].generatedUrl})`;
+      generatedImg.current.style.backgroundImage = `url(${uploadForm.get('image')})`;
+
+      setCurrentImageIndex((prevIndex) => prevIndex + 1);
+      setNextRound();
+    }
+  }
+
+
+  // 다음 라운드로 넘어가는 함수. x 초마다 무조건 실행.
+    // 다음 이미지를 보여주고 , 라운드 갱신.
   useEffect(() => {
-    const showImages = () => {
-      if (currentImageIndex < generatedImages.length) {
-        generatedImg.current.style.backgroundImage = `url(${generatedImages[currentImageIndex]})`;
-        setCurrentImageIndex((prevIndex) => prevIndex + 1);
-        setTimeout(showImages, 2000); // 2초마다 다음 이미지로 (이 시간은 조절 가능)
-      } else {
-        // 모든 이미지를 보여준 후 10초 뒤에 결과 페이지로 이동
-        setTimeout(() => {
-          navigate("/game2/result");
-        }, timeLimit);
-      }
-    };
+    const interval = setInterval(() => {
+      setGameState(STATUS.END);
+    }, 50000);
 
-    showImages();
-
-    return () => {
-      // cleanup 함수: 필요한 경우 타이머를 정리할 수 있습니다.
-    };
-  }, [generatedImages, navigate]);
+    return () => clearInterval(interval);
+  }, [round]); 
 
   return (
     <div className="inner">
@@ -118,8 +150,8 @@ const Game2 = () => {
               </div>
             </div>
             <div className="imageContainer">
-              <div className="findDifference containerWrapper">
-                <div className="generatedImg" ref={generatedImg} style={{backgroundImage: 'url("/images/characters/dummy.jpg")', width: canvasWrapperWidth, height: canvasWrapperHeight, position: 'relative' }}>
+              <div className="findDifference containerWrapper" >
+                <div className="generatedImg game2-canvas-container" ref={generatedImg} >
                   <Canvas />
                 </div>
               </div>

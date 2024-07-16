@@ -4,16 +4,12 @@ import { useCanvasStore, useFileStore} from "../../../store/game/useGameStore";
 import Canvas from "./Canvas";
 
 const CanvasContainer = () => {
-  const {canvasWrapperHeight, setCanvasWrapperHeight, setCanvasWrapperWidth, canvasWrapperWidth, setIsImgUploaded} = useCanvasStore();
+  const {setIsImgUploaded} = useCanvasStore();
   const {file} = useFileStore();
 
   const containerWrapper = useRef(null);
   const canvasContainerRef = useRef(null);
   const uploadImgRef = useRef(null);
-
-  useEffect(() => {
-    setCanvasWrapperHeight(containerWrapper.current.clientHeight);
-  }, [])
 
   useEffect(() => {
     if(file) {
@@ -29,7 +25,6 @@ const CanvasContainer = () => {
     uploadImgRef.current.src = imageUrl;
 
     uploadImgRef.current.onload = () => {
-      setCanvasWrapperWidth(uploadImgRef.current.clientWidth);
       canvasContainerRef.current.style.border = '5px solid red';
     }
 
@@ -46,7 +41,7 @@ const CanvasContainer = () => {
           className="game2-canvas-container"
           ref={canvasContainerRef}
         >
-          <img ref={uploadImgRef} src="" id="upload-img" style={{height: canvasWrapperHeight}}/>
+          <img ref={uploadImgRef} src="" id="upload-img" />
           <Canvas/>
         </div>
       </div>

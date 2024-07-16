@@ -5,8 +5,10 @@ const useGameStore = create((set) => ({
   setMode: (mode) => set({mode}),
   findDiffGameId: 0,
   setFindDiffGameId: (findDiffGameId) => set({ findDiffGameId }),
+  clickSendBtn: false,
+  setClickSendBtn: (clickSendBtn) => set({clickSendBtn}),
   round: 1,
-  setRound: () => set((state) => ({
+  setNextRound: () => set((state) => ({
     round: state.round + 1,
   })),
   chance: 3,
@@ -38,21 +40,27 @@ export const useCanvasStore = create((set)=>({
   setX: (x) => set({x}),
   y: '',
   setY: (y) => set({y}),
-  canvasWrapperHeight : '',
-  setCanvasWrapperHeight : (canvasWrapperHeight) => set( {canvasWrapperHeight} ),
-  canvasWrapperWidth: '',
-  setCanvasWrapperWidth: (canvasWrapperWidth) => set( {canvasWrapperWidth} ),
   isImgUploaded: false,
   setIsImgUploaded: (isImgUploaded) => set({isImgUploaded}),
+  isMaskingComplete: false,
+  setIsMaskingComplete: (isMaskingComplete) => set({isMaskingComplete}),
 }))
 
 export const useFileStore = create((set)=>({
   file:'',
   setFile: (file) => set({file}),
-  uploadForm: '',
-  setUploadForm: (uploadForm) => set({uploadForm}),
-  inpaintForm: '',
-  setInpaintForm: (inpaintForm) => set({inpaintForm}),
+  uploadForm: new FormData(),
+  updateUploadForm: (key, value) => set(state => {
+    const formData = state.uploadForm;
+    formData.append(key, value);
+    return {uploadForm: formData};
+  }),
+  inpaintForm: new FormData(),
+  updateInpaintForm: (key, value) => set(state => {
+    const formData = state.inpaintForm;
+    formData.append(key, value);
+    return {inpaintForm: formData};
+  }),
 }))
 
 export default useGameStore;
