@@ -1,7 +1,7 @@
 /* 행성 */
 .item-hints {
   /* 행성 사이즈 조절 여기서 하면 됨 */
-  width: 300px; 
+  width: 33%; 
   position: absolute;
 }
 .item-hints .hint {

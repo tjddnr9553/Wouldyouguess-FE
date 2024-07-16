@@ -44,23 +44,22 @@ const Game1 = () => {
   } = useCatchLiarStore();
   const { play, stop } = useAudioStore();
 
-  const sync_func = async () => {
-    const response = await catchLiar_info(gameId, userId, round);
-    setIsDrawing(response.isDrawing);
-    setIsLiar(response.isLiar);
-    setKeyword(response.keyword);
-    setTotalRound(response.totalRound);
-  };
-
   useEffect(() => {
     play("/bgm/Game1_bgm.mp3");
 
     return () => {
       stop();
     };
-  }, []);
+  }, [])
 
   useEffect(() => {
+    const sync_func = async () => {
+      const response = await catchLiar_info(gameId, userId, round);
+      setIsDrawing(response.isDrawing);
+      setIsLiar(response.isLiar);
+      setKeyword(response.keyword);
+      setTotalRound(response.totalRound);
+    };
     sync_func();
 
     setShowModal(true);

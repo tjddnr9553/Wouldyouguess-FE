@@ -137,15 +137,15 @@ const Lobby = () => {
 
           <div className="game-content">
             <Planet
-              style={{ top: "10%" }}
-              id={"planet4"}
+              style={{ top: "7%" }}
+              id={"planet1"}
               min={5}
               max={15}
               text={textList[0].text}
               onClick={startCatchLiar}
             />
             <Planet
-              style={{ bottom: "5%", left: "30%" }}
+              style={{ bottom: "0%", left: "33%" }}
               id={"planet2"}
               min={5}
               max={25}
@@ -153,10 +153,10 @@ const Lobby = () => {
               onClick={startFindDIff}
             />
             <Planet
-              style={{ right: "12%" }}
-              id={"planet5"}
+              style={{ right: "1%" }}
+              id={"planet3"}
               min={5}
-              max={20}
+              max={30}
               text={textList[2].text}
             />
           </div>

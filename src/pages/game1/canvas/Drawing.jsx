@@ -19,7 +19,7 @@ const toolsMap = {
 const Drawing = ({width, height}) => {
     const canvasRef = useRef(null);
     const ctxRef = useRef(null);
-    const toolRef = useRef(null);
+    const toolRef = useRef(null); 
     let isClick = false;
 
     const { socket } = useSocketStore();
@@ -145,6 +145,7 @@ const Drawing = ({width, height}) => {
                 onMouseDown={onMouseDown}
                 onMouseUp={onMouseUp}
                 onMouseMove={onMouseMove}
+                style={{ backgroundColor: 'transparent' }}
             />
         </>
     );

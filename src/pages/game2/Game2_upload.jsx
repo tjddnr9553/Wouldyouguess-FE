@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import NewButton from "../../components/button/newButton";
 import useImagesStore from "../../store/image/useImagesStore.js";
 import User from "../../components/game/User.tsx";
 import "./Game2.css";
 import useRoomStore from "../../store/room/useRoomStore.js";
 import useUserStore from "../../store/user/useUserStore.js";
-import useGameStore from "../../store/game/useGameStore.js";
+import useGameStore, { useCanvasStore, useFileStore } from "../../store/game/useGameStore.js";
+import Canvas from "./canvas/Canvas.jsx";
+import ImgResizer from "./ImgResizer.js"
 import useAudioStore from "../../store/bgm/useAudioStore";
 import {
   findDiff_gen,
@@ -17,20 +18,11 @@ import {
 } from "../../api/game/FindDiff.js";
 
 const Game2_upload = () => {
-  const imgSelctBtn = useRef(null);
-  const previewImage = useRef(null);
-  const canvasRef = useRef(null);
+  const { isImgUploaded, x, y, isMaskingComplete} = useCanvasStore();
+  const {file, setFile, uploadForm, updateUploadForm, inpaintForm, updateInpaintForm} = useFileStore();
+  const {clickSendBtn, setClickSendBtn, findDiffGameId} = useGameStore();
+  const imgSelectBtn = useRef(null);
 
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [uploadForm, setUploadForm] = useState(null);
-  const [inpaintForm, setInpaintForm] = useState(null);
-  const [clickSendBtn, setClickSendBtn] = useState(false);
-  const [clickUploadBtn, setClickUploadBtn] = useState(false);
-
-  const [previewImageWidth, setPreviewImageWidth] = useState(0);
-  const [previewImageHeight, setPreviewImageHeight] = useState(0);
-
-  const { findDiffGameId } = useGameStore();
   const { roomId } = useRoomStore();
   const { setOriginalImages, setGeneratedImages } = useImagesStore();
   const { userId } = useUserStore();
@@ -46,34 +38,33 @@ const Game2_upload = () => {
   }, []);
 
   useEffect(() => {
-    if (selectedImage) {
-      const imageUrl = URL.createObjectURL(selectedImage);
-      previewImage.current.style.backgroundImage = `url(${imageUrl})`;
-      setClickUploadBtn(true);
-
-      return () => {
-        URL.revokeObjectURL(imageUrl);
-        console.log("이미지 URL 삭제");
-      };
-    } else {
-      previewImage.current.style.backgroundImage = "";
+    if(isMaskingComplete) {
+      sendToServer();
     }
-  }, [selectedImage]);
-
-  useEffect(() => {
-    if (previewImage.current) {
-      setPreviewImageWidth(previewImage.current.clientWidth);
-      setPreviewImageHeight(previewImage.current.clientHeight);
-    }
-  }, [selectedImage]);
+  }, [isMaskingComplete])
 
   const sendToServer = async () => {
+    console.log("uploadForm ", uploadForm.get('image'));
+    console.log("inpaintForm ", inpaintForm.get('image'));
+
+    updateForm();
+
+    console.log("Updated mask coordinates:", {
+      maskX1: inpaintForm.get('maskX1'),
+      maskY1: inpaintForm.get('maskY1'),
+      maskX2: inpaintForm.get('maskX2'),
+      maskY2: inpaintForm.get('maskY2'),
+    });
+    console.log('prompt', inpaintForm.get('prompt'));
+
     setClickSendBtn(true);
 
+    // navigate("/game2")
+    
     const uploadRes = await findDiff_upload(uploadForm);
     if (uploadRes.status === 200) {
       console.log("서버로 원본 이미지 전송 성공");
-
+      
       const response = await findDiff_og(findDiffGameId, userId);
       if (response.status === 200) {
         setOriginalImages(response.data); // 여기서는 URL만 포함된 배열을 받습니다.
@@ -89,66 +80,37 @@ const Game2_upload = () => {
     }
   };
 
-  const selectImage = (event) => {
-    const file = event.target.files[0];
-    const uploadForm = new FormData();
-    const inpaintForm = new FormData();
+  const prepareFormData = async (file) => {
+    const resizingImg = await ImgResizer(file, 512, 512); // 512 변경 필요
+    // console.log(resizingImg);
+    setFile(resizingImg);
 
-    setSelectedImage(file);
+    updateInpaintForm("roomId", roomId);
+    updateInpaintForm("userId", userId);
+    updateInpaintForm("prompt", "Modify safely.");
 
-    inpaintForm.append("image", file);
-    inpaintForm.append("roomId", roomId);
-    inpaintForm.append("userId", userId);
-    inpaintForm.append("prompt", "Modify safely.");
-
-    uploadForm.append("image", file);
-    uploadForm.append("roomId", roomId);
-    uploadForm.append("userId", userId);
-
-    setInpaintForm(inpaintForm);
-    setUploadForm(uploadForm);
+    updateUploadForm("roomId", roomId);
+    updateUploadForm("userId", userId);
   };
 
-  const getCursorPosition = (e) => {
-    const { top, left } = canvasRef.current.getBoundingClientRect();
-    return {
-      x: e.clientX - left,
-      y: e.clientY - top,
-    };
-  };
-
-  const clickCanvas = (e) => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
-    context.clearRect(0, 0, previewImageWidth, previewImageHeight);
-    const { x, y } = getCursorPosition(e);
-
+  const updateForm = () => {
     const length = 100;
-    context.strokeRect(x - length / 2, y - length / 2, length, length);
-
-    // 마스킹 영역 업데이트
-    const updatedInpaintForm = new FormData();
-
-    // 기존 inpaintForm의 모든 데이터를 새 FormData 객체에 복사
-    for (let [key, value] of inpaintForm.entries()) {
-      updatedInpaintForm.append(key, value);
-    }
+    
+    const maskX1 = (x - length / 2)> 0 ? Math.round(x - length / 2) : 0;
+    const maskY1 = (y - length / 2) > 0 ? Math.round(y - length / 2) : 0;
+    const maskX2 = Math.round(x + length / 2);
+    const maskY2 = Math.round(y + length / 2);
 
     // 새로운 마스킹 좌표 설정
-    updatedInpaintForm.set("maskX1", Math.round(x - length / 2));
-    updatedInpaintForm.set("maskY1", Math.round(y - length / 2));
-    updatedInpaintForm.set("maskX2", Math.round(x + length / 2));
-    updatedInpaintForm.set("maskY2", Math.round(y + length / 2));
+    updateInpaintForm("maskX1", maskX1);
+    updateInpaintForm("maskY1", maskY1);
+    updateInpaintForm("maskX2", maskX2);
+    updateInpaintForm("maskY2", maskY2);
+  }
 
-    console.log("Updated mask coordinates:", {
-      maskX1: Math.round(x - length / 2),
-      maskY1: Math.round(y - length / 2),
-      maskX2: Math.round(x + length / 2),
-      maskY2: Math.round(y + length / 2),
-    });
-
-    setInpaintForm(updatedInpaintForm);
-  };
+  const changeInput = (e) => {
+    prepareFormData(e.target.files[0]);
+  }
 
   return (
     <div className="inner">
@@ -160,7 +122,7 @@ const Game2_upload = () => {
           <div className="game2_border">
             <div className="titleContainer">
               <div>
-                {clickUploadBtn === false ? (
+                {isImgUploaded === false ? (
                   <strong>Upload Your Image !</strong>
                 ) : (
                   <strong>Select your masking area</strong>
@@ -168,40 +130,33 @@ const Game2_upload = () => {
               </div>
             </div>
             <div className="imageContainer">
-              <div className="previewImage" ref={previewImage}>
-                {selectedImage && (
-                  <canvas
-                    ref={canvasRef}
-                    width={previewImageWidth}
-                    height={previewImageHeight}
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      backgroundColor: "transparent",
-                    }}
-                    onMouseDown={clickCanvas}
-                  />
-                )}
+              <div className="containerWrapper">
+                <div className="game2-canvas-container">
+                  <Canvas />
+                </div>
               </div>
               <div className="imageBtnContainer">
                 <input
                   type="file"
                   id="imageFile"
-                  ref={imgSelctBtn}
-                  onChange={selectImage}
+                  ref={imgSelectBtn}
+                  onChange={changeInput}
                   accept="image/png"
                   style={{ display: "none" }}
                 />
-                {clickUploadBtn === false ? (
+                {isImgUploaded === false ? (
                   <NewButton
                     text={"Image Upload"}
-                    onClick={() => imgSelctBtn.current.click()}
+                    onClick={() => {
+                      imgSelectBtn.current.click();
+                    }}
                   />
                 ) : (
                   <NewButton
                     text={"전송하기"}
-                    onClick={sendToServer}
+                    onClick={() => {
+                      setClickSendBtn(true);
+                    }}
                     disabled={clickSendBtn}
                   />
                 )}

@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import NewButton from "../../components/button/newButton.jsx";
@@ -31,7 +31,7 @@ const Game2_result = () => {
   return (
     <div className="inner">
       <div className="left-section">
-        <User />
+        {/* <User /> */}
       </div>
       <div className="game2_border">
         <div className="titleContainer">
