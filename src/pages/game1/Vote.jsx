@@ -1,10 +1,13 @@
 import "./Vote.css";
-import {useEffect, useRef, useState} from "react";
+import { useEffect, useRef, useState } from "react";
 import User from "../../components/game/User";
 import useAudioStore from "../../store/bgm/useAudioStore";
-import {catchLiar_vote, catchLiar_vote_candidates} from "../../api/game/CatchLiar.js";
+import {
+  catchLiar_vote,
+  catchLiar_vote_candidates,
+} from "../../api/game/CatchLiar.js";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useSocketStore from "../../store/socket/useSocketStore.js";
 import useUserStore from "../../store/user/useUserStore.js";
 import useRoomStore from "../../store/room/useRoomStore.js";
@@ -46,24 +49,24 @@ const Result1 = () => {
     return () => {
       stop();
     };
-  }, [])
+  }, []);
 
   useEffect(() => {
     const sync_func = async () => {
       const res = await catchLiar_vote_candidates(gameId);
       setPlayers(res);
-    }
+    };
 
     sync_func();
   }, []);
 
   const liarVote = async (e) => {
-    const votingUserId = Number(e.currentTarget.getAttribute('data-user-id'));
+    const votingUserId = Number(e.currentTarget.getAttribute("data-user-id"));
     await catchLiar_vote(gameId, votingUserId);
 
-    socket?.emit("game_result", { roomId, gameId, userId })
+    socket?.emit("game_result", { roomId, gameId, userId });
     navigate(`/loading`);
-  }
+  };
 
   return (
     <div className="inner">
@@ -80,23 +83,22 @@ const Result1 = () => {
             </div>
             <div className="imageContainer">
               <div className="findDiffrence" ref={previewImage}>
-
-                {/*{dummyImg && dummyImg.map((player, index) => (*/}
-                {/*    <div key={index} data-user-id={player.userId} className="user-painting" onClick={liarVote}>*/}
-                {/*      <div id={`image${index}`} className="img-border">*/}
-                {/*        <img src={player.imagePath} alt={`${player.userId} image`} />*/}
-                {/*      </div>*/}
-                {/*    </div>*/}
-                {/*))}*/}
-
-                {players && players.map((player, index) => (
-                    <div key={index} data-user-id={player.userId} className="user-painting" onClick={liarVote}>
+                {players &&
+                  players.map((player, index) => (
+                    <div
+                      key={index}
+                      data-user-id={player.userId}
+                      className="user-painting"
+                      onClick={liarVote}
+                    >
                       <div id={`image${index}`} className="img-border">
-                        <img src={player.imagePath} alt={`${player.userId} image`} />
+                        <img
+                          src={player.imagePath}
+                          alt={`${player.userId} image`}
+                        />
                       </div>
                     </div>
-                ))}
-
+                  ))}
               </div>
             </div>
           </div>

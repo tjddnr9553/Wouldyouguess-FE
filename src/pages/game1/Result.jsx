@@ -1,54 +1,64 @@
-import './Result.css'
-import PlayerResult from '../../components/game/PlayerResult.jsx';
-import {useEffect, useState} from "react";
-import {catchLiar_result} from "../../api/game/CatchLiar.js";
+import "./Result.css";
+import PlayerResult from "../../components/game/PlayerResult.jsx";
+import { useEffect, useState } from "react";
+import { catchLiar_result } from "../../api/game/CatchLiar.js";
 import useUserStore from "../../store/user/useUserStore.js";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useRoomStore from "../../store/room/useRoomStore.js";
+import useAudioStore from "../../store/bgm/useAudioStore.js";
 
 const Result = () => {
-    const navigate = useNavigate();
-    const [players, setPlayers] = useState([]);
+  const navigate = useNavigate();
+  const [players, setPlayers] = useState([]);
 
-    const { userId } = useUserStore();
-    const { roomId } = useRoomStore();
-    const { gameId} = useCatchLiarStore();
+  const { userId } = useUserStore();
+  const { roomId } = useRoomStore();
+  const { gameId } = useCatchLiarStore();
+  const { play, stop } = useAudioStore();
 
-    useEffect(() => {
-        const sync_func = async () => {
-            const res = await catchLiar_result(gameId, userId)
-            setPlayers(res);
-        }
-        sync_func();
-    }, [])
+  useEffect(() => {
+    play("/bgm/Result_bgm.mp3");
 
-    const goHome = () => {
-        navigate(`/lobby/${roomId}`)
-    }
+    return () => {
+      stop();
+    };
+  }, []);
 
-    return(
-        <div className="result inner">
-            <div className="title">
-                <strong>Result</strong>
-            </div>
-            <div className="player-list">
+  useEffect(() => {
+    const sync_func = async () => {
+      const res = await catchLiar_result(gameId, userId);
+      setPlayers(res);
+    };
+    sync_func();
+  }, []);
 
-                {players.map((player, index) => (
-                    <PlayerResult
-                        key={index}
-                        player={`Player${index+1}`}
-                        nickname={player.nickname}
-                        score={player.score}
-                        liar_img={player.liar && <img src='/images/game/liar.png'/>}
-                        isWinner={player.isWinner}
-                    />
-                ))}
+  const goHome = () => {
+    navigate(`/lobby/${roomId}`);
+  };
 
-            </div>
-            <button onClick={goHome} className="homeBtn">HOME</button>
-        </div>
-    );
-}
+  return (
+    <div className="result inner">
+      <div className="title">
+        <strong>Result</strong>
+      </div>
+      <div className="player-list">
+        {players.map((player, index) => (
+          <PlayerResult
+            key={index}
+            player={`Player${index + 1}`}
+            nickname={player.nickname}
+            score={player.score}
+            liar_img={player.liar && <img src="/images/game/liar.png" />}
+            isWinner={player.isWinner}
+          />
+        ))}
+      </div>
+      <button onClick={goHome} className="homeBtn">
+        HOME
+      </button>
+    </div>
+  );
+};
 
 export default Result;

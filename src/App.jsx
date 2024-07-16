@@ -23,6 +23,8 @@ import useAudioStore from "./store/bgm/useAudioStore.js";
 import Game1_Music from "./components/bgm/Game1_Music.jsx";
 import Game2_Music from "./components/bgm/Game2_Music.jsx";
 import LobbyMusic from "./components/bgm/LobbyMusic.jsx";
+import LaserPointer from "./pages/game1/LaserPointer.jsx";
+import Result_Music from "./components/bgm/Result_Music.jsx";
 
 function App() {
   const nav = useNavigate();
@@ -53,6 +55,7 @@ function App() {
       {isPlaying && currentTrack === "/bgm/bgm.mp3" && <LobbyMusic />}
       {isPlaying && currentTrack === "/bgm/Game1_bgm.mp3" && <Game1_Music />}
       {isPlaying && currentTrack === "/bgm/Game2_bgm.mp3" && <Game2_Music />}
+      {isPlaying && currentTrack === "/bgm/Result_bgm.mp3" && <Result_Music />}
       <Routes>
         <Route path="" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
@@ -74,6 +77,8 @@ function App() {
 
         <Route path="/auth/kakao/callback" element={<LoginHandler />} />
         <Route path="/temp/login" element={<Login />} />
+
+        <Route path="/laser" element={<LaserPointer />} />
       </Routes>
     </>
   );

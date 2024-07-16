@@ -6,9 +6,6 @@ import {
   RoomEvent,
 } from "livekit-client";
 
-const LIVEKIT_URL = import.meta.env.LIVEKIT_URL;
-const APPLICATION_SERVER_URL = import.meta.env.VITE_OPENVIDU_APP_SERVER_URL;
-
 type TrackInfo = {
   trackPublication: RemoteTrackPublication;
   participantIdentity: string;

@@ -5,14 +5,27 @@
   display: flex;
   height: 20%;
   margin-bottom: 14px;
+  width: 110%;
 }
-.game1-result .win, .lose {
+.game1-result .win,
+.lose {
   display: flex;
   justify-content: center;
   align-items: center;
 
+  font-size: 2.5rem;
   color: white;
-  margin-right: 10px;
+  
+  min-width: 15%;
+  margin-right: 5%;
+  
+  text-shadow: #ffffff 3px 3px;
+}
+.game1-result > .win {
+  color: red;
+}
+.game1-result > .lose {
+  color: slategray;
 }
 .playerResult {
   width: 100%;
@@ -20,13 +33,15 @@
 
   display: flex;
 
-  border-radius: 10px;
+  border-radius: 30px;
+  background: #e0e0e0;
+  box-shadow: 0px 5px 10px #bebebe, 0px -5px 10px #ffffff;
 }
-.playerResult  * {
+.playerResult * {
   text-align: center;
-  font-size: 2rem;
-  
-  height: 100%;
+  font-size: 1.75rem;
+
+  height: 90%;
 
   display: flex;
   justify-content: center;
@@ -39,7 +54,7 @@
   width: 50%;
 }
 .nickname .liar-icon {
-  height: 70%;
+  height: 60%;
 
   margin-right: 10px;
 }
@@ -49,6 +64,9 @@
   height: 100%;
   object-fit: cover;
 }
-.rightItem {
+.originScore {
   width: 25%;
 }
+/* .plusScore {
+  width: 10%;
+} */

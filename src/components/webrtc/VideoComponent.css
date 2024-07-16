@@ -3,54 +3,23 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  --s: 84px;
-  --c1: #f2f2f2;
-  --c2: #cdcbcc;
-  --c3: #999999;
 
-  --_g: 0 120deg, #0000 0;
-  background: conic-gradient(
-      from 0deg at calc(500% / 6) calc(100% / 3),
-      var(--c3) var(--_g)
-    ),
-    conic-gradient(
-      from -120deg at calc(100% / 6) calc(100% / 3),
-      var(--c2) var(--_g)
-    ),
-    conic-gradient(
-      from 120deg at calc(100% / 3) calc(500% / 6),
-      var(--c1) var(--_g)
-    ),
-    conic-gradient(
-      from 120deg at calc(200% / 3) calc(500% / 6),
-      var(--c1) var(--_g)
-    ),
-    conic-gradient(
-      from -180deg at calc(100% / 3) 50%,
-      var(--c2) 60deg,
-      var(--c1) var(--_g)
-    ),
-    conic-gradient(
-      from 60deg at calc(200% / 3) 50%,
-      var(--c1) 60deg,
-      var(--c3) var(--_g)
-    ),
-    conic-gradient(
-      from -60deg at 50% calc(100% / 3),
-      var(--c1) 120deg,
-      var(--c2) 0 240deg,
-      var(--c3) 0
-    );
-  background-size: calc(var(--s) * 1.732) var(--s);
-  aspect-ratio: 16/9;
   border-radius: 1rem;
-  overflow: hidden;
-  margin: 1rem;
+  transition: 0.5s;
+  width: 100%;
+  padding: 3%;
+  animation: 5s ease infinite;
+  background-image: linear-gradient(
+    #ffdb3b 10%,
+    #fe53bb 45%,
+    #8f51ea 67%,
+    #0044ff 87%
+  );
 }
 
 .video-container video {
-  width: 90%;
-  height: 100%;
+  width: 100%;
+  height: 90%;
 }
 
 .video-container .participant-data {
