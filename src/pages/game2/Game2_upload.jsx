@@ -112,14 +112,6 @@ const Game2_upload = () => {
   const changeInput = (e) => {
     prepareFormData(e.target.files[0]);
   }
-  const getCursorPosition = (e) => {
-    const { top, left } = canvasRef.current.getBoundingClientRect();
-    return {
-      x: e.clientX - left,
-      y: e.clientY - top,
-    };
-  };
-
 
   return (
     <div className="inner">

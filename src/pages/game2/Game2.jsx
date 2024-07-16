@@ -51,8 +51,6 @@ const Game2 = () => {
     }
   }, [x, y])
 
-  const { generatedImages } = useImagesStore();
-  const { roomId } = useRoomStore();
   const { play, stop } = useAudioStore();
 
   useEffect(() => {
