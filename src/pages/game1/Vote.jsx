@@ -55,7 +55,7 @@ const Result1 = () => {
     const sync_func = async () => {
       const res = await catchLiar_vote_candidates(gameId);
       setPlayers(res);
-    }
+    };
 
     sync_func();
   }, []);
@@ -83,17 +83,14 @@ const Result1 = () => {
             </div>
             <div className="imageContainer">
               <div className="findDiffrence" ref={previewImage}>
-
-                {/*{dummyImg && dummyImg.map((player, index) => (*/}
-                {/*    <div key={index} data-user-id={player.userId} className="user-painting" onClick={liarVote}>*/}
-                {/*      <div id={`image${index}`} className="img-border">*/}
-                {/*        <img src={player.imagePath} alt={`${player.userId} image`} />*/}
-                {/*      </div>*/}
-                {/*    </div>*/}
-                {/*))}*/}
-
-                {players && players.map((player, index) => (
-                    <div key={index} data-user-id={player.userId} className="user-painting" onClick={liarVote}>
+                {players &&
+                  players.map((player, index) => (
+                    <div
+                      key={index}
+                      data-user-id={player.userId}
+                      className="user-painting"
+                      onClick={liarVote}
+                    >
                       <div id={`image${index}`} className="img-border">
                         <img
                           src={player.imagePath}
@@ -101,8 +98,7 @@ const Result1 = () => {
                         />
                       </div>
                     </div>
-                ))}
-
+                  ))}
               </div>
             </div>
           </div>

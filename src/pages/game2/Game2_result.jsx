@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
-import NewButton from "../../components/button/NewButton.jsx";
+import NewButton from "../../components/button/newButton.jsx";
 import useImagesStore from "../../store/image/useImagesStore.js";
 import useAudioStore from "../../store/bgm/useAudioStore";
 import "./Game2.css";
