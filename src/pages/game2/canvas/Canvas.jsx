@@ -32,24 +32,14 @@ const Canvas = () => {
   // 캔버스 원본 이미지를 uploadForm에 저장
   useEffect(() => {
     if (isImgUploaded) {
-      const canvas = canvasRef.current;
-      const imgUrl = canvas.toDataURL("image/png");
-
-      updateUploadForm('image', imgUrl);
-      updateInpaintForm('image', imgUrl);
+      sendToServer('upload');
     }
   }, [isImgUploaded])
 
   // 최종적으로 서버에 캔버스 이미지 전송
   useEffect(() => {
     if (clickSendBtn) {
-      toolRef.current.Masking(canvasRef.current.width, canvasRef.current.height, x, y, 100);
-
-      const canvas = canvasRef.current;
-      const imgURL = canvas.toDataURL("image/png");
-      updateInpaintForm("mask", imgURL);
-
-      setIsMaskingComplete(true);
+      sendToServer('inpaint');
     }
   }, [clickSendBtn])
 
@@ -113,6 +103,24 @@ const Canvas = () => {
     
     setX(x);
     setY(y);
+  }
+
+  const sendToServer = async (mode) => {
+    const canvas = canvasRef.current;
+
+    if (mode === 'upload'){
+      await canvas.toBlob( async (blob) => {
+        updateUploadForm('image', blob, 'image.png');
+        updateInpaintForm('image', blob, 'image.png');
+      }, 'image/png');
+    } else if (mode === 'inpaint'){
+      await canvas.toBlob( async (blob) => { 
+        toolRef.current.Masking(canvasRef.current.width, canvasRef.current.height, x, y, 100);
+        updateInpaintForm("mask", blob, 'image.png');
+    
+        setIsMaskingComplete(true);
+    }, 'image/png');
+    }
   }
 
   return (

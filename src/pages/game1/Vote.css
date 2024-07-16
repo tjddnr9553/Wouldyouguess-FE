@@ -3,7 +3,6 @@
 }
 
 .game.container {
-  /* background-color: rgb(153, 114, 64); */
   width: 100%;
   height: 100%;
 }
@@ -11,7 +10,6 @@
 .game .left-section {
   width: 20%;
   height: 100%;
-  /* background-color: aqua; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -23,7 +21,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* background-color: antiquewhite; */
 }
 
 .game2_border {
@@ -63,20 +60,14 @@
 }
 
 .findDiffrence {
-  display: flex;
-  justify-content: center;
-  align-items: stretch; /* 모든 자식 요소가 동일한 높이를 가짐 */
-  text-align: center;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, auto)); 
+  grid-template-rows: repeat(auto-fit, minmax(100px, auto));
+  gap: 10px; /* 간격 설정 */
 
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-
-  max-width: 75rem;
-  max-height: 35rem;
-  min-width: 75rem;
-  min-height: 35rem;
 
   background-color: white;
   border-radius: 1rem;
@@ -96,7 +87,7 @@
 }
 .user-painting {
   box-sizing: border-box;
-  flex: 1 1 50%;
+  height: 100%;
 }
 .img-border {
   width: 90%;
