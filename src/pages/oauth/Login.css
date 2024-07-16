@@ -1,0 +1,113 @@
+@import url("https://cdn.jsdelivr.net/npm/galmuri/dist/galmuri.css");
+
+#Container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+#rays {
+  position: relative;
+  bottom: -1.5em;
+  z-index: 2;
+  animation: rays 2s ease-in-out infinite;
+}
+
+.form {
+  position: relative;
+  top: 5em;
+  padding: 10%;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 125%;
+  gap: 2em;
+  border-radius: 0.5rem;
+  background: rgba(0, 255, 240, 0.52);
+  box-shadow: 0px 0px 64px 0px #82e1ff inset, 0px 0px 16px #a8fffaa6;
+  backdrop-filter: blur(3.5px);
+  animation: float 5s ease-in-out infinite;
+}
+
+#login-lable {
+  font-family: "Keania One", sans-serif; /* 폰트 누락 추가 */
+  text-align: center;
+  color: white;
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 8px;
+  text-shadow: 0px 0px 16px #f00; /* 단축 표기법 사용 */
+}
+
+.form-content {
+  font-family: "Galmuri14", sans-serif;
+  height: 3em;
+  padding: 1px 8px;
+  border-radius: 5%;
+  border: 2px solid #fff;
+  background: rgba(139, 255, 247, 0.486);
+  box-shadow: 0 0 1px 3px #9ee5e3 inset, 0 4px 4px 0 #181a6040;
+  text-align: center;
+  font-size: 0.9rem;
+  color: white;
+  text-decoration: none;
+  letter-spacing: 1px;
+  font-weight: bold;
+  text-shadow: 0 1px 4px #f00; /* 단축 표기법 사용 */
+}
+
+.form-content:focus-visible,
+::placeholder { /* 공통 스타일 */
+  font-family: "Galmuri14", sans-serif;
+  font-size: medium;
+  font-weight: 300;
+  color: rgb(255, 255, 255);
+  letter-spacing: 0.2rem;
+  text-shadow: 0 1px 5px #000; /* 단축 표기법 사용 */
+}
+
+.form-content:focus-visible {
+  outline: none;
+  background: rgba(131, 152, 179, 0.59);
+  box-shadow: 0 0 1px 4px #9ee5e3;
+}
+
+.form-content:hover {
+  background: rgba(139, 189, 255, 0.59);
+}
+
+.form button {
+  cursor: pointer;
+  height: 3.5rem;
+  padding: 0;
+  border-radius: 5%;
+  border: 2px solid white;
+  font-family: "Keania One", sans-serif; /* 폰트 누락 추가 */
+  color: white;
+  font-size: 1.5em;
+  letter-spacing: 0.3rem;
+  background: linear-gradient(144deg, #9c11ffce, #2000eeb6 50%, #15efffbb);
+}
+
+.form button:hover {
+  position: relative;
+  bottom: 4px;
+  background: linear-gradient(144deg, #9c11ff, #2000ee 50%, #15fff3);
+  box-shadow: 0 0 2px 2px #fff;
+}
+
+/* 애니메이션 정의 */
+@keyframes float {
+  50% {
+    top: 50px;
+  }
+}
+
+@keyframes rays {
+  50% {
+    opacity: 1;
+  }
+}

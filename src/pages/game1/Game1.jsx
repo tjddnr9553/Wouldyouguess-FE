@@ -15,6 +15,7 @@ import useUserStore from "../../store/user/useUserStore.js";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 import useAudioStore from "../../store/bgm/useAudioStore.js";
 import Keyword from "../../components/game/Keyword.jsx";
+import KeywordText from "../../components/game/KeywordText.jsx";
 
 const Game1 = () => {
   const [searchParams] = useSearchParams();
@@ -27,6 +28,7 @@ const Game1 = () => {
   const [waitText, setWaitText] = useState(null);
   const [showModal, setShowModal] = useState(true); // 모달 표시 상태
   const [clockStart, setClockStart] = useState(false); // 시계 시작 상태
+  const [titleOn, setTitleOn] = useState(false);
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -50,7 +52,7 @@ const Game1 = () => {
     return () => {
       stop();
     };
-  }, [])
+  }, []);
 
   useEffect(() => {
     const sync_func = async () => {
@@ -62,24 +64,29 @@ const Game1 = () => {
     };
     sync_func();
 
+    if (isDrawing) {
+      setWaitText(null);
+      setIsDrawing(false);
+      setKeyword(keyword);
+    } else {
+      setWaitText("이번은 관전하는 턴");
+    }
+
+    setClockStart(false);
     setShowModal(true);
+    setTitleOn(false);
+
+    // 5초 후에 모달 닫고 시계 시작
+    setTimeout(() => {
+      setTitleOn(true);
+    }, 6000);
 
     // 5초 후에 모달 닫고 시계 시작
     const timer = setTimeout(() => {
       setShowModal(false);
       setClockStart(true); // 시계 시작 상태 변경
-    }, 5000);
+    }, 6000);
 
-    if (isDrawing) {
-      console.log("이번 턴은 그리는 턴");
-      setWaitText(null);
-      setIsDrawing(false);
-      setKeyword(keyword);
-      console.log("나의 키워드는 ", keyword);
-    } else {
-      console.log("이번 턴은 관전하는 턴");
-      setWaitText("이번은 관전하는 턴");
-    }
     return () => clearTimeout(timer);
   }, [round]);
 
@@ -97,14 +104,20 @@ const Game1 = () => {
 
   return (
     <div className="inner" key={round}>
+      {showModal && isDrawing && <Keyword keyword={keyword} />}
+      {showModal && !isDrawing && <Keyword keyword={"이번은 관전하는 턴"} />}
       <div className="game container">
         <div className="left-section">
           <User />
         </div>
         <div className="center">
-          {showModal && isDrawing && <Keyword text={keyword}></Keyword>}
-          {showModal && !isDrawing && <Keyword text={waitText}></Keyword>}
-          <div className="keyword">Keyword: {keyword}</div>
+          <div className="keyword-title">
+            {titleOn && isDrawing && <KeywordText text={keyword} />}
+            {titleOn && !isDrawing && (
+              <KeywordText text={"이번은 관전하는 턴"} />
+            )}
+          </div>
+          <hr></hr>
           <div ref={containerRef} className="canvas-container">
             <Drawing width={parentwidth} height={parentheight} />
           </div>

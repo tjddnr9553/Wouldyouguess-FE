@@ -1,13 +1,9 @@
 
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import NewButton from "../../components/button/newButton";
-import axios from "axios";
-import User from "../../components/game/User";
 import useImagesStore from "../../store/image/useImagesStore";
-import useRoomStore from "../../store/room/useRoomStore";
 import useAudioStore from "../../store/bgm/useAudioStore";
-
 import "./Game2.css";
 import "swiper/css";
 import Canvas from "./canvas/Canvas";
@@ -150,9 +146,6 @@ const Game2 = () => {
   return (
     <div className="inner">
       <div className="game container">
-        <div className="left-section">
-          <User />
-        </div>
         <div className="center">
           <div className="game2_border">
             <div className="titleContainer">

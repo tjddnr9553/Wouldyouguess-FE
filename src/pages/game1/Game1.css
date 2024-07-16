@@ -9,7 +9,7 @@
 .game .left-section {
   margin-left: 2%;
   margin-right: 2%;
-  width: 15%;
+  width: 20%;
   height: 100%;
   /* background-color: aqua; */
   display: flex;
@@ -23,6 +23,12 @@
   width: 70%;
   height: 100%;
 }
+
+.keyword-title {
+  position: absolute;
+  top: 8.5%;
+}
+
 .keyword {
   height: 7%;
 
@@ -40,11 +46,13 @@
 
   border-radius: 10px;
 }
+
 .canvas-container {
+  margin-top: 5%;
   width: 95%;
-  height: 70%;
+  height: 90%;
   background-color: white;
-  border-radius: 12px;
+  border-radius: 1rem;
 }
 .canvas-tools {
   width: 95%;
