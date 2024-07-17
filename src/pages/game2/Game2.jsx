@@ -34,6 +34,7 @@ const Game2 = () => {
   const timeLimit = 60000;
   
   useEffect(() => {
+    console.log("GeneratedImages : ", generatedImages);
     setMode('difference');
     
     setTimeout(() => { 
@@ -63,10 +64,12 @@ const Game2 = () => {
   }, [gameState])
   
   const checkAnswerAndCondition = () => {
+
     const maskX1 = generatedImages[round].maskX1;
     const maskY1 = generatedImages[round].maskY1;
     const maskX2 = generatedImages[round].maskX2;
     const maskY2 = generatedImages[round].maskY2;
+    
 
     // 테스트용
     // const maskX1 = inpaintForm.get('maskX1');
@@ -80,7 +83,7 @@ const Game2 = () => {
       alert('성공');
       
       // 점수 계산을 위해 셋팅
-      setRemainingChance(`round${round}`, chance);
+      setRemainingChance(`round${currentImageIndex}`, chance);
       setCorrectCount();
       showScore();
 
@@ -95,7 +98,7 @@ const Game2 = () => {
 
       if (chance - 1 <= 0) {
         alert('기회 끝');
-        setRemainingChance(`round${round}`, chance);
+        setRemainingChance(`round${currentImageIndex}`, chance);
         setChance(3);
 
         return STATUS.FAIL;
@@ -113,7 +116,7 @@ const Game2 = () => {
   }, [chance])
   
   const showScore = () => {
-    console.log("round ", round);
+    console.log("round ", currentImageIndex);
     console.log("chance ", chance);
     console.log("correctCount ", correctCount);
     console.log("remainingTime ", remainingTime);
@@ -141,7 +144,7 @@ const Game2 = () => {
     }, 50000);
 
     return () => clearInterval(interval);
-  }, [round]); 
+  }, [currentImageIndex]); 
 
   return (
     <div className="inner">

@@ -40,6 +40,7 @@ const Canvas = () => {
   useEffect(() => {
     if (clickSendBtn) {
       sendToServer('inpaint');
+      contextRef.current.clearRect(0,0,512,512);
     }
   }, [clickSendBtn])
 
