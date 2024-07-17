@@ -81,6 +81,7 @@ const Lobby = () => {
         setGameId(data.gameId);
         navigate(`/game1?gameId=${data.gameId}&round=1`);
       } else if (data.mode === 2) {
+        setFindDiffGameId(data.gameId)
         navigate(`/game2/upload`);
       }
     });

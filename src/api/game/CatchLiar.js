@@ -91,9 +91,6 @@ export const catchLiar_image_upload = async (formData) => {
         const res = await axios({
             method: "POST",
             url: `${API_SERVER_URL}/api/catchLiar/image`,
-            // headers: {
-            //     "Content-Type": "multipart/form-data",
-            // },
             data: formData
         });
 
