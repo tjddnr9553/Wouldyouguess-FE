@@ -28,7 +28,7 @@ const Game2_remember = () => {
     console.log("OriginalImages : ", originalImages);
     const timer = setTimeout(() => {
       navigate(`/game2/`);
-    }, 2000000);
+    }, 20000);
 
     return () => clearTimeout(timer);
   }, [originalImages, navigate, roomId]);
