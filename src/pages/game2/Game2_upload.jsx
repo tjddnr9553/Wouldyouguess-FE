@@ -39,6 +39,7 @@ const Game2_upload = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    setTimeout(() => navigate("/game2/remember/"), 30000);
     play("/bgm/Game2_bgm.mp3"); // 게임2 시작 시 음악 재생
 
     return () => {
@@ -53,37 +54,21 @@ const Game2_upload = () => {
   }, [isMaskingComplete]);
 
   const sendToServer = async () => {
-    console.log("uploadForm ", uploadForm.get("image"));
-    console.log("inpaintForm ", inpaintForm.get("image"));
-
     updateForm();
 
-    console.log("Updated mask coordinates:", {
-      maskX1: inpaintForm.get("maskX1"),
-      maskY1: inpaintForm.get("maskY1"),
-      maskX2: inpaintForm.get("maskX2"),
-      maskY2: inpaintForm.get("maskY2"),
-    });
-
     setClickSendBtn(true);
-
     // navigate("/game2")
 
     const uploadRes = await findDiff_upload(uploadForm);
     if (uploadRes === "OK") {
-      console.log("서버로 원본 이미지 전송 성공");
-
       const response = await findDiff_og(findDiffGameId, userId);
       if (response) {
         setOriginalImages(response); // 여기서는 URL만 포함된 배열을 받습니다.
-        console.log("해위 : ", response)
-        navigate("/game2/remember/");
       }
 
       setTimeout(async () => {
         await findDiff_inpaint(inpaintForm);
         const genResponse = await findDiff_gen(findDiffGameId, userId);
-        console.log("GenResponse: ", genResponse)
         setGeneratedImages(genResponse);
       }, 0);
     }
@@ -91,7 +76,6 @@ const Game2_upload = () => {
 
   const prepareFormData = async (file) => {
     const resizingImg = await ImgResizer(file, 512, 512); // 512 변경 필요
-    // console.log(resizingImg);
     setFile(resizingImg);
 
     updateInpaintForm("roomId", roomId);
