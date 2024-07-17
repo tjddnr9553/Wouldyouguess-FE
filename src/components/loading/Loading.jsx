@@ -2,20 +2,23 @@ import './Loading.css'
 import Star from '../background/Star';
 import useSocketStore from "../../store/socket/useSocketStore.js";
 import {useEffect} from "react";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 const Loading = () => {
+    const location = useLocation();
+    const { title } = location.state || {};
+
     const navigate = useNavigate();
     const { socket } = useSocketStore();
 
     useEffect(() => {
-        socket?.on("game_result", () => {
-            navigate(`/game1/result`)
+        socket?.on("game_loading", (data) => {
+            navigate(data.nextPageUrl);
         });
 
         return () => {
-            socket?.off("game_result", () => {
-                navigate(`/game1/result`)
+            socket?.off("game_loading", (data) => {
+                navigate(data.nextPageUrl);
             });
         }
     }, [socket])
@@ -24,7 +27,7 @@ const Loading = () => {
       <>
         <Star />
         <div className='loading content'>
-          <div className="loading-title">라이어 투표 중 입니다.</div>
+          <div className="loading-title">{title}</div>
           {/*<div className="loading-title">파일 업로드 중 입니다.</div>*/}
           <div data-js="astro" className="astronaut">
             <div className="head"></div>

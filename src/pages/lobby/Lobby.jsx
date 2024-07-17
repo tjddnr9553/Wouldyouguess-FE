@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 import "./Lobby.css";
 import PlayerSidebar from "./PlayerSidebar.jsx";
@@ -7,17 +7,17 @@ import Header from "../../components/game/Header.jsx";
 import Invite from "../../components/lobby/Invite.jsx";
 import useSocketStore from "../../store/socket/useSocketStore.js";
 import useUserStore from "../../store/user/useUserStore.js";
-import { io } from "socket.io-client";
-import { useEffect, useRef } from "react";
-import { room_create } from "../../api/home/Room.js";
+import {io} from "socket.io-client";
+import {useEffect, useRef} from "react";
+import {room_create} from "../../api/home/Room.js";
 import Modal from "../../components/lobby/Modal.jsx";
 import useRoomStore from "../../store/room/useRoomStore.js";
-import { catchLiar_start } from "../../api/game/CatchLiar.js";
+import {catchLiar_start} from "../../api/game/CatchLiar.js";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 import useWebrtcStore from "../../store/webrtc/useWebrtcStore.tsx";
-import useGameStore from "../../store/game/useGameStore.js";
-import { findDiff_start } from "../../api/game/FindDiff.js";
+import {findDiff_start} from "../../api/game/FindDiff.js";
 import useAudioStore from "../../store/bgm/useAudioStore.js";
+import useFDGStore from "../../store/game/findDiffGame/useFDGStore.js";
 
 const textList = [
   {
@@ -43,7 +43,7 @@ const Lobby = () => {
   const { userId, isInvite, nickname, accessToken, isLogin, setIsLogin } =
     useUserStore();
   const { roomId } = useRoomStore();
-  const { setFindDiffGameId } = useGameStore();
+  const { setFindDiffGameId } = useFDGStore();
   const { socket, setSocket } = useSocketStore();
   const { setGameId } = useCatchLiarStore();
   const { joinRoom } = useWebrtcStore();
@@ -106,15 +106,11 @@ const Lobby = () => {
 
   const startCatchLiar = async () => {
     const gameId = await catchLiar_start(roomId);
-    setGameId(gameId);
-
     socket.emit("game_start", { mode: 1, userId, roomId, gameId });
   };
 
   const startFindDIff = async () => {
     const gameId = await findDiff_start(roomId);
-    setFindDiffGameId(gameId);
-
     socket?.emit("game_start", { mode: 2, userId, roomId, gameId });
   };
 

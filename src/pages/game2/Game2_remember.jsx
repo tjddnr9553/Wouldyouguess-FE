@@ -1,20 +1,23 @@
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
+import {useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {Swiper, SwiperSlide} from "swiper/react";
+import {Navigation} from "swiper/modules";
 import "./Game2.css";
 import "swiper/css";
 import "swiper/css/navigation";
-import useRoomStore from "../../store/room/useRoomStore";
-import useImagesStore from "../../store/image/useImagesStore";
 import useAudioStore from "../../store/bgm/useAudioStore";
+import {findDiff_original_images} from "../../api/game/FindDiff.js";
+import useUserStore from "../../store/user/useUserStore.js";
+import useFDGStore from "../../store/game/findDiffGame/useFDGStore.js";
 
 const Game2_remember = () => {
   const navigate = useNavigate();
 
-  const { roomId } = useRoomStore();
-  const { originalImages } = useImagesStore();
+  const [originalImages, setOriginalImages] = useState([]);
+
   const { play, stop } = useAudioStore();
+  const { userId} = useUserStore();
+  const { findDiffGameId } = useFDGStore();
 
   useEffect(() => {
     play("/bgm/Game2_bgm.mp3");
@@ -25,13 +28,20 @@ const Game2_remember = () => {
   }, []);
 
   useEffect(() => {
-    console.log("OriginalImages : ", originalImages);
+    const sync_func = async () => {
+      const response = await findDiff_original_images(findDiffGameId, userId);
+      setOriginalImages(response);
+    }
+
+    sync_func();
+
     const timer = setTimeout(() => {
-      navigate(`/game2/`);
-    }, 20000);
+      navigate(`/game2?round=1`);
+    }, 50000);
 
     return () => clearTimeout(timer);
-  }, [originalImages, navigate, roomId]);
+  }, [])
+
 
   return (
     <div className="inner">
