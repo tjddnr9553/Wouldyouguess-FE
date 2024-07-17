@@ -71,7 +71,7 @@ const Game2_upload = () => {
     // navigate("/game2")
 
     const uploadRes = await findDiff_upload(uploadForm);
-    if (uploadRes.status === 200) {
+    if (uploadRes === "OK") {
       console.log("서버로 원본 이미지 전송 성공");
 
       const response = await findDiff_og(findDiffGameId, userId);
