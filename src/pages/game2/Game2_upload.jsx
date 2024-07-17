@@ -18,6 +18,7 @@ import {
   findDiff_og,
   findDiff_upload,
 } from "../../api/game/FindDiff.js";
+import Loading from "../../components/loading/Loading.jsx";
 
 const Game2_upload = () => {
   const { isImgUploaded, x, y, isMaskingComplete } = useCanvasStore();
@@ -40,6 +41,7 @@ const Game2_upload = () => {
 
   useEffect(() => {
     setTimeout(() => navigate("/game2/remember/"), 30000);
+
     play("/bgm/Game2_bgm.mp3"); // 게임2 시작 시 음악 재생
 
     return () => {
@@ -55,9 +57,6 @@ const Game2_upload = () => {
 
   const sendToServer = async () => {
     updateForm();
-
-    setClickSendBtn(true);
-    // navigate("/game2")
 
     const uploadRes = await findDiff_upload(uploadForm);
     if (uploadRes === "OK") {
@@ -104,6 +103,12 @@ const Game2_upload = () => {
   const changeInput = (e) => {
     prepareFormData(e.target.files[0]);
   };
+
+  if(isMaskingComplete) {
+    return (
+      <Loading text={'파일 업로드 중입니다.'} />
+    )
+  }
 
   return (
     <div className="inner">

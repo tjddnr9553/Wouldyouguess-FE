@@ -4,7 +4,7 @@ import useSocketStore from "../../store/socket/useSocketStore.js";
 import {useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 
-const Loading = () => {
+const Loading = ({text}) => {
     const navigate = useNavigate();
     const { socket } = useSocketStore();
 
@@ -24,8 +24,7 @@ const Loading = () => {
       <>
         <Star />
         <div className='loading content'>
-          <div className="loading-title">라이어 투표 중 입니다.</div>
-          {/*<div className="loading-title">파일 업로드 중 입니다.</div>*/}
+          <div className="loading-title">{text}</div>
           <div data-js="astro" className="astronaut">
             <div className="head"></div>
             <div className="arm arm-left"></div>
