@@ -36,7 +36,7 @@ export const findDiff_og = async (findDiffGameId, userId) => {
     try {
         const response = await axios({
             method: "GET",
-            url: `${API_SERVER_URL}/api/findDiff/og/${findDiffGameId}/423`
+            url: `${API_SERVER_URL}/api/findDiff/og/${findDiffGameId}/${userId}`
         });
 
         return response.data;
@@ -62,7 +62,7 @@ export const findDiff_gen = async (findDiffGameId, userId) => {
     try {
         const response = await axios({
             method: "GET",
-            url: `${API_SERVER_URL}/api/findDiff/gen/${findDiffGameId}/1234`
+            url: `${API_SERVER_URL}/api/findDiff/gen/${findDiffGameId}/${userId}`
         });
 
         return response.data;
