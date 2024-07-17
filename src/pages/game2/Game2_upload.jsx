@@ -64,7 +64,6 @@ const Game2_upload = () => {
       maskX2: inpaintForm.get("maskX2"),
       maskY2: inpaintForm.get("maskY2"),
     });
-    console.log("prompt", inpaintForm.get("prompt"));
 
     setClickSendBtn(true);
 
@@ -75,16 +74,17 @@ const Game2_upload = () => {
       console.log("서버로 원본 이미지 전송 성공");
 
       const response = await findDiff_og(findDiffGameId, userId);
-      if (response.status === 200) {
-        setOriginalImages(response.data); // 여기서는 URL만 포함된 배열을 받습니다.
+      if (response) {
+        setOriginalImages(response); // 여기서는 URL만 포함된 배열을 받습니다.
+        console.log("해위 : ", response)
+        navigate("/game2/remember/");
       }
-
-      navigate("/game2/remember/");
 
       setTimeout(async () => {
         await findDiff_inpaint(inpaintForm);
         const genResponse = await findDiff_gen(findDiffGameId, userId);
-        setGeneratedImages(genResponse.data);
+        console.log("GenResponse: ", genResponse)
+        setGeneratedImages(genResponse);
       }, 0);
     }
   };
@@ -123,7 +123,7 @@ const Game2_upload = () => {
 
   return (
     <div className="inner">
-      <div className="game container">
+      <div className="game2 container">
         <div className="center">
           <div className="game2_border">
             <div className="titleContainer">

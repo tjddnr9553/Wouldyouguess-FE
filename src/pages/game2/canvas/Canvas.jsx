@@ -40,6 +40,7 @@ const Canvas = () => {
   useEffect(() => {
     if (clickSendBtn) {
       sendToServer('inpaint');
+      contextRef.current.clearRect(0,0,512,512);
     }
   }, [clickSendBtn])
 
@@ -98,8 +99,7 @@ const Canvas = () => {
     
     if (mode === 'upload') {
       drawImg(() => {
-        toolRef.current.FullRect(100, x, y);
-        toolRef.current.FillText(30, x, y);
+        toolRef.current.StrokeRect(100, x, y);
       });
     } 
     
@@ -119,7 +119,7 @@ const Canvas = () => {
       await canvas.toBlob( async (blob) => { 
         toolRef.current.Masking(canvasRef.current.width, canvasRef.current.height, x, y, 100);
         updateInpaintForm("mask", blob, 'image.png');
-        
+
         contextRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
         setIsMaskingComplete(true);
     }, 'image/png');
