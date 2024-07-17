@@ -12,25 +12,6 @@ import useSocketStore from "../../store/socket/useSocketStore.js";
 import useUserStore from "../../store/user/useUserStore.js";
 import useRoomStore from "../../store/room/useRoomStore.js";
 
-const dummyImg = [
-  {
-    userId: 1,
-    imagePath: "/images/characters/1.png",
-  },
-  {
-    userId: 2,
-    imagePath: "/images/characters/2.png",
-  },
-  {
-    userId: 3,
-    imagePath: "/images/characters/3.png",
-  },
-  {
-    userId: 4,
-    imagePath: "/images/characters/1.png",
-  },
-];
-
 const Result1 = () => {
   const navigate = useNavigate();
 

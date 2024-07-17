@@ -1,64 +1,77 @@
-import './CanvasTools.css';
+import "./CanvasTools.css";
 import { useCanvasStore } from "../../../store/canvas/useCanvasStore";
-import {TOOL_PENCIL, TOOL_ELLIPSE, TOOL_RECTANGLE} from './tools';
+import { TOOL_PENCIL, TOOL_ELLIPSE, TOOL_RECTANGLE } from "./tools";
 
 const Tools = () => {
-  const {setTool, size, setSize, setFillColor, color,} = useCanvasStore();
+  const { setTool, size, setSize, setFillColor, color, setMode } =
+    useCanvasStore();
 
   return (
     <div>
       <div className="tools-wrap">
-        <button onClick={() => setTool('clear')}>
-            <img src="./images/canvas/clear_btn.png"/>
+        <button onClick={() => setTool("clear")}>
+          <img src="./images/canvas/clear_btn.png" />
         </button>
-        <button 
+        <button
           onClick={() => {
-            setTool('erase');
+            setTool("erase");
           }}
         >
-            <img src="./images/canvas/erase_btn.png"/>
+          <img src="./images/canvas/erase_btn.png" />
         </button>
         <button onClick={() => setTool(TOOL_PENCIL)}>
-            <img src="./images/canvas/pencil_btn.png"/>
+          <img src="./images/canvas/pencil_btn.png" />
         </button>
-        <button 
+        <button
           onClick={() => {
             setTool(TOOL_RECTANGLE);
-            setFillColor('');
+            setFillColor("");
+            setMode("stroke");
           }}
         >
-            <img src="./images/canvas/stroke_rect_btn.png"/>
+          <img src="./images/canvas/stroke_rect_btn.png" />
         </button>
-        <button 
+        <button
           onClick={() => {
             setTool(TOOL_ELLIPSE);
-            setFillColor('');
+            setFillColor("");
+            setMode("stroke");
           }}
         >
-            <img src="./images/canvas/stroke_circle_btn.png"/>
+          <img src="./images/canvas/stroke_circle_btn.png" />
         </button>
-        <button 
+        <button
           onClick={() => {
             setTool(TOOL_RECTANGLE);
             setFillColor(color);
+            setMode("fill");
           }}
         >
-            <img src="./images/canvas/fill_rect_btn.png"/>
+          <img src="./images/canvas/fill_rect_btn.png" />
         </button>
-        <button 
+        <button
           onClick={() => {
             setTool(TOOL_ELLIPSE);
             setFillColor(color);
+            setMode("fill");
           }}
         >
-            <img src="./images/canvas/fill_circle_btn.png"/>
+          <img src="./images/canvas/fill_circle_btn.png" />
         </button>
         <div className="PB-range-slider-div">
-            <input type="range" min="0" max="16" step="1" value={size} className="PB-range-slider" onChange={(e) => setSize(e.target.value)}></input>
+          <input
+            type="range"
+            min="0"
+            max="16"
+            step="1"
+            value={size}
+            className="PB-range-slider"
+            onChange={(e) => setSize(e.target.value)}
+          ></input>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Tools;

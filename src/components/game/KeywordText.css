@@ -1,3 +1,7 @@
+.keywordTextContainer{
+  height: 0px;
+}
+
 #keyword-text-container {
   position: absolute; /* Keyword 컴포넌트에 position: absolute 추가 */
   top: 50%;
