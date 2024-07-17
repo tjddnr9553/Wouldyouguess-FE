@@ -1,6 +1,5 @@
 import "./Login.css";
 import Header from "../../components/game/Header";
-import NewButton from "../../components/button/newButton";
 import useUserStore from "../../store/user/useUserStore";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +15,10 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [input, setInput] = useState({ username: "", nickname: "" });
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [error, setError] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+  const [discriptionError, setDiscriptionError] = useState("");
 
   const { setNickname, setUserId, setUsername, setIsLogin, setIsInvite } =
     useUserStore();
@@ -25,13 +28,24 @@ const Login = () => {
   useEffect(() => {
     play("/bgm/bgm.mp3");
 
+    setIsButtonDisabled(
+      input.username.trim() === "" || input.nickname.trim() === ""
+    );
+
     return () => {
       stop();
     };
-  }, []);
+  }, [input.username, input.nickname, play, stop]);
 
   const onChangeInput = (e) => {
     const { name, value } = e.target;
+
+    // if (name === "username") {
+    //   setUsernameError("");
+    // } else if (name === "nickname") {
+    //   setDiscriptionError("");
+    // }
+
     setInput((prevInput) => ({
       ...prevInput,
       [name]: value,
@@ -39,6 +53,17 @@ const Login = () => {
   };
 
   const onSubmitBtnClick = async () => {
+    if (isButtonDisabled) return;
+
+    // if (input.username.trim() === "") {
+    //   setError("닉네임을 입력해주세요.");
+    //   return;
+    // }
+    // if (input.nickname.trim() === "") {
+    //   setError("자기소개를 입력해주세요.");
+    //   return;
+    // }
+
     const response = await temp_login(input.username, input.nickname);
     const userId = response.user_id;
 
@@ -71,15 +96,19 @@ const Login = () => {
               value={input.username} // 닉네임으로 수정해야함
               onChange={onChangeInput}
             />
+            {/* {usernameError && <p className="error-message">{usernameError}</p>} */}
             <input
               className="form-content"
               type="text"
               placeholder="Description"
               name="nickname"
-              value={input.nickname} // 자기소개로 수정해야함
+              value={input.nickname}
               onChange={onChangeInput}
             />
-            <button onClick={onSubmitBtnClick}>Continue</button>
+            {/* {error && <p className="error-message">{error}</p>} */}
+            <button onClick={onSubmitBtnClick} disabled={isButtonDisabled}>
+              Continue
+            </button>
           </div>
 
           <div id="rays">
