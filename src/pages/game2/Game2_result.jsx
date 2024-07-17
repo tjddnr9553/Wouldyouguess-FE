@@ -36,11 +36,11 @@ const Game2_result = () => {
           </div>
         </div>
         <div className="imageContainer">
-          <div className="previewImage">
+          <div className="previewImage containerWrapper">
             <Swiper
               className="swiper-container"
-              spaceBetween={20}
-              slidesPerView={1}
+              spaceBetween={0} // 슬라이드 간격
+              slidesPerView={1} // 한 번에 표시할 슬라이드 수 
               slidesPerGroup={1}
               onSlideChange={() => console.log("slide change")}
               onSwiper={(swiper) => console.log(swiper)}
