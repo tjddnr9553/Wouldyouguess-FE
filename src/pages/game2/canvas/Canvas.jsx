@@ -46,40 +46,42 @@ const Canvas = () => {
 
   const drawImg = (callback) => {
     return new Promise((resolve) => {
-      const imageURL = URL.createObjectURL(file);
-      const img = new Image();
-      img.src = imageURL;
+      if(file){
+        const imageURL = URL.createObjectURL(file);
+        const img = new Image();
+        img.src = imageURL;
+    
+        img.onload = () => {
+          const canvasWidth = canvasRef.current.width;
+          const canvasHeight = canvasRef.current.height;
+    
+          const imgWidth = img.width;
+          const imgHeight = img.height;
+          
+          let sLength = 0;
+    
+          if (imgWidth < imgHeight) {
+            sLength = imgWidth;
+          } else {
+            sLength = imgHeight;
+          }
+    
+          const sx = imgWidth/2 - sLength/2;
+          const sy = imgHeight/2 - sLength/2;
+    
+          contextRef.current.drawImage(
+            img,
+            sx, sy, sLength, sLength, 
+            0, 0, canvasWidth, canvasHeight 
+          );
+    
+          if (callback) callback();
+    
+          // URL 해제
+          URL.revokeObjectURL(imageURL);
   
-      img.onload = () => {
-        const canvasWidth = canvasRef.current.width;
-        const canvasHeight = canvasRef.current.height;
-  
-        const imgWidth = img.width;
-        const imgHeight = img.height;
-        
-        let sLength = 0;
-  
-        if (imgWidth < imgHeight) {
-          sLength = imgWidth;
-        } else {
-          sLength = imgHeight;
-        }
-  
-        const sx = imgWidth/2 - sLength/2;
-        const sy = imgHeight/2 - sLength/2;
-  
-        contextRef.current.drawImage(
-          img,
-          sx, sy, sLength, sLength, 
-          0, 0, canvasWidth, canvasHeight 
-        );
-  
-        if (callback) callback();
-  
-        // URL 해제
-        URL.revokeObjectURL(imageURL);
-
-        resolve();
+          resolve();
+      }
       }
     })
   }
@@ -97,8 +99,7 @@ const Canvas = () => {
     
     if (mode === 'upload') {
       drawImg(() => {
-        toolRef.current.FullRect(100, x, y);
-        toolRef.current.FillText(30, x, y);
+        toolRef.current.StrokeRect(100, x, y);
       });
     } 
     
@@ -118,7 +119,8 @@ const Canvas = () => {
       await canvas.toBlob( async (blob) => { 
         toolRef.current.Masking(canvasRef.current.width, canvasRef.current.height, x, y, 100);
         updateInpaintForm("mask", blob, 'image.png');
-    
+
+        contextRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
         setIsMaskingComplete(true);
     }, 'image/png');
     }

@@ -2,7 +2,8 @@
   flex-direction: column;
 }
 
-.game2.container {
+.game.container {
+  /* background-color: rgb(153, 114, 64); */
   width: 100%;
   height: 100%;
   display: flex;
@@ -14,6 +15,11 @@
 .game .left-section {
   width: 20%;
   height: 100%;
+  /* background-color: aqua; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 5px;
 }
 
