@@ -3,9 +3,11 @@
   font-family: "Keania One";
 
   display: flex;
-  height: 20%;
-  margin-bottom: 14px;
-  width: 110%;
+  height: 18%;
+  margin-bottom: 5%;
+  width: 100%;
+  position: relative;
+  right: 10%;
 }
 .game1-result .win,
 .lose {
@@ -15,10 +17,10 @@
 
   font-size: 2.5rem;
   color: white;
-  
+
   min-width: 15%;
   margin-right: 5%;
-  
+
   text-shadow: #ffffff 3px 3px;
 }
 .game1-result > .win {

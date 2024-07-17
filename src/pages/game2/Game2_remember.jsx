@@ -28,14 +28,14 @@ const Game2_remember = () => {
     console.log("OriginalImages : ", originalImages);
     const timer = setTimeout(() => {
       navigate(`/game2/`);
-    }, 10000);
+    }, 20000);
 
     return () => clearTimeout(timer);
   }, [originalImages, navigate, roomId]);
 
   return (
     <div className="inner">
-      <div className="game container">
+      <div className="game2 container">
         <div className="center">
           <div className="game2_border">
             <div className="titleContainer">
