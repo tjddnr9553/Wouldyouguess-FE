@@ -28,7 +28,7 @@ const Game2_remember = () => {
     console.log("OriginalImages : ", originalImages);
     const timer = setTimeout(() => {
       navigate(`/game2/`);
-    }, 20000);
+    }, 2000000);
 
     return () => clearTimeout(timer);
   }, [originalImages, navigate, roomId]);
@@ -44,7 +44,7 @@ const Game2_remember = () => {
               </div>
             </div>
             <div className="imageContainer">
-              <div className="previewImage">
+              <div className="previewImage containerWrapper">
                 <Swiper
                   className=".swiper-container swiper-parent"
                   spaceBetween={0}
@@ -60,7 +60,7 @@ const Game2_remember = () => {
                         className="swiperSlide"
                         style={{
                           backgroundImage: `url(${imagePath})`,
-                          backgroundSize: "cover",
+                          backgroundSize: "contain",
                           backgroundPosition: "center",
                           width: "100%",
                           height: "100%",
