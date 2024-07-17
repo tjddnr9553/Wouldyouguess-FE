@@ -76,7 +76,6 @@ const Game1 = () => {
     setShowModal(true);
     setTitleOn(false);
 
-    // 5초 후에 모달 닫고 시계 시작
     setTimeout(() => {
       setTitleOn(true);
     }, 6000);

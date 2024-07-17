@@ -9,14 +9,13 @@
 .game .left-section {
   margin-left: 2%;
   margin-right: 2%;
-  width: 20%;
+  width: 15%;
   height: 100%;
   /* background-color: aqua; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 5px;
 }
 
 .game .center {
@@ -49,14 +48,14 @@
 
 .canvas-container {
   margin-top: 5%;
-  width: 95%;
-  height: 90%;
+  width: 100%;
+  height: 85%;
   background-color: white;
   border-radius: 1rem;
 }
 .canvas-tools {
-  width: 95%;
-  margin-top: 3%;
+  width: 100%;
+  margin-top: 1%;
 }
 
 /* right section css */
