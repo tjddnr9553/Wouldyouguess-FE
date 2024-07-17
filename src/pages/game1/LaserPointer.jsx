@@ -63,7 +63,7 @@ function LaserPointer() {
         setLastLineCompleteTime(Date.now()); // 마지막 선 완료 시간 기록
       }
     };
-
+  
     const handleMouseUp = () => {
       setIsDrawing(false);
       if (lines.length > 0) {

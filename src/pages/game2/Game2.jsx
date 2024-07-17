@@ -30,10 +30,15 @@ const Game2 = () => {
   const [gameState, setGameState] = useState(STATUS.START);
   
   const generatedImg = useRef(null);
+  const currentTime = useRef();
 
   const timeLimit = 60000;
   
   useEffect(() => {
+    let now = new Date();
+
+    console.log(now - currentTime.current);
+
     console.log("GeneratedImages : ", generatedImages);
     setMode('difference');
     
@@ -69,7 +74,6 @@ const Game2 = () => {
     const maskY1 = generatedImages[round].maskY1;
     const maskX2 = generatedImages[round].maskX2;
     const maskY2 = generatedImages[round].maskY2;
-    
 
     // 테스트용
     // const maskX1 = inpaintForm.get('maskX1');
@@ -128,7 +132,6 @@ const Game2 = () => {
     if (currentImageIndex < generatedImages.length) {
       console.log(generatedImages[currentImageIndex].generatedUrl);
       generatedImg.current.style.backgroundImage = `url(${generatedImages[currentImageIndex].generatedUrl})`;
-      // generatedImg.current.style.backgroundImage = `url(${uploadForm.get('image')})`;
 
       setCurrentImageIndex((prevIndex) => prevIndex + 1);
       setNextRound();
