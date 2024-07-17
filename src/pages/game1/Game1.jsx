@@ -16,6 +16,7 @@ import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 import useAudioStore from "../../store/bgm/useAudioStore.js";
 import Keyword from "../../components/game/Keyword.jsx";
 import KeywordText from "../../components/game/KeywordText.jsx";
+import LaserPointer from "./LaserPointer.jsx";
 
 const Game1 = () => {
   const [searchParams] = useSearchParams();
@@ -85,7 +86,6 @@ const Game1 = () => {
       setShowModal(false);
       setClockStart(true); // 시계 시작 상태 변경
     }, 6000);
-
     return () => clearTimeout(timer);
   }, [round]);
 
@@ -112,12 +112,25 @@ const Game1 = () => {
         <div className="center">
           <div className="keyword-title">
             {titleOn && isDrawing && <KeywordText text={keyword} />}
-            {titleOn && !isDrawing && <KeywordText text={"다른 플레이어의 차례"} />}
+            {titleOn && !isDrawing && (
+              <KeywordText text={"다른 플레이어의 차례"} />
+            )}
             {/* <hr /> */}
           </div>
           <div className="drawing-container">
             <div ref={containerRef} className="canvas-container">
-              <Drawing width={parentwidth * 0.85} height={parentheight * 0.8} />
+              <Drawing
+                width={parentwidth * 0.9}
+                height={parentheight * 0.9}
+                zIndex={isDrawing ? 10 : 9}
+                position={isDrawing ? "absolute" : "relative"}
+              />
+              <LaserPointer
+                width={parentwidth * 0.9}
+                height={parentheight * 0.9}
+                zIndex={!isDrawing ? 10 : 9}
+                position={!isDrawing ? "absolute" : "relative"}
+              />
             </div>
           </div>
           <div className="canvas-tools">
