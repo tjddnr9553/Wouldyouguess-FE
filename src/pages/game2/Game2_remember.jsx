@@ -1,8 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
-import User from "../../components/game/User";
 import "./Game2.css";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -37,9 +36,6 @@ const Game2_remember = () => {
   return (
     <div className="inner">
       <div className="game container">
-        <div className="left-section">
-          <User />
-        </div>
         <div className="center">
           <div className="game2_border">
             <div className="titleContainer">

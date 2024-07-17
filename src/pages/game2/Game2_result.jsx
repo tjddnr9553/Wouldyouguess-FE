@@ -8,7 +8,6 @@ import useAudioStore from "../../store/bgm/useAudioStore";
 import "./Game2.css";
 import "swiper/css";
 import "swiper/css/navigation";
-import User from "../../components/game/User.tsx";
 
 const Game2_result = () => {
   const navigate = useNavigate();
@@ -30,9 +29,6 @@ const Game2_result = () => {
 
   return (
     <div className="inner">
-      <div className="left-section">
-        {/* <User /> */}
-      </div>
       <div className="game2_border">
         <div className="titleContainer">
           <div>

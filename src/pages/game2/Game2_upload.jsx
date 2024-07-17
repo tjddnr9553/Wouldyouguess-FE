@@ -1,14 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import NewButton from "../../components/button/newButton";
 import useImagesStore from "../../store/image/useImagesStore.js";
-import User from "../../components/game/User.tsx";
 import "./Game2.css";
 import useRoomStore from "../../store/room/useRoomStore.js";
 import useUserStore from "../../store/user/useUserStore.js";
-import useGameStore, { useCanvasStore, useFileStore } from "../../store/game/useGameStore.js";
+import useGameStore, {
+  useCanvasStore,
+  useFileStore,
+} from "../../store/game/useGameStore.js";
 import Canvas from "./canvas/Canvas.jsx";
-import ImgResizer from "./ImgResizer.js"
+import ImgResizer from "./ImgResizer.js";
 import useAudioStore from "../../store/bgm/useAudioStore";
 import {
   findDiff_gen,
@@ -18,9 +20,16 @@ import {
 } from "../../api/game/FindDiff.js";
 
 const Game2_upload = () => {
-  const { isImgUploaded, x, y, isMaskingComplete} = useCanvasStore();
-  const {file, setFile, uploadForm, updateUploadForm, inpaintForm, updateInpaintForm} = useFileStore();
-  const {clickSendBtn, setClickSendBtn, findDiffGameId} = useGameStore();
+  const { isImgUploaded, x, y, isMaskingComplete } = useCanvasStore();
+  const {
+    file,
+    setFile,
+    uploadForm,
+    updateUploadForm,
+    inpaintForm,
+    updateInpaintForm,
+  } = useFileStore();
+  const { clickSendBtn, setClickSendBtn, findDiffGameId } = useGameStore();
   const imgSelectBtn = useRef(null);
 
   const { roomId } = useRoomStore();
@@ -38,33 +47,33 @@ const Game2_upload = () => {
   }, []);
 
   useEffect(() => {
-    if(isMaskingComplete) {
+    if (isMaskingComplete) {
       sendToServer();
     }
-  }, [isMaskingComplete])
+  }, [isMaskingComplete]);
 
   const sendToServer = async () => {
-    console.log("uploadForm ", uploadForm.get('image'));
-    console.log("inpaintForm ", inpaintForm.get('image'));
+    console.log("uploadForm ", uploadForm.get("image"));
+    console.log("inpaintForm ", inpaintForm.get("image"));
 
     updateForm();
 
     console.log("Updated mask coordinates:", {
-      maskX1: inpaintForm.get('maskX1'),
-      maskY1: inpaintForm.get('maskY1'),
-      maskX2: inpaintForm.get('maskX2'),
-      maskY2: inpaintForm.get('maskY2'),
+      maskX1: inpaintForm.get("maskX1"),
+      maskY1: inpaintForm.get("maskY1"),
+      maskX2: inpaintForm.get("maskX2"),
+      maskY2: inpaintForm.get("maskY2"),
     });
-    console.log('prompt', inpaintForm.get('prompt'));
+    console.log("prompt", inpaintForm.get("prompt"));
 
     setClickSendBtn(true);
 
     // navigate("/game2")
-    
+
     const uploadRes = await findDiff_upload(uploadForm);
-    if (uploadRes.status === 200) {
+    if (uploadRes === "OK") {
       console.log("서버로 원본 이미지 전송 성공");
-      
+
       const response = await findDiff_og(findDiffGameId, userId);
       if (response.status === 200) {
         setOriginalImages(response.data); // 여기서는 URL만 포함된 배열을 받습니다.
@@ -95,9 +104,9 @@ const Game2_upload = () => {
 
   const updateForm = () => {
     const length = 100;
-    
-    const maskX1 = (x - length / 2)> 0 ? Math.round(x - length / 2) : 0;
-    const maskY1 = (y - length / 2) > 0 ? Math.round(y - length / 2) : 0;
+
+    const maskX1 = x - length / 2 > 0 ? Math.round(x - length / 2) : 0;
+    const maskY1 = y - length / 2 > 0 ? Math.round(y - length / 2) : 0;
     const maskX2 = Math.round(x + length / 2);
     const maskY2 = Math.round(y + length / 2);
 
@@ -106,18 +115,15 @@ const Game2_upload = () => {
     updateInpaintForm("maskY1", maskY1);
     updateInpaintForm("maskX2", maskX2);
     updateInpaintForm("maskY2", maskY2);
-  }
+  };
 
   const changeInput = (e) => {
     prepareFormData(e.target.files[0]);
-  }
+  };
 
   return (
     <div className="inner">
       <div className="game container">
-        <div className="left-section">
-          <User />
-        </div>
         <div className="center">
           <div className="game2_border">
             <div className="titleContainer">
