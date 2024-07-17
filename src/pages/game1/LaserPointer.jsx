@@ -13,7 +13,7 @@ import {
   drawDrawingBezierData,
 } from "laser-pen";
 
-function LaserPointer() {
+const LaserPointer = ({ width, height, zIndex, position }) => {
   const canvasRef = useRef(null);
   const [lines, setLines] = useState([]);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -35,9 +35,10 @@ function LaserPointer() {
 
     const handleMouseDown = (e) => {
       setIsDrawing(true);
+      const rect = canvas.getBoundingClientRect(); // 캔버스의 위치 계산
       const newPoint = {
-        x: e.clientX - (canvas.offsetLeft || 0),
-        y: e.clientY - (canvas.offsetTop || 0),
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
         time: Date.now(),
       };
       setLines([...lines, [newPoint]]); // 새로운 선 시작
@@ -45,25 +46,25 @@ function LaserPointer() {
 
     const handleMouseMove = (e) => {
       if (isDrawing) {
+        const rect = canvas.getBoundingClientRect();
         const newPoint = {
-          x: e.clientX - (canvas.offsetLeft || 0),
-          y: e.clientY - (canvas.offsetTop || 0),
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top,
           time: Date.now(),
         };
 
         setLines((prevLines) => {
           if (prevLines.length === 0) {
-            // lines 배열이 비어 있는 경우
-            return [[newPoint]]; // 새로운 선 시작
+            return [[newPoint]];
           } else {
             const lastLine = prevLines[prevLines.length - 1];
-            return [...prevLines.slice(0, -1), [...lastLine, newPoint]]; // 마지막 선에 포인트 추가
+            return [...prevLines.slice(0, -1), [...lastLine, newPoint]];
           }
         });
-        setLastLineCompleteTime(Date.now()); // 마지막 선 완료 시간 기록
+        setLastLineCompleteTime(Date.now());
       }
     };
-  
+
     const handleMouseUp = () => {
       setIsDrawing(false);
       if (lines.length > 0) {
@@ -105,11 +106,11 @@ function LaserPointer() {
           drawDrawingBezierData(ctx, drawingData);
 
           // 안쪽 색상 (흰색)
-          setColor(255, 255, 255);
-          setOpacity(1);
-          setMaxWidth(5);
-          setMinWidth(5);
-          drawDrawingBezierData(ctx, drawingData);
+          // setColor(255, 255, 255);
+          // setOpacity(1);
+          // setMaxWidth(5);
+          // setMinWidth(5);
+          // drawDrawingBezierData(ctx, drawingData);
         }
       });
 
@@ -133,23 +134,17 @@ function LaserPointer() {
   }, [lines, isDrawing, lastLineCompleteTime]);
 
   return (
-    <div
+    <canvas
+      ref={canvasRef}
+      width={width}
+      height={height}
       style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width:"800px",
-        height:"600px"
+        backgroundColor: "transparent",
+        position: position,
+        zIndex: zIndex,
       }}
-    >
-      <canvas
-        ref={canvasRef}
-        width="800px"
-        height="600px"
-        style={{ border: "1px solid black", backgroundColor: "white" }}
-      />
-    </div>
+    />
   );
-}
+};
 
 export default LaserPointer;
