@@ -19,7 +19,7 @@ const toolsMap = {
 const Drawing = ({width, height}) => {
     const canvasRef = useRef(null);
     const ctxRef = useRef(null);
-    const toolRef = useRef(null); 
+    const toolRef = useRef(null);
     let isClick = false;
 
     const { socket } = useSocketStore();
@@ -108,6 +108,11 @@ const Drawing = ({width, height}) => {
         }
     }
 
+    const onMouseOut = (e) => {
+        const {x, y} = getCursorPosition(e);
+        toolRef.current.onMouseUp(x, y);
+    }
+
     const handleDrawerDrawStart = (data) => {
         const {tool, xAxis, yAxis, color, size, fillColor} = data;
 
@@ -145,6 +150,7 @@ const Drawing = ({width, height}) => {
                 onMouseDown={onMouseDown}
                 onMouseUp={onMouseUp}
                 onMouseMove={onMouseMove}
+                onMouseOut={onMouseOut}
                 style={{ backgroundColor: 'transparent' }}
             />
         </>

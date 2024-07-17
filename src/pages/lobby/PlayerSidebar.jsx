@@ -31,17 +31,18 @@ const PlayerSidebar = () => {
 
 
   return (
-    <div className="sidebar">
+    <>
       <div className="title-section">
         Player
       </div>
-
-      <div className="player-section">
-          {players.map((player, index) => (
-              <Player key={index} username={player.username} nickname={player.nickname}/>
-          ))}
+      <div className="sidebar">
+        <div className="player-section">
+            {players.map((player, index) => (
+                <Player key={index} username={player.username} nickname={player.nickname}/>
+            ))}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 
