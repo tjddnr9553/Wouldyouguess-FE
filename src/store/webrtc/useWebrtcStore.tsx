@@ -6,9 +6,6 @@ import {
   RoomEvent,
 } from "livekit-client";
 
-const LIVEKIT_URL = import.meta.env.LIVEKIT_URL;
-const APPLICATION_SERVER_URL = import.meta.env.VITE_OPENVIDU_APP_SERVER_URL;
-
 type TrackInfo = {
   trackPublication: RemoteTrackPublication;
   participantIdentity: string;
@@ -36,8 +33,8 @@ interface WebRTCState {
 const useWebrtcStore = create<WebRTCState>((set, get) => {
   // 외부 상태 저장소에서 초기값 가져오기
   return {
-    LIVEKIT_URL: '',
-    APPLICATION_SERVER_URL: '',
+    LIVEKIT_URL: "",
+    APPLICATION_SERVER_URL: "",
     room: undefined,
     localTrack: undefined,
     remoteTracks: [],
@@ -45,7 +42,8 @@ const useWebrtcStore = create<WebRTCState>((set, get) => {
     roomName: "roomId",
 
     setLIVEKIT_URL: (LIVEKIT_URL) => set({ LIVEKIT_URL }),
-    setAPPLICATION_SERVER_URL: (APPLICATION_SERVER_URL) => set({ APPLICATION_SERVER_URL }),
+    setAPPLICATION_SERVER_URL: (APPLICATION_SERVER_URL) =>
+      set({ APPLICATION_SERVER_URL }),
 
     joinRoom: async () => {
       const { roomName, participantName, getToken, leaveRoom } = get(); // Get necessary values from the store
@@ -79,7 +77,7 @@ const useWebrtcStore = create<WebRTCState>((set, get) => {
         const token = await getToken(roomName, participantName);
         await room.connect(get().LIVEKIT_URL, token);
 
-        await room.localParticipant.enableCameraAndMicrophone();
+        await room.localParticipant.setCameraEnabled(true);
         set({
           localTrack: room.localParticipant.videoTrackPublications
             .values()

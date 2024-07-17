@@ -1,13 +1,10 @@
-import './PlayerResult.css'
+import "./PlayerResult.css";
 
-const PlayerResult = ({player, nickname, score, liar_img, isWinner}) => {
-  return(
-    <div className='game1-result'>
-      <div className={isWinner? "win" : "lose"}>
-        {isWinner ? 
-          <div>Win!! &nbsp; &nbsp;</div> : 
-          <div>Lose!!</div>  
-        }
+const PlayerResult = ({ player, nickname, score, liar_img, isWinner }) => {
+  return (
+    <div className="game1-result">
+      <div className={isWinner ? "win" : "lose"}>
+        {isWinner ? <div>Win!</div> : <div>Lose..</div>}
       </div>
       <div className="playerResult">
         <div className="leftItem">{player}</div>
@@ -17,10 +14,11 @@ const PlayerResult = ({player, nickname, score, liar_img, isWinner}) => {
             <p>{nickname}</p>
           </div>
         </div>
-        <div className="rightItem">{score}</div>
+        <div className="originScore">{score}</div>
+        {/* <div className="plusScore">{score}</div> */}
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default PlayerResult;

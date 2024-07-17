@@ -3,7 +3,6 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "proxy": "http://localhost:6080",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -27,20 +26,21 @@
     "konva": "^9.3.1",
     "livekit-client": "^2.3.2",
     "livekit-server-sdk": "^2.5.1",
-    "openvidu-browser": "^2.30.1",
-    "openvidu-node-client": "^2.30.0",
     "react": "^18.2.0",
     "react-circular-progressbar": "^2.1.0",
     "react-countdown-circle-timer": "^3.2.1",
     "react-dom": "^18.2.0",
+    "react-image-file-resizer": "^0.4.8",
     "react-konva": "^18.2.10",
+    "react-h5-audio-player": "^3.9.3",
     "react-router-dom": "^6.23.1",
     "socket.io-client": "^4.7.5",
     "styled-components": "^6.1.11",
     "styled-reset": "^4.5.2",
     "swiper": "^11.1.4",
     "zustand": "^4.5.4",
-    "zustand-persist": "^0.4.0"
+    "zustand-persist": "^0.4.0",
+    "laser-pen": "^1.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",

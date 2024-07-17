@@ -1,18 +1,28 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
-import User from "../../components/game/User";
 import "./Game2.css";
 import "swiper/css";
 import "swiper/css/navigation";
 import useRoomStore from "../../store/room/useRoomStore";
 import useImagesStore from "../../store/image/useImagesStore";
+import useAudioStore from "../../store/bgm/useAudioStore";
 
 const Game2_remember = () => {
   const navigate = useNavigate();
+
   const { roomId } = useRoomStore();
-  const { originalImages  } = useImagesStore();
+  const { originalImages } = useImagesStore();
+  const { play, stop } = useAudioStore();
+
+  useEffect(() => {
+    play("/bgm/Game2_bgm.mp3");
+
+    return () => {
+      stop();
+    };
+  }, []);
 
   useEffect(() => {
     console.log("OriginalImages : ", originalImages);
@@ -21,15 +31,11 @@ const Game2_remember = () => {
     }, 10000);
 
     return () => clearTimeout(timer);
-    
   }, [originalImages, navigate, roomId]);
 
   return (
     <div className="inner">
       <div className="game container">
-        <div className="left-section">
-          <User />
-        </div>
         <div className="center">
           <div className="game2_border">
             <div className="titleContainer">
@@ -66,7 +72,7 @@ const Game2_remember = () => {
               </div>
             </div>
           </div>
-        </div>   
+        </div>
       </div>
     </div>
   );

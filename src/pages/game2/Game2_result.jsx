@@ -1,25 +1,34 @@
-import {useNavigate, useParams} from "react-router-dom";
-import {useRef} from "react";
-import {Swiper, SwiperSlide} from "swiper/react";
-import {Navigation} from "swiper/modules";
-import NewButton from "../../components/button/newButton";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import NewButton from "../../components/button/newButton.jsx";
 import useImagesStore from "../../store/image/useImagesStore.js";
+import useAudioStore from "../../store/bgm/useAudioStore";
 import "./Game2.css";
 import "swiper/css";
 import "swiper/css/navigation";
-import User from "../../components/game/User.tsx";
 
-const Game2 = () => {
+const Game2_result = () => {
   const navigate = useNavigate();
-  const { originalImages, generatedImages } = useImagesStore();
+
   const previewImage = useRef(null);
+
   const { roomId } = useParams();
+
+  const { originalImages, generatedImages } = useImagesStore();
+  const { play, stop } = useAudioStore();
+
+  useEffect(() => {
+    play("/bgm/Result_bgm.mp3");
+
+    return () => {
+      stop();
+    };
+  }, []);
 
   return (
     <div className="inner">
-      <div className="left-section">
-        <User />
-      </div>
       <div className="game2_border">
         <div className="titleContainer">
           <div>
@@ -69,4 +78,4 @@ const Game2 = () => {
   );
 };
 
-export default Game2;
+export default Game2_result;

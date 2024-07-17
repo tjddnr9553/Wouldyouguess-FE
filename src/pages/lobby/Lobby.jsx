@@ -16,7 +16,8 @@ import { catchLiar_start } from "../../api/game/CatchLiar.js";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 import useWebrtcStore from "../../store/webrtc/useWebrtcStore.tsx";
 import useGameStore from "../../store/game/useGameStore.js";
-import {findDiff_start} from "../../api/game/FindDiff.js";
+import { findDiff_start } from "../../api/game/FindDiff.js";
+import useAudioStore from "../../store/bgm/useAudioStore.js";
 
 const textList = [
   {
@@ -39,13 +40,22 @@ const Lobby = () => {
   let modalOn = false;
   const modalRef = useRef(null);
 
-  const { userId, isInvite, nickname, accessToken, isLogin, setIsLogin } = useUserStore();
+  const { userId, isInvite, nickname, accessToken, isLogin, setIsLogin } =
+    useUserStore();
   const { roomId } = useRoomStore();
   const { setFindDiffGameId } = useGameStore();
   const { socket, setSocket } = useSocketStore();
   const { setGameId } = useCatchLiarStore();
   const { joinRoom } = useWebrtcStore();
+  const { play, stop } = useAudioStore();
 
+  useEffect(() => {
+    play("/bgm/bgm.mp3");
+
+    return () => {
+      stop();
+    };
+  }, []);
 
   useEffect(() => {
     // 룸에 참가시키기
@@ -98,24 +108,23 @@ const Lobby = () => {
     setGameId(gameId);
 
     socket.emit("game_start", { mode: 1, userId, roomId, gameId });
-    navigate(`/game1?gameId=${gameId}&round=1`);
   };
 
   const startFindDIff = async () => {
     const gameId = await findDiff_start(roomId);
     setFindDiffGameId(gameId);
 
-    socket.emit("game_start", { mode: 2, gameId });
-    navigate("/game2/upload");
+    socket?.emit("game_start", { mode: 2, userId, roomId, gameId });
   };
-
 
   return (
     <div className="inner">
       <div className="lobby container">
         <Header />
         <div className="modal-container" ref={modalRef}>
-          <span className="close" onClick={handleModal}>X</span>
+          <span className="close" onClick={handleModal}>
+            X
+          </span>
           <Modal text1={`${window.location.origin}/invite/${roomId}`} />
         </div>
         <div className="content">
@@ -128,15 +137,15 @@ const Lobby = () => {
 
           <div className="game-content">
             <Planet
-              style={{ top: "10%" }}
-              id={"planet4"}
+              style={{ top: "7%" }}
+              id={"planet1"}
               min={5}
               max={15}
               text={textList[0].text}
               onClick={startCatchLiar}
             />
             <Planet
-              style={{ bottom: "5%", left: "30%" }}
+              style={{ bottom: "0%", left: "33%" }}
               id={"planet2"}
               min={5}
               max={25}
@@ -144,10 +153,10 @@ const Lobby = () => {
               onClick={startFindDIff}
             />
             <Planet
-              style={{ right: "12%" }}
-              id={"planet5"}
+              style={{ right: "1%" }}
+              id={"planet3"}
               min={5}
-              max={20}
+              max={30}
               text={textList[2].text}
             />
           </div>
