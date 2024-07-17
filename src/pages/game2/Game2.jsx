@@ -30,10 +30,16 @@ const Game2 = () => {
   const [gameState, setGameState] = useState(STATUS.START);
   
   const generatedImg = useRef(null);
+  const currentTime = useRef();
 
   const timeLimit = 60000;
   
   useEffect(() => {
+    let now = new Date();
+
+    console.log(now - currentTime.current);
+
+    console.log("GeneratedImages : ", generatedImages);
     setMode('difference');
     
     setTimeout(() => { 
@@ -63,6 +69,7 @@ const Game2 = () => {
   }, [gameState])
   
   const checkAnswerAndCondition = () => {
+
     const maskX1 = generatedImages[round].maskX1;
     const maskY1 = generatedImages[round].maskY1;
     const maskX2 = generatedImages[round].maskX2;
@@ -80,7 +87,7 @@ const Game2 = () => {
       alert('성공');
       
       // 점수 계산을 위해 셋팅
-      setRemainingChance(`round${round}`, chance);
+      setRemainingChance(`round${currentImageIndex}`, chance);
       setCorrectCount();
       showScore();
 
@@ -95,7 +102,7 @@ const Game2 = () => {
 
       if (chance - 1 <= 0) {
         alert('기회 끝');
-        setRemainingChance(`round${round}`, chance);
+        setRemainingChance(`round${currentImageIndex}`, chance);
         setChance(3);
 
         return STATUS.FAIL;
@@ -113,7 +120,7 @@ const Game2 = () => {
   }, [chance])
   
   const showScore = () => {
-    console.log("round ", round);
+    console.log("round ", currentImageIndex);
     console.log("chance ", chance);
     console.log("correctCount ", correctCount);
     console.log("remainingTime ", remainingTime);
@@ -125,7 +132,6 @@ const Game2 = () => {
     if (currentImageIndex < generatedImages.length) {
       console.log(generatedImages[currentImageIndex].generatedUrl);
       generatedImg.current.style.backgroundImage = `url(${generatedImages[currentImageIndex].generatedUrl})`;
-      // generatedImg.current.style.backgroundImage = `url(${uploadForm.get('image')})`;
 
       setCurrentImageIndex((prevIndex) => prevIndex + 1);
       setNextRound();
@@ -141,7 +147,7 @@ const Game2 = () => {
     }, 50000);
 
     return () => clearInterval(interval);
-  }, [round]); 
+  }, [currentImageIndex]); 
 
   return (
     <div className="inner">
