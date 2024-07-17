@@ -145,7 +145,7 @@ const Game2 = () => {
 
   return (
     <div className="inner">
-      <div className="game container">
+      <div className="game2 container">
         <div className="center">
           <div className="game2_border">
             <div className="titleContainer">
