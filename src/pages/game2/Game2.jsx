@@ -30,10 +30,15 @@ const Game2 = () => {
   const [gameState, setGameState] = useState(STATUS.START);
   
   const generatedImg = useRef(null);
+  const currentTime = useRef();
 
   const timeLimit = 60000;
   
   useEffect(() => {
+    let now = new Date();
+
+    console.log(now - currentTime.current);
+
     setMode('difference');
     
     setTimeout(() => { 
@@ -67,12 +72,6 @@ const Game2 = () => {
     const maskY1 = generatedImages[round].maskY1;
     const maskX2 = generatedImages[round].maskX2;
     const maskY2 = generatedImages[round].maskY2;
-
-    // 테스트용
-    // const maskX1 = inpaintForm.get('maskX1');
-    // const maskY1 = inpaintForm.get('maskY1');
-    // const maskX2 = inpaintForm.get('maskX2');
-    // const maskY2 = inpaintForm.get('maskY2');
 
     console.log('x ', x, 'y ', y);
 
@@ -125,7 +124,6 @@ const Game2 = () => {
     if (currentImageIndex < generatedImages.length) {
       console.log(generatedImages[currentImageIndex].generatedUrl);
       generatedImg.current.style.backgroundImage = `url(${generatedImages[currentImageIndex].generatedUrl})`;
-      // generatedImg.current.style.backgroundImage = `url(${uploadForm.get('image')})`;
 
       setCurrentImageIndex((prevIndex) => prevIndex + 1);
       setNextRound();
@@ -141,7 +139,7 @@ const Game2 = () => {
     }, 50000);
 
     return () => clearInterval(interval);
-  }, [round]); 
+  }, [currentImageIndex]); 
 
   return (
     <div className="inner">

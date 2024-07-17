@@ -3,15 +3,16 @@
 }
 
 .game.container {
-  /* background-color: rgb(153, 114, 64); */
   width: 100%;
   height: 100%;
+  
+  display: flex;
+  justify-content: center;
 }
 
 .game .left-section {
   width: 20%;
   height: 100%;
-  /* background-color: aqua; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -23,7 +24,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* background-color: antiquewhite; */
 }
 
 .game2_border {
