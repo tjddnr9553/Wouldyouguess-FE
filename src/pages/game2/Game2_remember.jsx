@@ -37,7 +37,7 @@ const Game2_remember = () => {
 
     const timer = setTimeout(() => {
       navigate(`/game2?round=1`);
-    }, 50000);
+    }, 30000);
 
     return () => clearTimeout(timer);
   }, [])
