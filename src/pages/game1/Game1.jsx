@@ -58,16 +58,18 @@ const Game1 = () => {
   useEffect(() => {
     const sync_func = async () => {
       const response = await catchLiar_info(gameId, userId, round);
+      console.log("api : ", response.isDrawing)
       setIsDrawing(response.isDrawing);
       setIsLiar(response.isLiar);
       setKeyword(response.keyword);
       setTotalRound(response.totalRound);
     };
     sync_func();
+  }, [round])
 
+  useEffect(() => {
     if (isDrawing) {
       setWaitText(null);
-      setIsDrawing(false);
       setKeyword(keyword);
     } else {
       setWaitText("다른 플레이어의 차례");

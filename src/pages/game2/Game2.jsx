@@ -41,6 +41,7 @@ const Game2 = () => {
         const res = await findDiff_generated_images(findDiffGameId, userId);
         setGeneratedImage(res[round - 1]);
         setRoundLength(res.length);
+        setChance(3);
     }
 
     sync_func();
@@ -73,6 +74,7 @@ const Game2 = () => {
       round === roundLength ? navigate(`/game2/result`) : navigate(`/game2?round=${round + 1}`);
     } else {
       setChance(chance - 1);
+
       if (chance === 0) {
         round === roundLength ? navigate(`/game2/result`) : navigate(`/game2?round=${round + 1}`);
       }
