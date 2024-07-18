@@ -9,6 +9,7 @@ const Palette = () => {
   function changeColor(targetColor) {
     if (mode === "fill") {
       tool === "clear" && setTool("pencil");
+      setColor(targetColor);
       setFillColor(targetColor);
     }
     setColor(targetColor);
