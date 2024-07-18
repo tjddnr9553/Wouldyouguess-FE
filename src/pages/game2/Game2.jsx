@@ -1,7 +1,6 @@
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import NewButton from "../../components/button/newButton";
-import useImagesStore from "../../store/image/useImagesStore";
 import useAudioStore from "../../store/bgm/useAudioStore";
 import "./Game2.css";
 import "swiper/css";
@@ -32,7 +31,12 @@ const Game2 = () => {
 
   useEffect(() => {
     play("/bgm/Game2_bgm.mp3");
+    return () => {
+      stop();
+    };
+  }, [])
 
+  useEffect(() => {
     const sync_func = async () => {
         const res = await findDiff_generated_images(findDiffGameId, userId);
         setGeneratedImage(res[round - 1]);
@@ -40,11 +44,7 @@ const Game2 = () => {
     }
 
     sync_func();
-
-    return () => {
-      stop();
-    };
-  }, []);
+  }, [round]);
 
   useEffect(() => {
     if(!generatedImage) return;
@@ -68,7 +68,7 @@ const Game2 = () => {
     console.log(maskX1, maskX2, maskY1, maskY2);
     console.log(x, y)
 
-
+    console.log(roundLength);
     if (maskX1 <= x && x <= maskX2 && maskY1 <= y && y <= maskY2) {
       round === roundLength ? navigate(`/game2/result`) : navigate(`/game2?round=${round + 1}`);
     } else {

@@ -66,8 +66,8 @@ const Game2_upload = () => {
 
       const upload_res = await findDiff_upload(upload_form);
       if (upload_res.status === 200) {
-        socket?.emit("game_loading", { roomId, nextPageUrl: "/game2/remember" });
         navigate(`/loading`, {state : { title: "파일 업로드 중입니다." }});
+        socket?.emit("game_loading", { roomId, nextPageUrl: "/game2/remember" });
       }
     }, 'image/png');
 
