@@ -12,12 +12,20 @@ import {
   calDrawingData,
   drawDrawingBezierData,
 } from "laser-pen";
+import useSocketStore from "../../store/socket/useSocketStore.js";
+import {TOOL_PENCIL} from "./canvas/tools/index.js";
+import useRoomStore from "../../store/room/useRoomStore.js";
+import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 
 const LaserPointer = ({ width, height, zIndex, position }) => {
   const canvasRef = useRef(null);
   const [lines, setLines] = useState([]);
-  const [isDrawing, setIsDrawing] = useState(false);
+  const [laserIsDrawing, setLaserIsDrawing] = useState(false);
   const [lastLineCompleteTime, setLastLineCompleteTime] = useState(null);
+
+  const { socket } = useSocketStore();
+  const { roomId } = useRoomStore();
+  const { isDrawing } = useCatchLiarStore();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -32,46 +40,6 @@ const LaserPointer = ({ width, height, zIndex, position }) => {
       ctx.lineWidth = 5;
       ctx.lineCap = "round";
     }
-
-    const handleMouseDown = (e) => {
-      setIsDrawing(true);
-      const rect = canvas.getBoundingClientRect(); // 캔버스의 위치 계산
-      const newPoint = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-        time: Date.now(),
-      };
-      setLines([...lines, [newPoint]]); // 새로운 선 시작
-    };
-
-    const handleMouseMove = (e) => {
-      if (isDrawing) {
-        const rect = canvas.getBoundingClientRect();
-        const newPoint = {
-          x: e.clientX - rect.left,
-          y: e.clientY - rect.top,
-          time: Date.now(),
-        };
-
-        setLines((prevLines) => {
-          if (prevLines.length === 0) {
-            return [[newPoint]];
-          } else {
-            const lastLine = prevLines[prevLines.length - 1];
-            return [...prevLines.slice(0, -1), [...lastLine, newPoint]];
-          }
-        });
-        setLastLineCompleteTime(Date.now());
-      }
-    };
-
-    const handleMouseUp = () => {
-      setIsDrawing(false);
-      if (lines.length > 0) {
-        // lines 배열이 비어있지 않은 경우에만
-        setLastLineCompleteTime(Date.now()); // 마지막 선 완료 시간 기록
-      }
-    };
 
     const draw = () => {
       if (!ctx) return;
@@ -119,25 +87,112 @@ const LaserPointer = ({ width, height, zIndex, position }) => {
       }
     };
 
-    canvas.addEventListener("mousedown", handleMouseDown);
-    canvas.addEventListener("mousemove", handleMouseMove);
-    canvas.addEventListener("mouseup", handleMouseUp);
 
     const intervalId = setInterval(draw);
 
     return () => {
-      canvas.removeEventListener("mousedown", handleMouseDown);
-      canvas.removeEventListener("mousemove", handleMouseMove);
-      canvas.removeEventListener("mouseup", handleMouseUp);
       clearInterval(intervalId);
     };
-  }, [lines, isDrawing, lastLineCompleteTime]);
+  }, [lines, laserIsDrawing, lastLineCompleteTime]);
+
+  useEffect(() => {
+    socket?.on("watcher_draw_start", handleWatcherDrawStart);
+    socket?.on("watcher_draw_move", handleWatcherDrawMove);
+
+    return () => {
+      socket?.off("watcher_draw_start", handleWatcherDrawStart);
+      socket?.off("watcher_draw_move", handleWatcherDrawMove);
+    };
+  }, [socket, isDrawing]);
+
+  const handleMouseDown = (e) => {
+    setLaserIsDrawing(true);
+    const rect = canvasRef.current.getBoundingClientRect(); // 캔버스의 위치 계산
+    const newPoint = {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      time: Date.now(),
+    };
+    setLines([...lines, [newPoint]]); // 새로운 선 시작
+
+    socket?.emit("watcher_draw_start", { xAxis: newPoint.x, yAxis: newPoint.y, time: newPoint.time, roomId });
+  };
+
+  const handleMouseMove = (e) => {
+    if (laserIsDrawing) {
+      const rect = canvasRef.current.getBoundingClientRect();
+      const newPoint = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+        time: Date.now(),
+      };
+
+      socket?.emit("watcher_draw_move", { xAxis: newPoint.x, yAxis: newPoint.y, time: newPoint.time, roomId });
+
+      setLines((prevLines) => {
+        if (prevLines.length === 0) {
+          return [[newPoint]];
+        } else {
+          const lastLine = prevLines[prevLines.length - 1];
+          return [...prevLines.slice(0, -1), [...lastLine, newPoint]];
+        }
+      });
+      setLastLineCompleteTime(Date.now());
+    }
+  };
+
+  const handleMouseUp = () => {
+    setLaserIsDrawing(false);
+    if (lines.length > 0) {
+      // lines 배열이 비어있지 않은 경우에만
+      setLastLineCompleteTime(Date.now()); // 마지막 선 완료 시간 기록
+    }
+  };
+
+  const handleWatcherDrawStart = (data) => {
+    console.log(isDrawing)
+    if(isDrawing) return;
+    const { xAxis, yAxis, time } = data;
+
+    const newPoint = {
+      x: xAxis,
+      y: yAxis,
+      time
+    };
+    setLines([...lines, [newPoint]]); // 새로운 선 시작
+  };
+
+  const handleWatcherDrawMove = (data) => {
+    console.log(isDrawing)
+    if(isDrawing) return;
+    const { xAxis, yAxis, time } = data;
+
+    const newPoint = {
+      x: xAxis,
+      y: yAxis,
+      time
+    };
+
+    setLines((prevLine) => {
+      if (prevLine.length === 0) {
+        return [[newPoint]];
+      } else {
+        const lastLine = prevLine[prevLine.length - 1];
+        return [...prevLine.slice(0, -1), [...lastLine, newPoint]];
+      }
+    });
+    setLastLineCompleteTime(Date.now());
+  };
+
 
   return (
     <canvas
       ref={canvasRef}
       width={width}
       height={height}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      onMouseMove={handleMouseMove}
       style={{
         backgroundColor: "transparent",
         position: position,
