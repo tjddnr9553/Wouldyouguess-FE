@@ -9,7 +9,7 @@
 .game .left-section {
   margin-left: 2%;
   margin-right: 2%;
-  width: 15%;
+  width: 11%;
   height: 100%;
   /* background-color: aqua; */
   display: flex;
@@ -25,7 +25,8 @@
 
 .keyword-title {
   position: absolute;
-  top: 8.5%;
+  top: 8%;
+  z-index: 6;
 }
 
 .keyword {
@@ -46,21 +47,45 @@
   border-radius: 10px;
 }
 
-.canvas-container {
-  margin-top: 5%;
+/* hr {
+  border: 0px;
   width: 100%;
-  height: 85%;
+  height: 0.3rem;
+  background: linear-gradient(
+    to left,
+    transparent,
+    rgb(177, 176, 238),
+    transparent
+  );
+  z-index: 7;
+} */
+
+.canvas-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 6%;
+  width: 100%;
+  height: 100%;
   background-color: white;
   border-radius: 1rem;
+  filter: drop-shadow(0px 10px 10px #4444dd);
 }
 .canvas-tools {
   width: 100%;
   margin-top: 1%;
 }
+.drawing-container {
+  filter: drop-shadow(0px 10px 10px #4444dd);
 
+  border-radius: 1rem;
+  width: 100%;
+  height: 90%;
+  margin-bottom: 5%;
+}
 /* right section css */
 .game .right-section {
-  width: 15%;
+  width: 18%;
   height: 100%;
   /* background-color: rgb(31, 65, 65); */
 
@@ -75,18 +100,4 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-/* 수정 필요 */
-.right-section .quite-btn {
-  width: 180px;
-  height: 150px;
-
-  border: 2px solid yellow;
-  border-radius: 15px;
-
-  background-color: rgba(129, 62, 146, 0.85);
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 20px 20px rgba(0, 0, 0, 0.22);
-
-  font-size: 30px;
 }

@@ -1,46 +1,28 @@
-import './Palette.css';
-import { useCanvasStore } from '../../../store/canvas/useCanvasStore';
-
-const colorOptions = [
-    "red", "orange", "yellow", "green", "blue", "purple", "pink", "brown", "gray",
-    "black", "white", "cyan",
-];
-
-const chunkArray = (array, size) => {
-    const result = [];
-    for (let i = 0; i < array.length; i += size) {
-        result.push(array.slice(i, i + size));
-    }
-    return result;
-};
+import "./Palette.css";
+import { useCanvasStore } from "../../../store/canvas/useCanvasStore";
+import { useState } from "react";
+import { HexColorPicker } from "react-colorful";
 
 const Palette = () => {
-  const colorGroups = chunkArray(colorOptions, 3);
-
-  const { setColor, setFillColor, tool, setTool } = useCanvasStore();
+  const { setColor, setFillColor, tool, setTool, mode } = useCanvasStore();
 
   function changeColor(targetColor) {
-    tool === 'clear' && setTool('pencil');
+    if (mode === "fill") {
+      tool === "clear" && setTool("pencil");
+      setColor(targetColor);
+      setFillColor(targetColor);
+    }
     setColor(targetColor);
-    setFillColor(targetColor);
+    setCurrentColor(targetColor);
   }
+
+  const [color, setCurrentColor] = useState("#000000");
 
   return (
     <div className="palette">
-        {colorGroups.map((group, groupIndex) => (
-            <div key={groupIndex} className="color-group">
-                {group.map((color, colorIndex) => (
-                    <div
-                        key={colorIndex}
-                        className="color-options"
-                        style={{ backgroundColor: color }}
-                        onClick={() => changeColor(color)}
-                    ></div>
-                ))}
-            </div>
-        ))}
+      <HexColorPicker color={color} onChange={changeColor} />
     </div>
-  )
-}
+  );
+};
 
 export default Palette;

@@ -11,26 +11,6 @@ import { useNavigate } from "react-router-dom";
 import useSocketStore from "../../store/socket/useSocketStore.js";
 import useUserStore from "../../store/user/useUserStore.js";
 import useRoomStore from "../../store/room/useRoomStore.js";
-import Loading from "../../components/loading/Loading.jsx";
-
-const dummyImg = [
-  {
-    userId: 1,
-    imagePath: "/images/characters/1.png",
-  },
-  {
-    userId: 2,
-    imagePath: "/images/characters/2.png",
-  },
-  {
-    userId: 3,
-    imagePath: "/images/characters/3.png",
-  },
-  {
-    userId: 4,
-    imagePath: "/images/characters/1.png",
-  },
-];
 
 const Result1 = () => {
   const navigate = useNavigate();
@@ -66,8 +46,8 @@ const Result1 = () => {
     const votingUserId = Number(e.currentTarget.getAttribute("data-user-id"));
     await catchLiar_vote(gameId, votingUserId);
 
-    socket?.emit("game_result", { roomId, gameId, userId });
-    setIsLiarVoteEnede(true);
+    socket?.emit("game_loading", { roomId, nextPageUrl: "/game1/result" });
+    navigate(`/loading`, {state : { title: "라이어 투표 중입니다." }});
   };
 
   if(isLiarVoteEnded) {

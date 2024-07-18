@@ -1,17 +1,12 @@
-import { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import {useEffect, useRef, useState} from "react";
 import NewButton from "../../components/button/newButton";
-import useImagesStore from "../../store/image/useImagesStore.js";
 import "./Game2.css";
 import useRoomStore from "../../store/room/useRoomStore.js";
 import useUserStore from "../../store/user/useUserStore.js";
-import useGameStore, {
-  useCanvasStore,
-  useFileStore,
-} from "../../store/game/useGameStore.js";
-import Canvas from "./canvas/Canvas.jsx";
+import FDGCanvas from "./canvas/FDGCanvas.jsx";
 import ImgResizer from "./ImgResizer.js";
 import useAudioStore from "../../store/bgm/useAudioStore";
+<<<<<<< HEAD
 import {
   findDiff_gen,
   findDiff_inpaint,
@@ -19,89 +14,87 @@ import {
   findDiff_upload,
 } from "../../api/game/FindDiff.js";
 import Loading from "../../components/loading/Loading.jsx";
+=======
+import {findDiff_upload,} from "../../api/game/FindDiff.js";
+import useFDGCanvasStore from "../../store/game/findDiffGame/useFDGCanvasStore.js";
+import useFDGFileStore from "../../store/game/findDiffGame/useFDGFileStore.js";
+import useFDGStore from "../../store/game/findDiffGame/useFDGStore.js";
+import {useNavigate} from "react-router-dom";
+import useSocketStore from "../../store/socket/useSocketStore.js";
+>>>>>>> 8a17fdba1da2a8a6a19ec28a357fa0e03db25278
 
 const Game2_upload = () => {
-  const { isImgUploaded, x, y, isMaskingComplete } = useCanvasStore();
-  const {
-    file,
-    setFile,
-    uploadForm,
-    updateUploadForm,
-    inpaintForm,
-    updateInpaintForm,
-  } = useFileStore();
-  const { clickSendBtn, setClickSendBtn, findDiffGameId } = useGameStore();
+  const navigate = useNavigate();
   const imgSelectBtn = useRef(null);
 
+  const [oneClick, setOneClick] = useState(false);
+
   const { roomId } = useRoomStore();
-  const { setOriginalImages, setGeneratedImages } = useImagesStore();
   const { userId } = useUserStore();
+  const { socket } = useSocketStore();
   const { play, stop } = useAudioStore();
-  const navigate = useNavigate();
+
+  const { isImgUploaded, FDGCanvasRef, x, y  } = useFDGCanvasStore();
+  const { originalFile, setUploadFile  } = useFDGFileStore();
+  const { clickSendBtn } = useFDGStore();
 
   useEffect(() => {
+<<<<<<< HEAD
     setTimeout(() => navigate("/game2/remember/"), 30000);
 
     play("/bgm/Game2_bgm.mp3"); // 게임2 시작 시 음악 재생
+=======
+    play("/bgm/Game2_bgm.mp3");
+>>>>>>> 8a17fdba1da2a8a6a19ec28a357fa0e03db25278
 
     return () => {
       stop();
     };
   }, []);
 
-  useEffect(() => {
-    if (isMaskingComplete) {
-      sendToServer();
-    }
-  }, [isMaskingComplete]);
+  const changeInput = async (e) => {
+    const file = e.target.files[0];
+    const resizingImg = await ImgResizer(file, 512, 512); // 512 변경 필요
+    setUploadFile(resizingImg);
+  };
 
   const sendToServer = async () => {
-    updateForm();
+    if (oneClick) return;
 
+<<<<<<< HEAD
     const uploadRes = await findDiff_upload(uploadForm);
     if (uploadRes === "OK") {
       const response = await findDiff_og(findDiffGameId, userId);
       if (response) {
         setOriginalImages(response); // 여기서는 URL만 포함된 배열을 받습니다.
+=======
+    await FDGCanvasRef.toBlob( async (blob) => {
+      setOneClick(true);
+
+      const length = 100;
+      const maskX1 = x - length / 2 > 0 ? Math.round(x - length / 2) : 0;
+      const maskY1 = y - length / 2 > 0 ? Math.round(y - length / 2) : 0;
+      const maskX2 = Math.round(x + length / 2);
+      const maskY2 = Math.round(y + length / 2);
+
+      const upload_form = new FormData();
+      upload_form.append('originalImage', originalFile, 'originalImage.png');
+      upload_form.append('maskingImage', blob, 'maskingImage.png');
+      upload_form.append("userId", userId);
+      upload_form.append("prompt", "Modify safely.");
+      upload_form.append("maskX1", maskX1);
+      upload_form.append("maskY1", maskY1);
+      upload_form.append("maskX2", maskX2);
+      upload_form.append("maskY2", maskY2);
+
+      const upload_res = await findDiff_upload(upload_form);
+      if (upload_res.status === 200) {
+        navigate(`/loading`, {state : { title: "파일 업로드 중입니다." }});
+        socket?.emit("game_loading", { roomId, nextPageUrl: "/game2/remember" });
+>>>>>>> 8a17fdba1da2a8a6a19ec28a357fa0e03db25278
       }
+    }, 'image/png');
 
-      setTimeout(async () => {
-        await findDiff_inpaint(inpaintForm);
-        const genResponse = await findDiff_gen(findDiffGameId, userId);
-        setGeneratedImages(genResponse);
-      }, 0);
-    }
-  };
-
-  const prepareFormData = async (file) => {
-    const resizingImg = await ImgResizer(file, 512, 512); // 512 변경 필요
-    setFile(resizingImg);
-
-    updateInpaintForm("roomId", roomId);
-    updateInpaintForm("userId", userId);
-    updateInpaintForm("prompt", "Modify safely.");
-
-    updateUploadForm("roomId", roomId);
-    updateUploadForm("userId", userId);
-  };
-
-  const updateForm = () => {
-    const length = 100;
-
-    const maskX1 = x - length / 2 > 0 ? Math.round(x - length / 2) : 0;
-    const maskY1 = y - length / 2 > 0 ? Math.round(y - length / 2) : 0;
-    const maskX2 = Math.round(x + length / 2);
-    const maskY2 = Math.round(y + length / 2);
-
-    // 새로운 마스킹 좌표 설정
-    updateInpaintForm("maskX1", maskX1);
-    updateInpaintForm("maskY1", maskY1);
-    updateInpaintForm("maskX2", maskX2);
-    updateInpaintForm("maskY2", maskY2);
-  };
-
-  const changeInput = (e) => {
-    prepareFormData(e.target.files[0]);
   };
 
   if(isMaskingComplete) {
@@ -124,12 +117,14 @@ const Game2_upload = () => {
                 )}
               </div>
             </div>
+
             <div className="imageContainer">
               <div className="containerWrapper">
                 <div className="game2-canvas-container">
-                  <Canvas />
+                  <FDGCanvas />
                 </div>
               </div>
+
               <div className="imageBtnContainer">
                 <input
                   type="file"
@@ -142,16 +137,12 @@ const Game2_upload = () => {
                 {isImgUploaded === false ? (
                   <NewButton
                     text={"Image Upload"}
-                    onClick={() => {
-                      imgSelectBtn.current.click();
-                    }}
+                    onClick={() => imgSelectBtn.current.click()}
                   />
                 ) : (
                   <NewButton
                     text={"전송하기"}
-                    onClick={() => {
-                      setClickSendBtn(true);
-                    }}
+                    onClick={sendToServer}
                     disabled={clickSendBtn}
                   />
                 )}

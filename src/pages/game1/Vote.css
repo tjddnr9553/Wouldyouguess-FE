@@ -97,6 +97,7 @@
   border-radius: 30px;
 
   box-shadow: 10px 10px 10px -5px rgba(68, 68, 221, 0.7);
+  overflow: hidden;
 }
 .img-border:hover {
   animation: grow 1s forwards;
