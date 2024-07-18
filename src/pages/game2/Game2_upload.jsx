@@ -1,4 +1,4 @@
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 import NewButton from "../../components/button/newButton";
 import "./Game2.css";
 import useRoomStore from "../../store/room/useRoomStore.js";
@@ -16,6 +16,8 @@ import useSocketStore from "../../store/socket/useSocketStore.js";
 const Game2_upload = () => {
   const navigate = useNavigate();
   const imgSelectBtn = useRef(null);
+
+  const [oneClick, setOneClick] = useState(false);
 
   const { roomId } = useRoomStore();
   const { userId } = useUserStore();
@@ -41,8 +43,11 @@ const Game2_upload = () => {
   };
 
   const sendToServer = async () => {
+    if (oneClick) return;
 
     await FDGCanvasRef.toBlob( async (blob) => {
+      setOneClick(true);
+
       const length = 100;
       const maskX1 = x - length / 2 > 0 ? Math.round(x - length / 2) : 0;
       const maskY1 = y - length / 2 > 0 ? Math.round(y - length / 2) : 0;
@@ -61,8 +66,8 @@ const Game2_upload = () => {
 
       const upload_res = await findDiff_upload(upload_form);
       if (upload_res.status === 200) {
-        socket?.emit("game_loading", { roomId, nextPageUrl: "/game2/remember" });
         navigate(`/loading`, {state : { title: "파일 업로드 중입니다." }});
+        socket?.emit("game_loading", { roomId, nextPageUrl: "/game2/remember" });
       }
     }, 'image/png');
 
