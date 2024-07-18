@@ -32,8 +32,7 @@ const Drawing = ({ width, height, zIndex, position }) => {
   let isClick = false;
 
   const { socket } = useSocketStore();
-  const { tool, color, size, fillColor, clearBtnClick, setCanvas, setTool } =
-    useCanvasStore();
+  const { tool, color, size, fillColor, clearBtnClick, setCanvas, setTool } = useCanvasStore();
   const { roomId } = useRoomStore();
   const { isDrawing } = useCatchLiarStore();
 
@@ -57,14 +56,10 @@ const Drawing = ({ width, height, zIndex, position }) => {
   useEffect(() => {
     socket?.on("drawer_draw_start", handleDrawerDrawStart);
     socket?.on("drawer_draw_move", handleDrawerDrawMove);
-    socket?.on("watcher_draw_start", handleWatcherDrawStart);
-    socket?.on("watcher_draw_move", handleWatcherDrawMove);
 
     return () => {
       socket?.off("drawer_draw_start", handleDrawerDrawStart);
       socket?.off("drawer_draw_move", handleDrawerDrawMove);
-      socket?.off("watcher_draw_start", handleWatcherDrawStart);
-      socket?.off("watcher_draw_move", handleWatcherDrawMove);
     };
   }, [socket]);
 
@@ -94,25 +89,7 @@ const Drawing = ({ width, height, zIndex, position }) => {
     }
 
     if (isDrawing) {
-      socket?.emit("drawer_draw_start", {
-        tool,
-        xAxis: x,
-        yAxis: y,
-        color,
-        size,
-        fillColor,
-        roomId,
-      });
-    } else {
-      socket?.emit("watcher_draw_start", {
-        tool,
-        xAxis: x,
-        yAxis: y,
-        color,
-        size,
-        fillColor,
-        roomId,
-      });
+      socket?.emit("drawer_draw_start", {tool, xAxis: x, yAxis: y, color, size, fillColor, roomId,});
     }
   };
 
@@ -128,25 +105,7 @@ const Drawing = ({ width, height, zIndex, position }) => {
     toolRef.current.onMouseMove(x, y);
 
     if (isDrawing) {
-      socket?.emit("drawer_draw_move", {
-        tool,
-        xAxis: x,
-        yAxis: y,
-        color,
-        size,
-        fillColor,
-        roomId,
-      });
-    } else {
-      socket?.emit("watcher_draw_move", {
-        tool,
-        xAxis: x,
-        yAxis: y,
-        color,
-        size,
-        fillColor,
-        roomId,
-      });
+      socket?.emit("drawer_draw_move", { tool, xAxis: x, yAxis: y, color, size, fillColor, roomId,});
     }
   };
 
@@ -158,10 +117,13 @@ const Drawing = ({ width, height, zIndex, position }) => {
   const handleDrawerDrawStart = (data) => {
     const { tool, xAxis, yAxis, color, size, fillColor } = data;
 
-    setTool(tool);
-    tool === TOOL_PENCIL
-      ? toolRef.current.onMouseDown(xAxis, yAxis, color, size)
-      : toolRef.current.onMouseDown(xAxis, yAxis, color, size, fillColor);
+    if (tool === TOOL_PENCIL) {
+      toolRef.current.onMouseDown(xAxis, yAxis, color, size);
+    } else if (tool === ERASE) {
+      toolRef.current.onMouseDown(xAxis, yAxis, "white", size);
+    } else {
+      toolRef.current.onMouseDown(xAxis, yAxis, color, size, fillColor);
+    }
   };
 
   const handleDrawerDrawMove = (data) => {
@@ -169,19 +131,6 @@ const Drawing = ({ width, height, zIndex, position }) => {
     toolRef.current.onMouseMove(xAxis, yAxis);
   };
 
-  const handleWatcherDrawStart = (data) => {
-    const { tool, xAxis, yAxis, color, size, fillColor } = data;
-
-    setTool(tool);
-    tool === TOOL_PENCIL
-      ? toolRef.current.onMouseDown(xAxis, yAxis, color, size)
-      : toolRef.current.onMouseDown(xAxis, yAxis, color, size, fillColor);
-  };
-
-  const handleWatcherDrawMove = (data) => {
-    const { tool, xAxis, yAxis, color, size, fillColor } = data;
-    toolRef.current.onMouseMove(xAxis, yAxis);
-  };
 
   return (
     <>
