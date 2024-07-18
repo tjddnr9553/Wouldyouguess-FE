@@ -136,11 +136,10 @@ const Game1 = () => {
             </div>
           </div>
           <div className="canvas-tools">
-            <Tools />
           </div>
         </div>
         <div className="right-section">
-          {clockStart && <Clock />}
+          <Tools />
           <Palette />
         </div>
       </div>

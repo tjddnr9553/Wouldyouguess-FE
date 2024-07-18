@@ -6,22 +6,12 @@ import useUserStore from "../../store/user/useUserStore.js";
 import FDGCanvas from "./canvas/FDGCanvas.jsx";
 import ImgResizer from "./ImgResizer.js";
 import useAudioStore from "../../store/bgm/useAudioStore";
-<<<<<<< HEAD
-import {
-  findDiff_gen,
-  findDiff_inpaint,
-  findDiff_og,
-  findDiff_upload,
-} from "../../api/game/FindDiff.js";
-import Loading from "../../components/loading/Loading.jsx";
-=======
 import {findDiff_upload,} from "../../api/game/FindDiff.js";
 import useFDGCanvasStore from "../../store/game/findDiffGame/useFDGCanvasStore.js";
 import useFDGFileStore from "../../store/game/findDiffGame/useFDGFileStore.js";
 import useFDGStore from "../../store/game/findDiffGame/useFDGStore.js";
 import {useNavigate} from "react-router-dom";
 import useSocketStore from "../../store/socket/useSocketStore.js";
->>>>>>> 8a17fdba1da2a8a6a19ec28a357fa0e03db25278
 
 const Game2_upload = () => {
   const navigate = useNavigate();
@@ -39,13 +29,7 @@ const Game2_upload = () => {
   const { clickSendBtn } = useFDGStore();
 
   useEffect(() => {
-<<<<<<< HEAD
-    setTimeout(() => navigate("/game2/remember/"), 30000);
-
-    play("/bgm/Game2_bgm.mp3"); // 게임2 시작 시 음악 재생
-=======
     play("/bgm/Game2_bgm.mp3");
->>>>>>> 8a17fdba1da2a8a6a19ec28a357fa0e03db25278
 
     return () => {
       stop();
@@ -61,13 +45,6 @@ const Game2_upload = () => {
   const sendToServer = async () => {
     if (oneClick) return;
 
-<<<<<<< HEAD
-    const uploadRes = await findDiff_upload(uploadForm);
-    if (uploadRes === "OK") {
-      const response = await findDiff_og(findDiffGameId, userId);
-      if (response) {
-        setOriginalImages(response); // 여기서는 URL만 포함된 배열을 받습니다.
-=======
     await FDGCanvasRef.toBlob( async (blob) => {
       setOneClick(true);
 
@@ -91,17 +68,10 @@ const Game2_upload = () => {
       if (upload_res.status === 200) {
         navigate(`/loading`, {state : { title: "파일 업로드 중입니다." }});
         socket?.emit("game_loading", { roomId, nextPageUrl: "/game2/remember" });
->>>>>>> 8a17fdba1da2a8a6a19ec28a357fa0e03db25278
       }
     }, 'image/png');
 
   };
-
-  if(isMaskingComplete) {
-    return (
-      <Loading text={'파일 업로드 중입니다.'} />
-    )
-  }
 
   return (
     <div className="inner">
