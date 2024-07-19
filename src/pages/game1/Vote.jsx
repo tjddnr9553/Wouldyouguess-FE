@@ -16,6 +16,7 @@ const Result1 = () => {
   const navigate = useNavigate();
 
   const [players, setPlayers] = useState([]);
+  const [isLiarVoteEnded, setIsLiarVoteEnede] = useState(false);
 
   const previewImage = useRef(null);
 
@@ -48,6 +49,12 @@ const Result1 = () => {
     socket?.emit("game_loading", { roomId, nextPageUrl: "/game1/result" });
     navigate(`/loading`, {state : { title: "라이어 투표 중입니다." }});
   };
+
+  if(isLiarVoteEnded) {
+    return (
+      <Loading text={'라이어 투표 중입니다.'} />
+    )
+  }
 
   return (
     <div className="inner">

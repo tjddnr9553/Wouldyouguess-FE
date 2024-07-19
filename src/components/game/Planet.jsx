@@ -29,13 +29,24 @@ const Planet = ({ style, id, min, max, text, onClick }) => {
   return (
     <div className={`${id} item-hints`} style={style}>
       <div className="hint" data-position="4">
-        <span className="hint-radius"></span>
         <span className="hint-dot">
           <img src={imagePath} alt="planet image" onClick={onClick} />
+          {id === 'planet3' && 
+            <img src='/images/planet/lock.png' 
+              style={{
+                position: 'absolute',
+                width: '18%',
+                top: '37%',
+                left: '41.7%',
+                opacity: '0.7'
+               }}/>
+          }
+          {text && 
+            <div className="hint-content">
+              <p>{text}</p>
+            </div>
+          }
         </span>
-        <div className="hint-content do--split-children">
-          <p>{text}</p>
-        </div>
       </div>
     </div>
   );
