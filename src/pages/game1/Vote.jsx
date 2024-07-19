@@ -50,12 +50,6 @@ const Result1 = () => {
     navigate(`/loading`, {state : { title: "라이어 투표 중입니다." }});
   };
 
-  if(isLiarVoteEnded) {
-    return (
-      <Loading text={'라이어 투표 중입니다.'} />
-    )
-  }
-
   return (
     <div className="inner">
       <div className="game container">
