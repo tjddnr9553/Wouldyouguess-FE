@@ -58,7 +58,6 @@ const Game1 = () => {
   useEffect(() => {
     const sync_func = async () => {
       const response = await catchLiar_info(gameId, userId, round);
-      console.log("api : ", response.isDrawing)
       setIsDrawing(response.isDrawing);
       setIsLiar(response.isLiar);
       setKeyword(response.keyword);

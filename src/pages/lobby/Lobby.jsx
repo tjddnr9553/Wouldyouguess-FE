@@ -40,8 +40,7 @@ const Lobby = () => {
   let modalOn = false;
   const modalRef = useRef(null);
 
-  const { userId, isInvite, nickname, accessToken, isLogin, setIsLogin } =
-    useUserStore();
+  const { userId, isInvite, nickname } = useUserStore();
   const { roomId } = useRoomStore();
   const { setFindDiffGameId } = useFDGStore();
   const { socket, setSocket } = useSocketStore();
@@ -60,7 +59,7 @@ const Lobby = () => {
   useEffect(() => {
     // 룸에 참가시키기
     if (roomId && nickname) {
-      joinRoom(); // 룸 접속 함수 호출
+      joinRoom(roomId, nickname); // 룸 접속 함수 호출
     }
   }, [roomId, nickname]); // 의존성 배열 추가
 
