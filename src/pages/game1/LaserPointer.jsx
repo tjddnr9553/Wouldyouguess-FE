@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useId } from "react";
 import {
   drainPoints,
   setDelay,
@@ -13,19 +13,21 @@ import {
   drawDrawingBezierData,
 } from "laser-pen";
 import useSocketStore from "../../store/socket/useSocketStore.js";
-import {TOOL_PENCIL} from "./canvas/tools/index.js";
 import useRoomStore from "../../store/room/useRoomStore.js";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
+import useUserStore from "../../store/user/useUserStore.js";
 
 const LaserPointer = ({ width, height, zIndex, position }) => {
   const canvasRef = useRef(null);
   const [lines, setLines] = useState([]);
+  const [clientLines, setClientLines] = useState({});
   const [laserIsDrawing, setLaserIsDrawing] = useState(false);
   const [lastLineCompleteTime, setLastLineCompleteTime] = useState(null);
 
   const { socket } = useSocketStore();
   const { roomId } = useRoomStore();
   const { isDrawing } = useCatchLiarStore();
+  const { userId } = useUserStore();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -47,49 +49,53 @@ const LaserPointer = ({ width, height, zIndex, position }) => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const currentTime = Date.now();
+      for (const userId in clientLines) {
+        const lines = clientLines[userId];
+        lines.forEach((line) => {
+          const drainedPoints = drainPoints(line);
+          if (drainedPoints.length > 5) {
+            const elapsedTime = currentTime - line[0].time;
+            const opacity = Math.max(0, 1 - elapsedTime / 5000);
+            setOpacity(opacity);
 
-      lines.forEach((line) => {
-        const drainedPoints = drainPoints(line);
-        if (drainedPoints.length > 2) {
-          const elapsedTime = currentTime - line[0].time;
-          const opacity = Math.max(0, 1 - elapsedTime / 5000);
-          setOpacity(opacity);
+            const controlPoints = calControlPoints(drainedPoints);
+            const bezierCurves = transformPointToBezier(
+              drainedPoints,
+              controlPoints
+            );
+            const totalLength = bezierCurves.reduce(
+              (sum, bz) => sum + bz.length(),
+              0
+            );
+            const drawingData = calDrawingData(bezierCurves, totalLength);
 
-          const controlPoints = calControlPoints(drainedPoints);
-          const bezierCurves = transformPointToBezier(
-            drainedPoints,
-            controlPoints
-          );
-          const totalLength = bezierCurves.reduce(
-            (sum, bz) => sum + bz.length(),
-            0
-          );
-          const drawingData = calDrawingData(bezierCurves, totalLength);
+            // 선에 그림자 블러 효과를 줘서 형광펜 느낌나도록
+            ctx.shadowColor = "rgba(255, 0, 0, 1)";
+            ctx.shadowBlur = 10;
+            ctx.shadowOffsetX = 3;
+            ctx.shadowOffsetY = 3;
 
-          // 겉 색상 (빨간색)
-          setColor(255, 0, 0);
-          setOpacity(1);
-          setMaxWidth(5);
-          setMinWidth(5);
-          drawDrawingBezierData(ctx, drawingData);
+            setColor(255, 255, 255);
+            setOpacity(1);
+            setMaxWidth(5);
+            setMinWidth(5);
+            drawDrawingBezierData(ctx, drawingData);
 
-          // 안쪽 색상 (흰색)
-          // setColor(255, 255, 255);
-          // setOpacity(1);
-          // setMaxWidth(5);
-          // setMinWidth(5);
-          // drawDrawingBezierData(ctx, drawingData);
+            ctx.shadowColor = "transparent";
+          }
+        });
+
+        if (lastLineCompleteTime && Date.now() - lastLineCompleteTime > 3000) {
+          setClientLines((prevLines) => {
+            const newLines = { ...prevLines };
+            delete newLines[userId]; // 해당 socketId의 선만 삭제
+            return newLines;
+          });
         }
-      });
-
-      if (lastLineCompleteTime && Date.now() - lastLineCompleteTime > 3000) {
-        setLines([]); // 3초 후 모든 선 지우기
       }
     };
 
-
-    const intervalId = setInterval(draw);
-
+    const intervalId = setInterval(draw, 8);
     return () => {
       clearInterval(intervalId);
     };
@@ -103,7 +109,7 @@ const LaserPointer = ({ width, height, zIndex, position }) => {
       socket?.off("watcher_draw_start", handleWatcherDrawStart);
       socket?.off("watcher_draw_move", handleWatcherDrawMove);
     };
-  }, [socket, isDrawing]);
+  }, [socket, isDrawing, laserIsDrawing]);
 
   const handleMouseDown = (e) => {
     setLaserIsDrawing(true);
@@ -115,7 +121,19 @@ const LaserPointer = ({ width, height, zIndex, position }) => {
     };
     setLines([...lines, [newPoint]]); // 새로운 선 시작
 
-    socket?.emit("watcher_draw_start", { xAxis: newPoint.x, yAxis: newPoint.y, time: newPoint.time, roomId });
+    setClientLines((prevLines) => ({
+      ...prevLines,
+      [userId]: prevLines[userId]
+        ? [...prevLines[userId], [newPoint]]
+        : [[newPoint]],
+    }));
+
+    socket?.emit("watcher_draw_start", {
+      xAxis: newPoint.x,
+      yAxis: newPoint.y,
+      time: newPoint.time,
+      roomId,
+    });
   };
 
   const handleMouseMove = (e) => {
@@ -127,15 +145,20 @@ const LaserPointer = ({ width, height, zIndex, position }) => {
         time: Date.now(),
       };
 
-      socket?.emit("watcher_draw_move", { xAxis: newPoint.x, yAxis: newPoint.y, time: newPoint.time, roomId });
+      socket?.emit("watcher_draw_move", {
+        xAxis: newPoint.x,
+        yAxis: newPoint.y,
+        time: newPoint.time,
+        roomId,
+      });
 
-      setLines((prevLines) => {
-        if (prevLines.length === 0) {
-          return [[newPoint]];
-        } else {
-          const lastLine = prevLines[prevLines.length - 1];
-          return [...prevLines.slice(0, -1), [...lastLine, newPoint]];
-        }
+      setClientLines((prevLines) => {
+        const lines = prevLines[userId] || [];
+        const lastLine = lines[lines.length - 1] || [];
+        return {
+          ...prevLines,
+          [userId]: [...lines.slice(0, -1), [...lastLine, newPoint]],
+        };
       });
       setLastLineCompleteTime(Date.now());
     }
@@ -144,46 +167,51 @@ const LaserPointer = ({ width, height, zIndex, position }) => {
   const handleMouseUp = () => {
     setLaserIsDrawing(false);
     if (lines.length > 0) {
-      // lines 배열이 비어있지 않은 경우에만
       setLastLineCompleteTime(Date.now()); // 마지막 선 완료 시간 기록
     }
   };
 
   const handleWatcherDrawStart = (data) => {
-    console.log(isDrawing)
-    if(isDrawing) return;
+    if (isDrawing) return;
     const { xAxis, yAxis, time } = data;
 
     const newPoint = {
       x: xAxis,
       y: yAxis,
-      time
+      time,
     };
-    setLines([...lines, [newPoint]]); // 새로운 선 시작
+
+    setClientLines((prevLines) => ({
+      ...prevLines,
+      [userId]: prevLines[userId]
+        ? [...prevLines[userId], [newPoint]]
+        : [[newPoint]],
+    }));
   };
 
   const handleWatcherDrawMove = (data) => {
-    console.log(isDrawing)
-    if(isDrawing) return;
+    if (isDrawing) return;
     const { xAxis, yAxis, time } = data;
 
     const newPoint = {
       x: xAxis,
       y: yAxis,
-      time
+      time,
     };
 
-    setLines((prevLine) => {
-      if (prevLine.length === 0) {
-        return [[newPoint]];
-      } else {
-        const lastLine = prevLine[prevLine.length - 1];
-        return [...prevLine.slice(0, -1), [...lastLine, newPoint]];
-      }
+    setClientLines((prevLines) => {
+      const lines = prevLines[userId] || [];
+      const lastLine = lines[lines.length - 1] || [];
+      return {
+        ...prevLines,
+        [userId]: [
+          ...lines.slice(0, -1),
+          [...lastLine, { x: xAxis, y: yAxis, time }],
+        ],
+      };
     });
     setLastLineCompleteTime(Date.now());
   };
-
 
   return (
     <canvas
