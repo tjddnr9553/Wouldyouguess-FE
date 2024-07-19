@@ -13,8 +13,8 @@ const Player = ({nickname, username}) => {
         <Profile />
       </div>
       <div className="name-section">
-        <h1 className='nickname'>{nickname}</h1>
-        <p className="user-description">{username}</p>
+        <h1 className='nickname'>{username}</h1>
+        <p className="user-description">{nickname}</p>
       </div>
     </div>
   )

@@ -26,11 +26,11 @@ const textList = [
   },
   {
     id: "game2",
-    text: "재미있는 틀린 부분 찾기 입니다.",
+    text: "틀린 그림을 찾아보세요!!",
   },
   {
     id: "game3",
-    text: "아주아주 재밌는 game3 입니다.",
+    text: "",
   },
 ];
 
@@ -40,8 +40,7 @@ const Lobby = () => {
   let modalOn = false;
   const modalRef = useRef(null);
 
-  const { userId, isInvite, nickname, accessToken, isLogin, setIsLogin } =
-    useUserStore();
+  const { userId, isInvite, nickname } = useUserStore();
   const { roomId } = useRoomStore();
   const { setFindDiffGameId } = useFDGStore();
   const { socket, setSocket } = useSocketStore();
@@ -60,7 +59,7 @@ const Lobby = () => {
   useEffect(() => {
     // 룸에 참가시키기
     if (roomId && nickname) {
-      joinRoom(); // 룸 접속 함수 호출
+      joinRoom(roomId, nickname); // 룸 접속 함수 호출
     }
   }, [roomId, nickname]); // 의존성 배열 추가
 
@@ -142,7 +141,7 @@ const Lobby = () => {
               onClick={startCatchLiar}
             />
             <Planet
-              style={{ bottom: "0%", left: "33%" }}
+              style={{ bottom: "0%", left: "30%" }}
               id={"planet2"}
               min={5}
               max={25}
@@ -150,11 +149,10 @@ const Lobby = () => {
               onClick={startFindDIff}
             />
             <Planet
-              style={{ right: "1%" }}
+              style={{ right: "3%" }}
               id={"planet3"}
               min={5}
               max={30}
-              text={textList[2].text}
             />
           </div>
         </div>

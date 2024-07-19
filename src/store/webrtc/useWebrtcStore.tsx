@@ -23,7 +23,7 @@ interface WebRTCState {
 
   setLIVEKIT_URL: (url: string) => void;
   setAPPLICATION_SERVER_URL: (url: string) => void;
-  joinRoom: () => Promise<void>;
+  joinRoom: (roomName: string, participantName: string) => Promise<void>;
   leaveRoom: () => Promise<void>;
   setParticipantName: (name: string) => void;
   setRoomName: (name: string) => void;
@@ -45,8 +45,8 @@ const useWebrtcStore = create<WebRTCState>((set, get) => {
     setAPPLICATION_SERVER_URL: (APPLICATION_SERVER_URL) =>
       set({ APPLICATION_SERVER_URL }),
 
-    joinRoom: async () => {
-      const { roomName, participantName, getToken, leaveRoom } = get(); // Get necessary values from the store
+    joinRoom: async (roomName: string, participantName: string) => {
+      const { getToken, leaveRoom } = get(); // Get necessary values from the store
 
       const room = new Room({
         adaptiveStream: true, // 적응형 스트리밍 활성화
@@ -74,7 +74,7 @@ const useWebrtcStore = create<WebRTCState>((set, get) => {
       });
 
       try {
-        const token = await getToken(roomName, participantName);
+        const token = await getToken( "roomId" + roomName, participantName);
         await room.connect(get().LIVEKIT_URL, token);
 
         await room.localParticipant.setCameraEnabled(true);
