@@ -83,17 +83,18 @@
   height: 90%;
   margin-bottom: 5%;
 }
+
 /* right section css */
 .game .right-section {
   width: 18%;
   height: 100%;
-  /* background-color: rgb(31, 65, 65); */
+  padding: 20px;
 
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* justify-content: center; */
-  justify-content: space-evenly;
+  justify-content: center;
+  gap: 30px;
 }
 .right-section .clock {
   height: 20%;

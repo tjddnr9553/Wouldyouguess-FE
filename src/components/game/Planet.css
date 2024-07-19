@@ -1,16 +1,16 @@
 /* 행성 */
 .item-hints {
   /* 행성 사이즈 조절 여기서 하면 됨 */
-  width: 33%; 
+  width: 31%; 
   position: absolute;
 }
 .item-hints .hint {
-  position: relative;
   display: flex;   
   justify-content: center;
   align-items: center;
 }
 .item-hints .hint-dot {
+  position: relative;
   z-index: 3;
 
   -webkit-transform: translate(-0%, -0%) scale(0.95);
@@ -29,26 +29,11 @@
     drop-shadow(0 0 15px rgba(243, 255, 246, 0.7));
 }
 
-.item-hints .hint-radius {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin: -125px 0 0 -125px;
-  opacity: 0;
-  visibility: hidden;
-  -webkit-transform: scale(0);
-  transform: scale(0);
-}
-.item-hints .hint[data-position="1"] .hint-content {
-  top: 85px;
-  left: 50%;
-  margin-left: 56px;
-}
 .item-hints .hint-content {
-  width: 300px;
   position: absolute;
+  top: 0;
+  left: 0;
+
   z-index: 5;
   padding: 35px 0;
   opacity: 0;
@@ -104,7 +89,8 @@
   opacity: 1;
   visibility: visible;
 }
-.item-hints .hint[data-position="4"] .hint-content {
-  top: -10%;
+.item-hints .hint-content {
+  width: 300px;
+  top: -13%;
   left: 80%;
 }

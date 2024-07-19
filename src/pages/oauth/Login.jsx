@@ -20,8 +20,7 @@ const Login = () => {
   const [usernameError, setUsernameError] = useState("");
   const [discriptionError, setDiscriptionError] = useState("");
 
-  const { setNickname, setUserId, setUsername, setIsLogin, setIsInvite } =
-    useUserStore();
+  const { setNickname, setUserId, setUsername, setIsLogin, setIsInvite } = useUserStore();
   const { setRoomId } = useRoomStore();
   const { play, stop } = useAudioStore();
 
@@ -66,16 +65,17 @@ const Login = () => {
 
     const response = await temp_login(input.username, input.nickname);
     const userId = response.user_id;
-
     setUserId(userId);
-    setNickname(response.nickname);
     setUsername(response.username);
+    setNickname(response.nickname);
     setIsLogin(true);
     setIsInvite(isInvited);
+
     const roomId = isInvited
       ? await room_join(userId, inviteRoomId)
       : await room_create(userId);
     setRoomId(roomId);
+
     window.localStorage.removeItem("inviteRoomId");
     window.localStorage.removeItem("isInvited");
     navigate(`/lobby/${roomId}`);
@@ -93,10 +93,9 @@ const Login = () => {
               type="text"
               placeholder="Nickname"
               name="username"
-              value={input.username} // 닉네임으로 수정해야함
+              value={input.username}
               onChange={onChangeInput}
             />
-            {/* {usernameError && <p className="error-message">{usernameError}</p>} */}
             <input
               className="form-content"
               type="text"
@@ -105,7 +104,6 @@ const Login = () => {
               value={input.nickname}
               onChange={onChangeInput}
             />
-            {/* {error && <p className="error-message">{error}</p>} */}
             <button onClick={onSubmitBtnClick} disabled={isButtonDisabled}>
               Continue
             </button>
