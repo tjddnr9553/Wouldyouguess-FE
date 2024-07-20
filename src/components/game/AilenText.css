@@ -1,8 +1,8 @@
-.keywordTextContainer{
+.alienTextContainer {
   height: 0px;
 }
 
-#keyword-text-container {
+#alien-text-container {
   position: absolute; /* Keyword 컴포넌트에 position: absolute 추가 */
   top: 50%;
   left: 50%;
@@ -10,32 +10,33 @@
   z-index: 5;
 }
 
-#keyword-text {
+#alien-text {
   width: 70vw;
   margin: 5vw auto;
 }
 
-.keywordText {
+.alienText {
   position: relative;
   text-align: center;
   color: #000000;
   font-size: 2.5rem;
   letter-spacing: 0.5rem;
-  font-family: "Press Start 2P";
+  font-family: "NeoDunggeunmoPro-Regular";
   font-weight: 900;
-  
+
   margin: 0;
   animation: glitch1 2.5s infinite;
+  animation: neon 0.1s ease-in-out infinite alternate;
 }
 
-.keywordText:nth-child(2) {
+.alienText:nth-child(2) {
   top: -2.25rem;
   left: 3px;
   color: #67f3da;
   animation: glitch2 2.5s infinite;
 }
 
-.keywordText:nth-child(3) {
+.alienText:nth-child(3) {
   top: -4.75rem;
   left: -2px;
   color: #f16f6f;
@@ -205,5 +206,20 @@
   100% {
     transform: none;
     opacity: 0.25;
+  }
+}
+
+@keyframes neon {
+  from {
+    text-shadow: 0 0 6px rgba(0, 255, 225, 0.92),
+      0 0 30px rgba(202, 228, 225, 0.34), 0 0 12px rgba(30, 132, 242, 0.52),
+      0 0 21px rgba(30, 132, 242, 0.92), 0 0 34px rgba(30, 132, 242, 0.78),
+      0 0 54px rgba(30, 132, 242, 0.92);
+  }
+  to {
+    text-shadow: 0 0 6px rgba(236, 225, 225, 0.98),
+      0 0 30px rgba(202, 228, 225, 0.42), 0 0 12px rgba(30, 132, 242, 0.58),
+      0 0 22px rgba(30, 132, 242, 0.84), 0 0 38px rgba(30, 132, 242, 0.88),
+      0 0 60px rgba(30, 132, 242, 1);
   }
 }

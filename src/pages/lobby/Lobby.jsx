@@ -1,4 +1,4 @@
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import "./Lobby.css";
 import PlayerSidebar from "./PlayerSidebar.jsx";
@@ -7,15 +7,15 @@ import Header from "../../components/game/Header.jsx";
 import Invite from "../../components/lobby/Invite.jsx";
 import useSocketStore from "../../store/socket/useSocketStore.js";
 import useUserStore from "../../store/user/useUserStore.js";
-import {io} from "socket.io-client";
-import {useEffect, useRef} from "react";
-import {room_create} from "../../api/home/Room.js";
+import { io } from "socket.io-client";
+import { useEffect, useRef } from "react";
+import { room_create } from "../../api/home/Room.js";
 import Modal from "../../components/lobby/Modal.jsx";
 import useRoomStore from "../../store/room/useRoomStore.js";
-import {catchLiar_start} from "../../api/game/CatchLiar.js";
+import { catchLiar_start } from "../../api/game/CatchLiar.js";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 import useWebrtcStore from "../../store/webrtc/useWebrtcStore.tsx";
-import {findDiff_start} from "../../api/game/FindDiff.js";
+import { findDiff_start } from "../../api/game/FindDiff.js";
 import useAudioStore from "../../store/bgm/useAudioStore.js";
 import useFDGStore from "../../store/game/findDiffGame/useFDGStore.js";
 
@@ -40,7 +40,7 @@ const Lobby = () => {
   let modalOn = false;
   const modalRef = useRef(null);
 
-  const { userId, isInvite, username } = useUserStore();
+  const { userId, isInvite } = useUserStore();
   const { roomId } = useRoomStore();
   const { setFindDiffGameId } = useFDGStore();
   const { socket, setSocket } = useSocketStore();
@@ -58,10 +58,10 @@ const Lobby = () => {
 
   useEffect(() => {
     // 룸에 참가시키기
-    if (roomId && username) {
-      joinRoom(roomId, username); // 룸 접속 함수 호출
+    if (roomId && userId) {
+      joinRoom(roomId, userId.toString()); // 룸 접속 함수 호출
     }
-  }, [roomId, username]); // 의존성 배열 추가
+  }, [roomId, userId]); // 의존성 배열 추가
 
   useEffect(() => {
     const socketConnect = io(import.meta.env.VITE_SOCKET_SERVER_URL);
@@ -80,7 +80,7 @@ const Lobby = () => {
         setGameId(data.gameId);
         navigate(`/game1?gameId=${data.gameId}&round=1`);
       } else if (data.mode === 2) {
-        setFindDiffGameId(data.gameId)
+        setFindDiffGameId(data.gameId);
         navigate(`/game2/upload`);
       }
     });
@@ -148,12 +148,7 @@ const Lobby = () => {
               text={textList[1].text}
               onClick={startFindDIff}
             />
-            <Planet
-              style={{ right: "3%" }}
-              id={"planet3"}
-              min={5}
-              max={30}
-            />
+            <Planet style={{ right: "3%" }} id={"planet3"} min={5} max={30} />
           </div>
         </div>
       </div>
