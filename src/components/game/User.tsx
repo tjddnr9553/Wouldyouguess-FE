@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect} from "react";
 import VideoComponent from "../../components/webrtc/VideoComponent";
 import AudioComponent from "../../components/webrtc/AudioComponent";
 import useUserStore from "../../store/user/useUserStore";
 import useWebrtcStore from "../../store/webrtc/useWebrtcStore";
 
 const User = () => {
-  const { nickname } = useUserStore();
-  const [participantName] = useState(nickname);
+  const { username } = useUserStore();
   const { localTrack, remoteTracks } = useWebrtcStore();
 
   useEffect(() => {}, [localTrack]);
@@ -16,7 +15,7 @@ const User = () => {
       {localTrack && (
         <VideoComponent
           track={localTrack}
-          participantIdentity={participantName}
+          participantIdentity={username}
           local={true}
         />
       )}
