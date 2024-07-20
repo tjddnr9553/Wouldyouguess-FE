@@ -9,15 +9,12 @@ interface VideoComponentProps {
   local?: boolean;
 }
 
-function VideoComponent({
-  track,
-  participantIdentity,
-  local = false,
-}: VideoComponentProps) {
+function VideoComponent({ track, participantIdentity }: VideoComponentProps) {
   const videoElement = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     if (videoElement.current) {
+      videoElement.current.style.borderRadius = "inherit";
       track.attach(videoElement.current);
     }
 
@@ -28,9 +25,6 @@ function VideoComponent({
 
   return (
     <div id={"camera-" + participantIdentity} className="video-container">
-      <div className="participant-data">
-        <p>{participantIdentity + (local ? " (You)" : "")}</p>
-      </div>
       <video ref={videoElement} id={track.sid}></video>
     </div>
   );

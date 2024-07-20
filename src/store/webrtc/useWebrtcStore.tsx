@@ -77,7 +77,7 @@ const useWebrtcStore = create<WebRTCState>((set, get) => {
         const token = await getToken( "roomId" + roomName, participantName);
         await room.connect(get().LIVEKIT_URL, token);
 
-        await room.localParticipant.setCameraEnabled(true);
+        await room.localParticipant.enableCameraAndMicrophone();
         set({
           localTrack: room.localParticipant.videoTrackPublications
             .values()

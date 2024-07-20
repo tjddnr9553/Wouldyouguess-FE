@@ -10,32 +10,34 @@ import Tools from "./canvas/CanvasTools.jsx";
 import Clock from "../../components/game/Clock.jsx";
 
 import { catchLiar_info } from "../../api/game/CatchLiar.js";
-
 import useUserStore from "../../store/user/useUserStore.js";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 import useAudioStore from "../../store/bgm/useAudioStore.js";
-import Keyword from "../../components/game/Keyword.jsx";
-import KeywordText from "../../components/game/KeywordText.jsx";
+import Ailen from "../../components/game/Ailen.jsx";
 import LaserPointer from "./LaserPointer.jsx";
+import { useCanvasStore } from "../../store/canvas/useCanvasStore.js";
+import Keyword from "../../components/game/Keyword.jsx";
 
 const Game1 = () => {
   const [searchParams] = useSearchParams();
   const round = Number(searchParams.get("round"));
 
   const containerRef = useRef(null);
+  const keywordRef = useRef(null);
 
   const [parentwidth, setParentWidth] = useState(0);
   const [parentheight, setParentHeight] = useState(0);
   const [waitText, setWaitText] = useState(null);
-  const [showModal, setShowModal] = useState(true); // 모달 표시 상태
+  const [showModal, setShowModal] = useState(false); // 모달 표시 상태
   const [clockStart, setClockStart] = useState(false); // 시계 시작 상태
-  const [titleOn, setTitleOn] = useState(false);
+  const [showKeyword, setShowKeyword] = useState(true);
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
   });
 
-  const { userId } = useUserStore();
+  const { userId, nickname, cameraId, isLocal } = useUserStore();
+  const { setTool, setColor } = useCanvasStore();
   const {
     gameId,
     keyword,
@@ -49,6 +51,11 @@ const Game1 = () => {
 
   useEffect(() => {
     play("/bgm/Game1_bgm.mp3");
+
+    keywordRef.current.style.display = "block";
+    setTimeout(() => {
+      keywordRef.current.style.display = "none";
+    }, 4000);
 
     return () => {
       stop();
@@ -64,30 +71,44 @@ const Game1 = () => {
       setTotalRound(response.totalRound);
     };
     sync_func();
-  }, [round])
+    setTool("pencil");
+    setColor("black");
 
-  useEffect(() => {
     if (isDrawing) {
       setWaitText(null);
       setKeyword(keyword);
     } else {
-      setWaitText("다른 플레이어의 차례");
+      setWaitText(`${nickname}님이 그릴 순서!`);
     }
 
-    setClockStart(false);
-    setShowModal(true);
-    setTitleOn(false);
+    if (round === 1) {
+      const timer = setTimeout(() => {
+        setShowModal(true);
+        setTimeout(() => {
+          setShowModal(false);
+          setClockStart(true);
+        }, 6000);
+        setShowKeyword(false);
+      }, 3500);
+      return () => {
+        setShowModal(false);
+        setClockStart(false);
+        clearTimeout(timer);
+      };
+    } else {
+      setClockStart(false);
+      setShowModal(true);
+      const timer = setTimeout(() => {
+        setShowModal(false);
+        setClockStart(true); // 시계 시작 상태 변경
+      }, 6000);
 
-    setTimeout(() => {
-      setTitleOn(true);
-    }, 6000);
-
-    // 5초 후에 모달 닫고 시계 시작
-    const timer = setTimeout(() => {
-      setShowModal(false);
-      setClockStart(true); // 시계 시작 상태 변경
-    }, 6000);
-    return () => clearTimeout(timer);
+      return () => {
+        setShowModal(false);
+        setClockStart(false);
+        clearTimeout(timer);
+      };
+    }
   }, [round]);
 
   // window size 변경 시 캔버스 좌표 수정을 위한 resize
@@ -104,20 +125,16 @@ const Game1 = () => {
 
   return (
     <div className="inner" key={round}>
-      {showModal && isDrawing && <Keyword keyword={keyword} />}
-      {showModal && !isDrawing && <Keyword keyword={"다른 플레이어의 차례"} />}
+      {showModal && isDrawing && <Ailen keyword={"내가 그릴 순서!"} />}
+      {showModal && !isDrawing && (
+        <Ailen keyword={`${nickname}님이 그릴 순서!`} />
+      )}
+      <div ref={keywordRef}>{showKeyword && <Keyword keyword={keyword} />}</div>
       <div className="game container">
         <div className="left-section">
           <User />
         </div>
         <div className="center">
-          <div className="keyword-title">
-            {titleOn && isDrawing && <KeywordText text={keyword} />}
-            {titleOn && !isDrawing && (
-              <KeywordText text={"다른 플레이어의 차례"} />
-            )}
-            {/* <hr /> */}
-          </div>
           <div className="drawing-container">
             <div ref={containerRef} className="canvas-container">
               <Drawing
@@ -134,10 +151,10 @@ const Game1 = () => {
               />
             </div>
           </div>
-          <div className="canvas-tools">
-          </div>
+          <div className="canvas-tools"></div>
         </div>
         <div className="right-section">
+          {clockStart && <Clock />}
           <Tools />
           <Palette />
         </div>
