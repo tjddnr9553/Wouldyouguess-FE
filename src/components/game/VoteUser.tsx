@@ -13,8 +13,6 @@ const VoteUser = ({ targetId }) => {
 
   useEffect(() => {
     i = 0;
-    console.log("승리자 목록 : ", targetId);
-    console.log(remoteTracks);
   }, [targetId]);
 
   const targetIdArrayNumber = Array.isArray(targetId) ? targetId: [targetId];

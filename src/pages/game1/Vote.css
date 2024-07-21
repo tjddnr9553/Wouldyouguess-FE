@@ -113,7 +113,7 @@
     border-width: 1px;
   }
   to {
-    transform: scale(1.5);
+    transform: scale(1.2);
     border-width: 2px;
   }
 }
