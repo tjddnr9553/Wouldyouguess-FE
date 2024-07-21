@@ -3,12 +3,13 @@ import { useEffect, useState } from "react";
 import { catchLiar_result } from "../../api/game/CatchLiar.js";
 import useUserStore from "../../store/user/useUserStore.js";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
-import { useNavigate } from "react-router-dom";
 import useRoomStore from "../../store/room/useRoomStore.js";
 import useAudioStore from "../../store/bgm/useAudioStore.js";
 import useWebrtcStore from "../../store/webrtc/useWebrtcStore.tsx";
 import User from "../../components/game/User.tsx";
 import VoteUser from "../../components/game/VoteUser.tsx";
+
+import { catchLiar_result } from "../../api/game/CatchLiar.js";
 
 const Result = () => {
   const navigate = useNavigate();
