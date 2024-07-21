@@ -15,11 +15,16 @@ const VoteUser = ({ targetId }) => {
     i = 0;
   }, [targetId]);
 
-  const targetIdArrayNumber = Array.isArray(targetId) ? targetId: [targetId];
-  const targetIdArrayString = Array.isArray(targetId) ? targetId.map(String) : [String(targetId)];
+  const targetIdArrayNumber = Array.isArray(targetId) ? targetId : [targetId];
+  const targetIdArrayString = Array.isArray(targetId)
+    ? targetId.map(String)
+    : [String(targetId)];
 
   return (
-    <div id="layout-container">
+    <div
+      className="voteUser-layout-container"
+      style={{ display: "flex", justifyContent: "space-around" }}
+    >
       {
         // localTrack은 targetIdArray 배열에 userId가 포함될 때만 렌더링
         targetIdArrayNumber.includes(userId) && localTrack && (
@@ -33,7 +38,7 @@ const VoteUser = ({ targetId }) => {
       }
       {remoteTracks.map((remoteTrack) =>
         remoteTrack.trackPublication.kind === "video" ? (
-          targetIdArrayString.includes(remoteTrack.participantIdentity) && ( // targetIdArray 사용
+          targetIdArrayString.includes(remoteTrack.participantIdentity) && (
             <VideoComponent
               key={remoteTrack.trackPublication.trackSid}
               track={remoteTrack.trackPublication.videoTrack!}
