@@ -97,7 +97,7 @@ const Result = () => {
   };
 
   return (
-    <div className="result">
+    <div className="game1 result">
       <div className="title">
         <div className="result-title">
           {players.find((player) => player.isWinner)?.isLiar

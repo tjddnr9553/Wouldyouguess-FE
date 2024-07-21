@@ -28,7 +28,7 @@ const Game1 = () => {
   const keywordRef = useRef(null);
 
   const [waitText, setWaitText] = useState(null);
-  const [showModal, setShowModal] = useState(true); // 모달 표시 상태
+  const [showModal, setShowModal] = useState(false); // 모달 표시 상태
   const [gameStart, setGameStart] = useState(false); // 게임 시작 상태, 30초 시작
   const [showKeyword, setShowKeyword] = useState(true);
   const [titleOn, setTitleOn] = useState(false);
