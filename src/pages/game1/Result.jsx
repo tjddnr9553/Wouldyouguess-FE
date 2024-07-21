@@ -2,10 +2,13 @@ import "./Result.css";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import VoteUser from "../../components/game/VoteUser.tsx";
+
 import useUserStore from "../../store/user/useUserStore.js";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 import useRoomStore from "../../store/room/useRoomStore.js";
 import useAudioStore from "../../store/bgm/useAudioStore.js";
+import useWebrtcStore from "../../store/webrtc/useWebrtcStore.tsx";
 
 import { catchLiar_result } from "../../api/game/CatchLiar.js";
 
@@ -40,12 +43,15 @@ const dummy2 = {
 
 const Result = () => {
   const navigate = useNavigate();
+
   const [players, setPlayers] = useState([]);
+  const [winnerIds, setWinnerIds] = useState([]);
 
   const { userId } = useUserStore();
   const { roomId } = useRoomStore();
   const { gameId } = useCatchLiarStore();
   const { play, stop } = useAudioStore();
+  const { remoteTracks } = useWebrtcStore();
 
   const showKewordRef = useRef(null);
 
@@ -74,7 +80,14 @@ const Result = () => {
     const sync_func = async () => {
       const res = await catchLiar_result(gameId, userId);
       setPlayers(res);
+
+      // winnerIds 업데이트 로직 (async/await 사용)
+      const newWinnerIds = res
+        .filter((player) => player.isWinner)
+        .map((player) => player.userId);
+      setWinnerIds(newWinnerIds);
     };
+
     sync_func();
   }, []);
 
@@ -86,19 +99,18 @@ const Result = () => {
     <div className="result">
       <div className="title">
         <div className="result-title">
-          {dummy.find(player => player.isWin === 'win').role} 승리 !!
+          {players.find((player) => player.isWinner)?.isLiar
+            ? "라이어"
+            : "시민"}{" "}
+          승리 !!
         </div>
       </div>
       <div className="player-list">
-        {dummy.map((player, index) => (
-          player.isWin === 'win' &&
-          (
-          <div key={index} >
-            <p className="nick">{player.nickname}</p>
-            <div className="player-video"> 영상 들어갈 곳 </div>
-          </div>
-          )
-        ))}
+        {winnerIds &&
+          winnerIds.length > 0 &&
+          remoteTracks.length > 0 && ( // remoteTracks 길이 확인 추가
+            <VoteUser targetId={winnerIds} />
+          )}
       </div>
       <div className="showKeyword" ref={showKewordRef}>
         <div className="normalKeyword">normal {dummy2.normal}</div>

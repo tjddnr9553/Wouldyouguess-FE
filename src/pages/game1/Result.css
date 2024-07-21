@@ -7,6 +7,7 @@
   justify-content: center;
   align-items: center;
 }
+
 .result > .title {
   position: relative;
 
@@ -18,10 +19,12 @@
   max-width: 57vw;
   height: 18vh;
 }
+
 .player-list {
   display: flex;
   gap: 10px;
 }
+
 .player-list .player-video{
   width: 304px;
   height: 226px;
@@ -42,7 +45,7 @@
   border: none;
 
   font-weight: 700;
-  font-size: 1.3rem; 
+  font-size: 1.3rem;
 
   background-image: url('/images/btn/home-btn.png');
   background-size: contain;
@@ -72,11 +75,11 @@
   width: 100%;
   max-width: 636px;
   max-height: 127px;
-  
+
   display: flex;
   justify-content: center;
-  
-  background-image: url('/images/game/game1_result/ribbon.png'); 
+
+  background-image: url('/images/game/game1_result/ribbon.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: 100% auto; /* 세로 길이를 div 요소에 맞춤 */

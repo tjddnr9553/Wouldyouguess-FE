@@ -6,15 +6,22 @@ import React from "react";
 interface VideoComponentProps {
   track: LocalVideoTrack | RemoteVideoTrack;
   participantIdentity: string;
-  local?: boolean;
+  color: string;
+  local: boolean;
 }
 
-function VideoComponent({ track, participantIdentity }: VideoComponentProps) {
+function VideoComponent({
+  track,
+  participantIdentity,
+  color,
+  local,
+}: VideoComponentProps) {
   const videoElement = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     if (videoElement.current) {
       videoElement.current.style.borderRadius = "inherit";
+      videoElement.current.style.boxShadow = `0 0 10px 10px ${color}`;
       track.attach(videoElement.current);
     }
 
