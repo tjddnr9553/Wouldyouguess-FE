@@ -9,7 +9,7 @@ import { useEffect, useRef } from 'react';
 import { catchLiar_image_upload } from '../../api/game/CatchLiar';
 import gsap from 'gsap';
 
-const Gaugebar = ({gameStart}) => {
+const Gaugebar = ({gameStart, setGameStart}) => {
   const loaderRef = useRef(null);
 
   const navigate = useNavigate();
@@ -25,23 +25,21 @@ const Gaugebar = ({gameStart}) => {
 
   useEffect(() => {
     if (gameStart) {
-      // loader 길이 늘리기
-      // 길이가 늘어남에 따라 색깔 변하기
-      setTimeout(() => {
-        handleCountdownComplete();
-      }, 30000)
-
       gsap.to(".loader", 
         {
-          width: '100%',
+          width: '99.9%',
           backgroundColor: 'red',
           duration: 30,
+          onComplete: () => {
+            handleCountdownComplete();
+            setGameStart(false);
+          }
         })
     } else {
-        gsap.killTweensOf(".loader");
+      gsap.killTweensOf(".loader");
     }
     
-  },[gameStart])
+  }, [gameStart])
 
   useEffect(() => {
     socket?.on("game_round_change", (data) => {
@@ -50,25 +48,23 @@ const Gaugebar = ({gameStart}) => {
     });
 
     socket?.on("game_end", () => {
-      navigate(`/game1/vote`)
+      navigate(`/game1/vote`);
     });
 
     return () => {
       socket?.off("game_round_change", (data) => {
         const { gameId, round } = data;
-        navigate(`/game1?gameId=${gameId}&round=${round + 1}`)
+        navigate(`/game1?gameId=${gameId}&round=${round + 1}`);
       });
 
       socket?.off("game_end", () => {
-        navigate(`/game1/vote`)
+        navigate(`/game1/vote`);
       });
     }
   }, [socket])
 
   const handleCountdownComplete = async () => {
     if (!isDrawing) return ;
-    console.log('실행');
-
 
     await canvas.toBlob( async (blob) => {
       const formData = new FormData();
