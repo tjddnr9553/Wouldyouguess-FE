@@ -6,10 +6,18 @@ const Keyword = ({ keyword }) => {
   const spaceshipTextRef = useRef(null);
 
   useEffect(() => {
-    spaceshipTextRef.current.style.display = "none";
-    setTimeout(() => {
-      spaceshipTextRef.current.style.display = "block";
-    }, 3500);
+    if (spaceshipTextRef.current) {
+
+      spaceshipTextRef.current.style.display = "none";
+      const timer = setTimeout(() => {
+        console.log('2', spaceshipTextRef.current);
+
+        spaceshipTextRef.current.style.display = "block";
+      }, 3500);
+      
+      return () => clearTimeout(timer);
+    }
+
   }, []);
 
   return (
