@@ -14,6 +14,7 @@ import useFDGFileStore from "../../store/game/findDiffGame/useFDGFileStore.js";
 
 import ImgResizer from "./ImgResizer.js";
 import { findDiff_upload } from "../../api/game/FindDiff.js";
+import useFDGStore from "../../store/game/findDiffGame/useFDGStore.js";
 
 
 const Game2_upload = () => {
@@ -28,6 +29,7 @@ const Game2_upload = () => {
   const { socket } = useSocketStore();
   const { play, stop } = useAudioStore();
 
+  const { findDiffGameId  } = useFDGStore();
   const { originalImage, maskingImage, aiGeneratedImage,
             setResizingImage, setMaskingImage, setAiGeneratedImage } = useFDGFileStore();
   const { FDGCanvasRef, startX, endX, startY, endY  } = useFDGCanvasStore();
@@ -56,6 +58,7 @@ const Game2_upload = () => {
       upload_form.append('originalImage', originalImage, 'originalImage.png');
       upload_form.append('maskingImage', blob, 'maskingImage.png');
       upload_form.append("userId", userId);
+      upload_form.append("gameId", findDiffGameId);
       upload_form.append("prompt", "Modify safely.");
       upload_form.append("maskX1", Math.round(startX));
       upload_form.append("maskX2", Math.round(endX));
@@ -65,6 +68,7 @@ const Game2_upload = () => {
       const upload_res = await findDiff_upload(upload_form);
       if (upload_res.status === 200) {
         setAiGeneratedImage(upload_res.data.aiGeneratedImageUrl);
+        setOneClick(false);
       }
     }, 'image/png');
   };
