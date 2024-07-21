@@ -59,32 +59,20 @@
 }
 
 .loader {
-  width: 100%;
+  width: 0;
   height: 100%;
 
   display: inline-block;
   position: relative;
+
+  background-color: #DAA520;
   
-  /* background: linear-gradient(90deg, #DAA520, red); */
   box-shadow: 10px 0px 15px 0px #DAA520;
   box-sizing: border-box;
 
   border-radius: 20px;
 
-  animation: animFw 30s linear infinite, 
-            progress-animation 30s linear infinite;
-}
-
-@keyframes progress-animation {
-  0% {
-    background-color: #DAA520;
-  }
-  70% {
-    background-color: #da7420;
-  }
-  100% {
-    background-color: red;
-  }
+  animation: progress-animation 30s linear infinite;
 }
 
 .loader::after,
@@ -106,16 +94,6 @@
   top: -4px;
   transform: rotate(45deg);
   animation: coli2 0.3s linear infinite;
-}
-
-@keyframes animFw {
-  0% {
-    width: 0;
-  }
-
-  100% {
-    width: 100%;
-  }
 }
 
 @keyframes coli1 {
