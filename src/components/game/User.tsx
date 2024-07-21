@@ -4,25 +4,25 @@ import AudioComponent from "../../components/webrtc/AudioComponent";
 import useUserStore from "../../store/user/useUserStore";
 import useWebrtcStore from "../../store/webrtc/useWebrtcStore";
 
-const User = () => {
-  const { userId } = useUserStore();
+const User = ({ targetId }) => {
+  const { username } = useUserStore();
   const { localTrack, remoteTracks } = useWebrtcStore();
-  const colors = [
-    "blue", // Blue
-    "purple", // Purple
-    "green", // Green
-  ];
 
+  const colors = ["blue", "purple", "green"];
   let i = 0;
+
+  useEffect(() => {
+    i = 0;
+  }, [targetId]);
 
   return (
     <div id="layout-container">
       {localTrack && (
         <VideoComponent
           track={localTrack}
-          participantIdentity={userId}
-          color={"red"}
+          participantIdentity={username}
           local={true}
+          color="red"
         />
       )}
       {remoteTracks.map((remoteTrack) =>
