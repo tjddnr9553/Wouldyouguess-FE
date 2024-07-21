@@ -9,6 +9,7 @@ const FDGUploadCanvas = () => {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
   const toolRef = useRef(null);
+  const containerRef = useRef(null);
 
   const { resizingImage, setOriginalImage  } = useFDGFileStore();
   const { setFDGCanvasRef, setStartX, setEndX, setStartY, setEndY } = useFDGCanvasStore();
@@ -25,10 +26,11 @@ const FDGUploadCanvas = () => {
   useEffect(() => {
     if (!resizingImage) return;
 
-    drawImg(resizingImage).then(async () => {
+    drawImg(resizingImage).then(async imageURL => {
       await canvasRef.current.toBlob(async (blob) => {
         setOriginalImage(blob);
       }, 'image/png');
+      containerRef.current.style.backgroundImage = `url('${imageURL}')`;
     })
   },  [resizingImage]);
 
@@ -41,6 +43,7 @@ const FDGUploadCanvas = () => {
   };
 
   const onMouseDown = (e) => {
+    contextRef.current.clearRect(0,0,512,512);
     const { x, y } = getCursorPosition(e);
     setStartX(x);
     setStartY(y);
@@ -94,16 +97,22 @@ const FDGUploadCanvas = () => {
           if (callback) callback();
 
           // URL 해제
-          URL.revokeObjectURL(imageURL);
+          // URL.revokeObjectURL(imageURL);
 
-          resolve();
+          resolve(imageURL);
         }
       }
     })
   }
 
     return (
-        <>
+        <div className='game2-container' 
+          ref={containerRef} 
+          style=
+          {{width: '512px', 
+            height: '512px', 
+            backgroundPosition: 'center',
+          }}>
           <canvas
               ref={canvasRef}
               width={512}
@@ -111,8 +120,9 @@ const FDGUploadCanvas = () => {
               onMouseDown={onMouseDown}
               onMouseUp={onMouseUp}
               onMouseMove={onMouseMove}
+              onMouseOut={onMouseUp}
           />
-        </>
+        </div>
     );
   }
 
