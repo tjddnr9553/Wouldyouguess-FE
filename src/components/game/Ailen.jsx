@@ -8,13 +8,18 @@ const Ailen = ({ keyword }) => {
 
   useEffect(() => {
     spaceshipTextRef.current.style.display = "none";
-    setTimeout(() => {
+    const soundTimer = setTimeout(() => {
       sequenceSoundRef.current.volume = 0.4;
       sequenceSoundRef.current.play();
     }, 3000);
-    setTimeout(() => {
+    const textTimer = setTimeout(() => {
       spaceshipTextRef.current.style.display = "block";
     }, 3500);
+
+    return () => {
+      clearTimeout(soundTimer);
+      clearTimeout(textTimer);
+    }
   }, []);
 
   return (

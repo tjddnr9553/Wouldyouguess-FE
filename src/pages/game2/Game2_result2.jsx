@@ -42,7 +42,7 @@ const Game2_result2 = () => {
   };
 
   return (
-    <div className="result inner">
+    <div className="game2 result inner">
       <div className="title">
         <strong>Result</strong>
       </div>
