@@ -47,7 +47,7 @@ const FDGUploadCanvas = () => {
     const { x, y } = getCursorPosition(e);
     setStartX(x);
     setStartY(y);
-
+    
     toolRef.current.onMouseDown(x, y, '#ff0000', 4, false);
   };
 
@@ -77,7 +77,7 @@ const FDGUploadCanvas = () => {
           const imgWidth = img.width;
           const imgHeight = img.height;
 
-          let sLength = 0;
+          let sLength = 0; 
 
           if (imgWidth < imgHeight) {
             sLength = imgWidth;
@@ -120,7 +120,6 @@ const FDGUploadCanvas = () => {
               onMouseDown={onMouseDown}
               onMouseUp={onMouseUp}
               onMouseMove={onMouseMove}
-              onMouseOut={onMouseUp}
           />
         </div>
     );

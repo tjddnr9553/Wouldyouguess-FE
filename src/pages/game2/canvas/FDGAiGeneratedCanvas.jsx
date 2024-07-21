@@ -1,7 +1,7 @@
 import {useEffect, useRef} from 'react';
 import useFDGCanvasStore from "../../../store/game/findDiffGame/useFDGCanvasStore.js";
 
-const FDGAiGeneratedCanvas = ({ image }) => {
+const FDGAiGeneratedCanvas = ({ image, endSearch, maskX1, maskY1, maskX2, maskY2 }) => {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
 
@@ -20,6 +20,17 @@ const FDGAiGeneratedCanvas = ({ image }) => {
 
     drawImg(image);
   }, [image]);
+
+  useEffect(() => {
+    if (endSearch) {
+      contextRef.current.lineWidth = 4;
+      contextRef.current.strokeStyle = '#ff0000'
+      const lengthX = Math.abs(maskX1 - maskX2);
+      const lengthY = Math.abs(maskY1 - maskY2);
+
+      contextRef.current.strokeRect(maskX1, maskY1, lengthX, lengthY);
+    }
+  }, [endSearch])
 
   const getCursorPosition = (e) => {
     const { top, left } = canvasRef.current.getBoundingClientRect();
