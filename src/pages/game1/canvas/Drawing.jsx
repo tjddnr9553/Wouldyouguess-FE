@@ -135,8 +135,8 @@ const Drawing = ({ zIndex, position }) => {
   return (
     <>
       <canvas
-        width={512}
-        height={512}
+        width={1200}
+        height={750}
         ref={canvasRef}
         onMouseDown={onMouseDown}
         onMouseUp={onMouseUp}

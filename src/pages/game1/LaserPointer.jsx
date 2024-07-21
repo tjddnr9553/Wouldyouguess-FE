@@ -216,8 +216,8 @@ const LaserPointer = ({ zIndex, position }) => {
   return (
     <canvas
       ref={canvasRef}
-      width={512}
-      height={512}
+      width={1200}
+      height={750}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}
