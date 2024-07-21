@@ -1,6 +1,6 @@
 import "./Result.css";
 import PlayerResult from "../../components/game/PlayerResult.jsx";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { catchLiar_result } from "../../api/game/CatchLiar.js";
 import useUserStore from "../../store/user/useUserStore.js";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
@@ -31,6 +31,12 @@ const dummy = [
   },
 ]
 
+const dummy2 = {
+  liar: '풋사과',
+  normal: '사과',
+  win: 'normal'
+}
+
 const Result = () => {
   const navigate = useNavigate();
   const [players, setPlayers] = useState([]);
@@ -39,6 +45,21 @@ const Result = () => {
   const { roomId } = useRoomStore();
   const { gameId } = useCatchLiarStore();
   const { play, stop } = useAudioStore();
+
+  const showKewordRef = useRef(null);
+
+  useEffect(() => {
+    if(showKewordRef.current && dummy2) {
+      if(dummy2.win === 'normal') {
+        showKewordRef.current.firstChild.classList.add('winKeyword');
+        showKewordRef.current.lastChild.classList.add('loseKeyword');
+      } else {
+        showKewordRef.current.firstChild.classList.add('loseKeyword');
+        showKewordRef.current.lastChild.classList.add('winKeyword');
+
+      }
+    }
+  }, [dummy2])
 
   useEffect(() => {
     play("/bgm/Result_bgm.mp3");
@@ -72,14 +93,17 @@ const Result = () => {
           player.isWin === 'win' &&
           (
           <div key={index} >
-            <div className="nick">{player.nickname}</div>
+            <p className="nick">{player.nickname}</p>
             <div className="player-video"> 영상 들어갈 곳 </div>
           </div>  
           )
         ))}
       </div>
+      <div className="showKeyword" ref={showKewordRef}>
+        <div className="normalKeyword">normal {dummy2.normal}</div>
+        <div className="liarKeyword">liar {dummy2.liar}</div>
+      </div>
       <button onClick={goHome} className="homeBtn">
-        HOME
       </button>
     </div>
   );
