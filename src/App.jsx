@@ -51,10 +51,10 @@ function App() {
   return (
     <>
       <GlobalStyles />
-      {isPlaying && currentTrack === "/bgm/bgm.mp3" && <LobbyMusic />}
+      {/* {isPlaying && currentTrack === "/bgm/bgm.mp3" && <LobbyMusic />}
       {isPlaying && currentTrack === "/bgm/Game1_bgm.mp3" && <Game1_Music />}
       {isPlaying && currentTrack === "/bgm/Game2_bgm.mp3" && <Game2_Music />}
-      {isPlaying && currentTrack === "/bgm/Result_bgm.mp3" && <Result_Music />}
+      {isPlaying && currentTrack === "/bgm/Result_bgm.mp3" && <Result_Music />} */}
       <Routes>
         <Route path="" element={<Home />} />
         <Route path="/profile" element={<Profile />} />

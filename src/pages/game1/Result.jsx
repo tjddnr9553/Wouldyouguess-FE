@@ -9,8 +9,9 @@ import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 import useRoomStore from "../../store/room/useRoomStore.js";
 import useAudioStore from "../../store/bgm/useAudioStore.js";
 import useWebrtcStore from "../../store/webrtc/useWebrtcStore.tsx";
+import VoteUser from "../../components/game/VoteUser.tsx";
+import { useNavigate } from "react-router-dom";
 
-import { catchLiar_result } from "../../api/game/CatchLiar.js";
 
 const dummy = [
   {
@@ -100,17 +101,18 @@ const Result = () => {
       <div className="title">
         <div className="result-title">
           {players.find((player) => player.isWinner)?.isLiar
-            ? "라이어"
-            : "시민"}{" "}
-          승리 !!
+            ? "Liar  Win !"
+            : "Catch Liar !"}{" "}
         </div>
       </div>
-      <div className="player-list">
-        {winnerIds &&
-          winnerIds.length > 0 &&
-          remoteTracks.length > 0 && ( // remoteTracks 길이 확인 추가
-            <VoteUser targetId={winnerIds} />
-          )}
+      <div className="winnerVideo-container">
+        <div className="player-list">
+          {winnerIds &&
+            winnerIds.length > 0 &&
+            remoteTracks.length > 0 && ( // remoteTracks 길이 확인 추가
+              <VoteUser targetId={winnerIds} />
+            )}
+        </div>
       </div>
       <div className="showKeyword" ref={showKewordRef}>
         <div className="normalKeyword">normal {dummy2.normal}</div>
