@@ -1,29 +1,29 @@
-import { Route, Routes, useNavigate } from "react-router-dom";
-import GlobalStyles from "./styles/GlobalStyles";
-import { useEffect } from "react";
 import "./App.css";
+import GlobalStyles from "./styles/GlobalStyles";
+
+import {useEffect} from "react";
+import {Route, Routes, useNavigate} from "react-router-dom";
 
 import Lobby from "./pages/lobby/Lobby.jsx";
 import Game1 from "./pages/game1/Game1.jsx";
 import Home from "./pages/home/Home.jsx";
 import Game2 from "./pages/game2/Game2.jsx";
 import Game2_upload from "./pages/game2/Game2_upload.jsx";
-import Game2_remember from "./pages/game2/Game2_remember.jsx";
 import Game2_result from "./pages/game2/Game2_result.jsx";
 import Result from "./pages/game1/Result.jsx";
 import Login from "./pages/oauth/Login.jsx";
 import Loading from "./components/loading/Loading.jsx";
 import Profile from "./pages/home/Profile.jsx";
 import LoginHandler from "./pages/oauth/LoginHandler.jsx";
-import { KAKAO_AUTH_URL } from "./api/oauth/Oauth.js";
 import Vote from "./pages/game1/Vote.jsx";
-import useWebrtcStore from "./store/webrtc/useWebrtcStore.tsx";
-import useAudioStore from "./store/bgm/useAudioStore.js";
 import Game1_Music from "./components/bgm/Game1_Music.jsx";
 import Game2_Music from "./components/bgm/Game2_Music.jsx";
 import LobbyMusic from "./components/bgm/LobbyMusic.jsx";
-import LaserPointer from "./pages/game1/LaserPointer.jsx";
 import Result_Music from "./components/bgm/Result_Music.jsx";
+import Game2_result2 from "./pages/game2/Game2_result2.jsx";
+
+import useWebrtcStore from "./store/webrtc/useWebrtcStore.tsx";
+import useAudioStore from "./store/bgm/useAudioStore.js";
 
 function App() {
   const nav = useNavigate();
@@ -65,18 +65,16 @@ function App() {
         <Route path="/game1/vote" element={<Vote />} />
         <Route path="/game1/result" element={<Result />} />
 
-        <Route path="/game2" element={<Game2 />} />
         <Route path="/game2/upload" element={<Game2_upload />} />
-        <Route path="/game2/remember" element={<Game2_remember />} />
+        <Route path="/game2" element={<Game2 />} />
         <Route path="/game2/result" element={<Game2_result />} />
+        <Route path="/game2/result2" element={<Game2_result2 />} />
 
         <Route path="/result" element={<Result />} />
         <Route path="/loading" element={<Loading />} />
 
         <Route path="/auth/kakao/callback" element={<LoginHandler />} />
         <Route path="/temp/login" element={<Login />} />
-
-        <Route path="/laser" element={<LaserPointer />} />
       </Routes>
     </>
   );

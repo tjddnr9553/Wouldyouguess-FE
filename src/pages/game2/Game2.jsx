@@ -1,15 +1,19 @@
-import {useNavigate, useSearchParams} from "react-router-dom";
-import {useEffect, useRef, useState} from "react";
-import NewButton from "../../components/button/newButton";
-import useAudioStore from "../../store/bgm/useAudioStore";
 import "./Game2.css";
-import "swiper/css";
-import FDGCanvas from "./canvas/FDGCanvas.jsx";
+
+import {useEffect, useRef, useState} from "react";
+import {useNavigate, useSearchParams} from "react-router-dom";
+
+import NewButton from "../../components/button/newButton";
+
+import useUserStore from "../../store/user/useUserStore.js";
+import useAudioStore from "../../store/bgm/useAudioStore";
 import useFDGStore from "../../store/game/findDiffGame/useFDGStore.js";
 import useFDGCanvasStore from "../../store/game/findDiffGame/useFDGCanvasStore.js";
-import {findDiff_generated_images} from "../../api/game/FindDiff.js";
-import useUserStore from "../../store/user/useUserStore.js";
-import useFDGFileStore from "../../store/game/findDiffGame/useFDGFileStore.js";
+
+import {findDiff_game_images, findDiff_update_score} from "../../api/game/FindDiff.js";
+import FDGAiGeneratedCanvas from "./canvas/FDGAiGeneratedCanvas.jsx";
+import useRoomStore from "../../store/room/useRoomStore.js";
+import useSocketStore from "../../store/socket/useSocketStore.js";
 
 const Game2 = () => {
   const navigate = useNavigate();
@@ -18,16 +22,20 @@ const Game2 = () => {
 
   const generatedImgRef = useRef(null);
 
-  const [generatedImage, setGeneratedImage] = useState(null);
+  const [startSearch, setStartSearch] = useState(false);
+  const [endSearch, setEndSearch] = useState(false);
+  const [gameImages, setGameImages] = useState(null);
   const [chance, setChance] = useState(3);
   const [roundLength, setRoundLength] = useState(0);
 
   const { userId } = useUserStore();
-  const { x, y, canvasClick } = useFDGCanvasStore();
-  const { setUploadFile } = useFDGFileStore();
+  const { roomId } = useRoomStore();
+  const { socket } = useSocketStore();
   const { findDiffGameId } = useFDGStore();
-
   const { play, stop } = useAudioStore();
+
+  const { answerClick, answerX, answerY } = useFDGCanvasStore();
+
 
   useEffect(() => {
     play("/bgm/Game2_bgm.mp3");
@@ -37,9 +45,15 @@ const Game2 = () => {
   }, [])
 
   useEffect(() => {
+    setTimeout(() => {
+      setStartSearch(true);
+    }, 3000);
+  }, []);
+
+  useEffect(() => {
     const sync_func = async () => {
-        const res = await findDiff_generated_images(findDiffGameId, userId);
-        setGeneratedImage(res[round - 1]);
+        const res = await findDiff_game_images(findDiffGameId, userId);
+        setGameImages(res[round - 1]);
         setRoundLength(res.length);
         setChance(3);
     }
@@ -48,40 +62,43 @@ const Game2 = () => {
   }, [round]);
 
   useEffect(() => {
-    if(!generatedImage) return;
-
-    setUploadFile(generatedImage.generatedUrl);
-  }, [generatedImage])
-
-  useEffect(() => {
-    if (canvasClick) {
+    if (answerX > 0) {
       checkAnswerAndCondition();
     }
-  }, [canvasClick])
+  }, [answerX])
 
-  const checkAnswerAndCondition = () => {
+  useEffect(() => {
+    if (chance === 0) {
+      findDiff_update_score(userId, chance, false);
+      setStartSearch(true);
+      setEndSearch(true);
+    }
+  }, [chance])
 
+  const checkAnswerAndCondition = async () => {
     // 정답
-    const maskX1 = generatedImage.maskX1;
-    const maskY1 = generatedImage.maskY1;
-    const maskX2 = generatedImage.maskX2;
-    const maskY2 = generatedImage.maskY2;
-    console.log(maskX1, maskX2, maskY1, maskY2);
-    console.log(x, y)
+    const maskX1 = gameImages.maskX1;
+    const maskY1 = gameImages.maskY1;
+    const maskX2 = gameImages.maskX2;
+    const maskY2 = gameImages.maskY2;
 
-    console.log(roundLength);
-    if (maskX1 <= x && x <= maskX2 && maskY1 <= y && y <= maskY2) {
-      round === roundLength ? navigate(`/game2/result`) : navigate(`/game2?round=${round + 1}`);
+    if (maskX1 <= answerX && answerX <= maskX2 && maskY1 <= answerY && answerY <= maskY2) {
+      await findDiff_update_score(userId, chance, true);
+      setStartSearch(true);
+      setEndSearch(true);
     } else {
       setChance(chance - 1);
-
-      if (chance === 0) {
-        round === roundLength ? navigate(`/game2/result`) : navigate(`/game2?round=${round + 1}`);
-      }
     }
-
   }
-  
+
+  const goNextPage = () => {
+    if (round === roundLength) {
+      navigate(`/loading`, {state : { title: "다른 플레이어들을 기다리고 있습니다." }});
+      socket?.emit("game_loading", { roomId, nextPageUrl: "/game2/result2" });
+    } else {
+      navigate(`/game2?round=${round + 1}`);
+    }
+  }
 
   return (
     <div className="inner">
@@ -94,25 +111,33 @@ const Game2 = () => {
               </div>
             </div>
             <div className="imageContainer">
+
               <div className="findDifference containerWrapper" >
                 <div className="generatedImg game2-canvas-container" ref={generatedImgRef} >
-                  <FDGCanvas />
+                  {gameImages && <img className="original-img-wrap" src={gameImages.originalImageUrl} alt="ai-img"/>
+                    // : <div className="original-img-wrap"></div>
+                  }
+                  {!endSearch ? <FDGAiGeneratedCanvas image={gameImages && gameImages.aiGeneratedImageUrl} />
+                    : <img className="original-img-wrap" src={gameImages.maskingImageUrl} alt="mask-img"/>
+                  }
+
                 </div>
               </div>
+
               <div className="magnifierContainer">
-                <NewButton
-                  text={
-                    Array.from({ length: chance }, (_, index) => (
-                    <img
-                      key={index}
-                      src="/images/magnifier.png"
-                      style={{ width: "2rem" }}
-                    />
-                    ))
-                  }
-                />
+                {!endSearch ?
+                  <NewButton
+                    text={
+                      Array.from({ length: chance }, (_, index) => (
+                        <img key={index} src="/images/magnifier.png" style={{ width: "2rem" }}/>
+                  ))}/>
+                    :
+                  <NewButton text={round === roundLength ? "결과 보기" : "다음 문제 보기"} onClick={goNextPage}/>
+                }
               </div>
+
             </div>
+
           </div>
         </div>
       </div>

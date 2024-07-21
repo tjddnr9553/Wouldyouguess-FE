@@ -1,24 +1,24 @@
-import "./Result.css";
+import "./Game2_result2.css";
 
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 import PlayerResult from "../../components/game/PlayerResult.jsx";
 
-import useUserStore from "../../store/user/useUserStore.js";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 import useRoomStore from "../../store/room/useRoomStore.js";
 import useAudioStore from "../../store/bgm/useAudioStore.js";
 
-import { catchLiar_result } from "../../api/game/CatchLiar.js";
+import {findDiff_result} from "../../api/game/FindDiff.js";
+import useFDGStore from "../../store/game/findDiffGame/useFDGStore.js";
+import Game2_playerResult from "./Game2_playerResult.jsx";
 
-const Result = () => {
+const Game2_result2 = () => {
   const navigate = useNavigate();
   const [players, setPlayers] = useState([]);
 
-  const { userId } = useUserStore();
   const { roomId } = useRoomStore();
-  const { gameId } = useCatchLiarStore();
+  const { findDiffGameId } = useFDGStore();
   const { play, stop } = useAudioStore();
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const Result = () => {
 
   useEffect(() => {
     const sync_func = async () => {
-      const res = await catchLiar_result(gameId, userId);
+      const res = await findDiff_result(findDiffGameId);
       setPlayers(res);
     };
     sync_func();
@@ -48,13 +48,11 @@ const Result = () => {
       </div>
       <div className="player-list">
         {players.map((player, index) => (
-          <PlayerResult
+          <Game2_playerResult
             key={index}
-            player={`Player${index + 1}`}
+            player={`${index + 1}`}
             nickname={player.nickname}
             score={player.score}
-            liar_img={player.liar && <img src="/images/game/liar.png" />}
-            isWinner={player.isWinner}
           />
         ))}
       </div>
@@ -65,4 +63,4 @@ const Result = () => {
   );
 };
 
-export default Result;
+export default Game2_result2;
