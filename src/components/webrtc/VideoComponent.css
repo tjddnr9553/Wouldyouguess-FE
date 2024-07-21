@@ -9,12 +9,7 @@
   width: 100%;
   padding: 3%;
   animation: 5s ease infinite;
-  background-image: linear-gradient(
-    #ffdb3b 10%,
-    #fe53bb 45%,
-    #8f51ea 67%,
-    #0044ff 87%
-  );
+  background-image: white;
   margin-bottom: 10%;
 }
 

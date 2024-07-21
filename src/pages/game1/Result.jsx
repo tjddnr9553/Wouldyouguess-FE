@@ -8,6 +8,29 @@ import { useNavigate } from "react-router-dom";
 import useRoomStore from "../../store/room/useRoomStore.js";
 import useAudioStore from "../../store/bgm/useAudioStore.js";
 
+const dummy = [
+  {
+    nickname: '채윤',
+    role: '라이어',
+    isWin: 'lose',
+  },
+  {
+    nickname: '현민',
+    role: '일반시민',
+    isWin: 'win',
+  },
+  {
+    nickname: '성욱',
+    role: '일반시민',
+    isWin: 'win',
+  },
+  {
+    nickname: '광윤',
+    role: '일반시민',
+    isWin: 'win',
+  },
+]
+
 const Result = () => {
   const navigate = useNavigate();
   const [players, setPlayers] = useState([]);
@@ -38,20 +61,21 @@ const Result = () => {
   };
 
   return (
-    <div className="result inner">
+    <div className="result">
       <div className="title">
-        <strong>Result</strong>
+        <div className="result-title">
+          {dummy.find(player => player.isWin === 'win').role} 승리 !!
+        </div>
       </div>
       <div className="player-list">
-        {players.map((player, index) => (
-          <PlayerResult
-            key={index}
-            player={`Player${index + 1}`}
-            nickname={player.nickname}
-            score={player.score}
-            liar_img={player.liar && <img src="/images/game/liar.png" />}
-            isWinner={player.isWinner}
-          />
+        {dummy.map((player, index) => (
+          player.isWin === 'win' &&
+          (
+          <div key={index} >
+            <div className="nick">{player.nickname}</div>
+            <div className="player-video"> 영상 들어갈 곳 </div>
+          </div>  
+          )
         ))}
       </div>
       <button onClick={goHome} className="homeBtn">
