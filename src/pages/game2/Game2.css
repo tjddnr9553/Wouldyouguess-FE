@@ -113,8 +113,9 @@
 }
 
 .game2-canvas-container {
+  width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   position: relative;
   box-sizing: content-box;

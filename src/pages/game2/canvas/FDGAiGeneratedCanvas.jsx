@@ -1,66 +1,32 @@
 import {useEffect, useRef} from 'react';
-import CanvasTool from './FDGCanvasTool.js'
-import useFDGCanvasStore from "../../../store/game/findDiffGame/useFDGCanvasStore.js";
 import useFDGFileStore from "../../../store/game/findDiffGame/useFDGFileStore.js";
 
-const FDGCanvas = () => {
+const FDGAiGeneratedCanvas = () => {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
   const toolRef = useRef(null);
 
-  const { uploadFile, setOriginalFile } = useFDGFileStore();
-  const { setX, setY, setIsImgUploaded, setFDGCanvasRef, setCanvasClick } = useFDGCanvasStore();
+  const { aiGeneratedImage, setAiGeneratedImage } = useFDGFileStore();
 
   // 캔버스 셋팅
   useEffect(() => {
     const canvas = canvasRef.current;
-    setFDGCanvasRef(canvas);
 
     const context = canvas.getContext("2d");
     contextRef.current = context;
-    toolRef.current = CanvasTool(context);
   }, []);
 
   useEffect(() => {
-    if(!uploadFile) return;
+    if(!aiGeneratedImage) return;
 
-    drawImg().then(async () => {
-      await canvasRef.current.toBlob( async (blob) => {
-        setOriginalFile(blob);
-      }, 'image/png');
+    drawImg();
+  }, [aiGeneratedImage]);
 
-      setIsImgUploaded(true);
-    })
-  }, [uploadFile]);
-
-  const getCursorPosition = (e) => {
-    const { top, left } = canvasRef.current.getBoundingClientRect();
-    return {
-      x: e.clientX - left,
-      y: e.clientY - top,
-    };
-  };
-
-  const mouseDownCanvas = (e) => {
-    const { x, y } = getCursorPosition(e);
-
-    drawImg(() => {
-      toolRef.current.StrokeRect(100, x, y);
-    });
-
-    setX(x);
-    setY(y);
-    setCanvasClick(true);
-  }
-
-  const mouseUpCanvas = (e) => {
-    setCanvasClick(false);
-  }
 
   const drawImg = (callback) => {
     return new Promise((resolve) => {
-      if(uploadFile){
-        const imageURL = typeof uploadFile === 'string' ? uploadFile : URL.createObjectURL(uploadFile);
+      if(aiGeneratedImage){
+        const imageURL = typeof aiGeneratedImage === 'string' ? aiGeneratedImage : URL.createObjectURL(aiGeneratedImage);
         const img = new Image();
         img.src = imageURL;
     
@@ -103,19 +69,11 @@ const FDGCanvas = () => {
     <>
       <canvas
         ref={canvasRef}
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          // backgroundColor: "transparent",
-        }}
         width={512}
         height={512}
-        onMouseDown={mouseDownCanvas}
-        onMouseUp={mouseUpCanvas}
       />
     </>
   )
 }
 
-export default FDGCanvas;
+export default FDGAiGeneratedCanvas;

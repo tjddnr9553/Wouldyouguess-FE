@@ -1,15 +1,20 @@
-import {useNavigate, useSearchParams} from "react-router-dom";
-import {useEffect, useRef, useState} from "react";
-import NewButton from "../../components/button/newButton";
-import useAudioStore from "../../store/bgm/useAudioStore";
 import "./Game2.css";
 import "swiper/css";
-import FDGCanvas from "./canvas/FDGCanvas.jsx";
+
+import {useEffect, useRef, useState} from "react";
+import {useNavigate, useSearchParams} from "react-router-dom";
+
+import NewButton from "../../components/button/newButton";
+import FDGUploadCanvas from "./canvas/FDGUploadCanvas.jsx";
+
+import useUserStore from "../../store/user/useUserStore.js";
+import useAudioStore from "../../store/bgm/useAudioStore";
 import useFDGStore from "../../store/game/findDiffGame/useFDGStore.js";
 import useFDGCanvasStore from "../../store/game/findDiffGame/useFDGCanvasStore.js";
-import {findDiff_generated_images} from "../../api/game/FindDiff.js";
-import useUserStore from "../../store/user/useUserStore.js";
 import useFDGFileStore from "../../store/game/findDiffGame/useFDGFileStore.js";
+
+import {findDiff_game_images} from "../../api/game/FindDiff.js";
+import FDGAiGeneratedCanvas from "./canvas/FDGAiGeneratedCanvas.jsx";
 
 const Game2 = () => {
   const navigate = useNavigate();
@@ -18,16 +23,17 @@ const Game2 = () => {
 
   const generatedImgRef = useRef(null);
 
-  const [generatedImage, setGeneratedImage] = useState(null);
+  const [gameImages, setGameImages] = useState(null);
   const [chance, setChance] = useState(3);
   const [roundLength, setRoundLength] = useState(0);
 
   const { userId } = useUserStore();
-  const { x, y, canvasClick } = useFDGCanvasStore();
-  const { setUploadFile } = useFDGFileStore();
   const { findDiffGameId } = useFDGStore();
-
   const { play, stop } = useAudioStore();
+
+  const { setOriginalImage, setAiGeneratedImage } = useFDGFileStore();
+  const { answerClick, answerX, answerY } = useFDGCanvasStore();
+
 
   useEffect(() => {
     play("/bgm/Game2_bgm.mp3");
@@ -38,8 +44,9 @@ const Game2 = () => {
 
   useEffect(() => {
     const sync_func = async () => {
-        const res = await findDiff_generated_images(findDiffGameId, userId);
-        setGeneratedImage(res[round - 1]);
+        const res = await findDiff_game_images(findDiffGameId, userId);
+        setGameImages(res[round - 1]);
+        setOriginalImage(res[round - 1].originalImageUrl);
         setRoundLength(res.length);
         setChance(3);
     }
@@ -48,29 +55,26 @@ const Game2 = () => {
   }, [round]);
 
   useEffect(() => {
-    if(!generatedImage) return;
-
-    setUploadFile(generatedImage.generatedUrl);
-  }, [generatedImage])
+    setTimeout(() => {
+      setAiGeneratedImage(gameImages.aiGeneratedImageUrl);
+    }, 3000);
+  }, []);
 
   useEffect(() => {
-    if (canvasClick) {
+    if (answerClick) {
       checkAnswerAndCondition();
     }
-  }, [canvasClick])
+  }, [answerClick])
 
   const checkAnswerAndCondition = () => {
 
     // 정답
-    const maskX1 = generatedImage.maskX1;
-    const maskY1 = generatedImage.maskY1;
-    const maskX2 = generatedImage.maskX2;
-    const maskY2 = generatedImage.maskY2;
-    console.log(maskX1, maskX2, maskY1, maskY2);
-    console.log(x, y)
+    const maskX1 = gameImages.maskX1;
+    const maskY1 = gameImages.maskY1;
+    const maskX2 = gameImages.maskX2;
+    const maskY2 = gameImages.maskY2;
 
-    console.log(roundLength);
-    if (maskX1 <= x && x <= maskX2 && maskY1 <= y && y <= maskY2) {
+    if (maskX1 <= answerX && answerX <= maskX2 && maskY1 <= answerY && answerY <= maskY2) {
       round === roundLength ? navigate(`/game2/result`) : navigate(`/game2?round=${round + 1}`);
     } else {
       setChance(chance - 1);
@@ -96,20 +100,16 @@ const Game2 = () => {
             <div className="imageContainer">
               <div className="findDifference containerWrapper" >
                 <div className="generatedImg game2-canvas-container" ref={generatedImgRef} >
-                  <FDGCanvas />
+                  <FDGUploadCanvas />
+                  <FDGAiGeneratedCanvas />
                 </div>
               </div>
               <div className="magnifierContainer">
                 <NewButton
                   text={
                     Array.from({ length: chance }, (_, index) => (
-                    <img
-                      key={index}
-                      src="/images/magnifier.png"
-                      style={{ width: "2rem" }}
-                    />
-                    ))
-                  }
+                      <img key={index} src="/images/magnifier.png" style={{ width: "2rem" }}/>
+                    ))}
                 />
               </div>
             </div>

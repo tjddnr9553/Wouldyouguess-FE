@@ -32,11 +32,11 @@ export const findDiff_upload = async (upload_form) => {
   }
 };
 
-export const findDiff_original_images = async (findDiffGameId, userId) => {
+export const findDiff_game_images = async (findDiffGameId, userId) => {
     try {
         const response = await axios({
             method: "GET",
-            url: `${API_SERVER_URL}/api/findDiff/original/image/${findDiffGameId}`,
+            url: `${API_SERVER_URL}/api/findDiff/images/${findDiffGameId}`,
             params: {
                 userId
             }
@@ -46,23 +46,7 @@ export const findDiff_original_images = async (findDiffGameId, userId) => {
     } catch (error) {
         console.error("Error starting Find Diff game:", error);
     }
-}
-
-export const findDiff_generated_images = async (findDiffGameId, userId) => {
-    try {
-        const response = await axios({
-            method: "GET",
-            url: `${API_SERVER_URL}/api/findDiff/generated/image/${findDiffGameId}`,
-            params: {
-                userId
-            }
-        });
-
-        return response.data;
-    } catch (error) {
-        console.error("Error starting Find Diff game:", error);
-    }
-}
+};
 
 export const findDiff_result = async (findDiffGameId) => {
     try {
