@@ -17,7 +17,7 @@ import useRoomStore from "../../store/room/useRoomStore.js";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 import useUserStore from "../../store/user/useUserStore.js";
 
-const LaserPointer = ({ width, height, zIndex, position }) => {
+const LaserPointer = ({ zIndex, position }) => {
   const canvasRef = useRef(null);
   const [lines, setLines] = useState([]);
   const [clientLines, setClientLines] = useState({});
@@ -216,8 +216,8 @@ const LaserPointer = ({ width, height, zIndex, position }) => {
   return (
     <canvas
       ref={canvasRef}
-      width={width}
-      height={height}
+      width={1200}
+      height={750}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}

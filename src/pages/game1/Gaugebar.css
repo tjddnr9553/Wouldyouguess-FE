@@ -1,0 +1,107 @@
+.gaugebar {
+  width: 98%;
+  height: 4%;
+
+  margin-bottom: 28px;
+
+  border: 5px solid #DAA520;
+  border-radius: 20px;
+
+  box-shadow: 
+    -0.05rem -0.05rem 0.08rem rgba(252, 230, 151, 0.6), 0.05rem 0.05rem 0.1rem #DAA520, 
+    inset 0.5rem 0.5rem 2rem rgb(73 73 106 / 50%), 
+    inset 0.1rem 0.1rem 0.2rem rgba(238, 246, 104, 0.75), 
+    inset -0.5rem -0.5rem 4rem #DAA520;
+
+  animation: size1 0.5s linear infinite 20s,
+            size2 0.3s linear infinite 22s,
+            vibrationAndScale1 0.2s linear infinite 25s,
+            vibrationAndScale2 0.2s infinite 27s;
+}
+
+@keyframes size1 {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.01);
+  }
+}
+
+@keyframes size2 {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.02);
+  }
+}
+
+@keyframes vibrationAndScale1 {
+  from {
+    transform: rotate(0.15deg);
+    transform: scale(1);
+  }
+  to {
+    transform: rotate(0.15deg);
+    transform: scale(1.03);
+  }
+}
+
+@keyframes vibrationAndScale2 {
+  from {
+    transform: rotate(0.3deg);
+    transform: scale(1);
+
+  }
+  to {
+    transform: rotate(-0.3deg);
+    transform: scale(1.02);
+  }
+}
+
+.loader {
+  width: 0;
+  height: 100%;
+
+  display: inline-block;
+  position: relative;
+
+  background-color: #DAA520;
+  
+  box-shadow: 10px 0px 15px 0px #DAA520;
+  box-sizing: border-box;
+
+  border-radius: 20px;
+
+  animation: progress-animation 30s linear infinite;
+}
+
+.loader::after,
+  .loader::before {
+  content: '';
+  width: 10px;
+  height: 1px;
+  background: #FFF;
+  position: absolute;
+  top: 30px;
+  right: -2px;
+  opacity: 0;
+  transform: rotate(-45deg) translateX(0px);
+  box-sizing: border-box;
+}
+
+.loader::before {
+  top: -4px;
+  transform: rotate(45deg);
+}
+  
+.rocket {
+  position: absolute;
+  top: -11.5px;
+  right: 0;
+
+  height: 45px;
+  animation: vibrationAndScale1 0.2s linear infinite 25s,
+            vibrationAndScale2 0.1s infinite 27s;
+}

@@ -25,7 +25,7 @@ const toolsMap = {
   [ERASE]: Pencil,
 };
 
-const Drawing = ({ width, height, zIndex, position }) => {
+const Drawing = ({ zIndex, position }) => {
   const canvasRef = useRef(null);
   const ctxRef = useRef(null);
   const toolRef = useRef(null);
@@ -48,7 +48,7 @@ const Drawing = ({ width, height, zIndex, position }) => {
       ctxRef.current.strokeStyle = color;
     }
     if (tool === TOOL_CLEAR) {
-      toolRef.current.clearCanvas(width, height);
+      toolRef.current.clearCanvas(1200, 750);
       setTool(TOOL_PENCIL);
     }
   }, [tool]);
@@ -136,8 +136,8 @@ const Drawing = ({ width, height, zIndex, position }) => {
   return (
     <>
       <canvas
-        width={width}
-        height={height}
+        width={1200}
+        height={750}
         ref={canvasRef}
         onMouseDown={onMouseDown}
         onMouseUp={onMouseUp}

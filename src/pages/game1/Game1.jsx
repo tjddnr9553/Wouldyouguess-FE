@@ -10,6 +10,7 @@ import Tools from "./canvas/CanvasTools.jsx";
 import Clock from "../../components/game/Clock.jsx";
 
 import { catchLiar_info } from "../../api/game/CatchLiar.js";
+
 import useUserStore from "../../store/user/useUserStore.js";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 import useAudioStore from "../../store/bgm/useAudioStore.js";
@@ -17,6 +18,7 @@ import Ailen from "../../components/game/Ailen.jsx";
 import LaserPointer from "./LaserPointer.jsx";
 import { useCanvasStore } from "../../store/canvas/useCanvasStore.js";
 import Keyword from "../../components/game/Keyword.jsx";
+import Gaugebar from "./Gaugebar.jsx";
 
 const Game1 = () => {
   const [searchParams] = useSearchParams();
@@ -25,16 +27,11 @@ const Game1 = () => {
   const containerRef = useRef(null);
   const keywordRef = useRef(null);
 
-  const [parentwidth, setParentWidth] = useState(0);
-  const [parentheight, setParentHeight] = useState(0);
   const [waitText, setWaitText] = useState(null);
-  const [showModal, setShowModal] = useState(false); // 모달 표시 상태
-  const [clockStart, setClockStart] = useState(false); // 시계 시작 상태
+  const [showModal, setShowModal] = useState(true); // 모달 표시 상태
+  const [gameStart, setGameStart] = useState(false); // 게임 시작 상태, 30초 시작
   const [showKeyword, setShowKeyword] = useState(true);
-  const [windowSize, setWindowSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
+  const [titleOn, setTitleOn] = useState(false);
 
   const { userId, nickname, cameraId, isLocal } = useUserStore();
   const { setTool, setColor } = useCanvasStore();
@@ -86,48 +83,36 @@ const Game1 = () => {
         setShowModal(true);
         setTimeout(() => {
           setShowModal(false);
-          setClockStart(true);
+          setGameStart(true);
         }, 6000);
         setShowKeyword(false);
       }, 3500);
       return () => {
         setShowModal(false);
-        setClockStart(false);
+        setGameStart(false);
         clearTimeout(timer);
       };
     } else {
-      setClockStart(false);
+      setGameStart(false);
       setShowModal(true);
       const timer = setTimeout(() => {
         setShowModal(false);
-        setClockStart(true); // 시계 시작 상태 변경
+        setGameStart(true); // 시계 시작 상태 변경
       }, 6000);
 
       return () => {
         setShowModal(false);
-        setClockStart(false);
+        setGameStart(false);
         clearTimeout(timer);
       };
     }
   }, [round]);
 
-  // window size 변경 시 캔버스 좌표 수정을 위한 resize
-  useEffect(() => {
-    window.addEventListener("resize", () =>
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      })
-    );
-    setParentWidth(containerRef.current.clientWidth);
-    setParentHeight(containerRef.current.clientHeight);
-  }, [windowSize]);
-
   return (
     <div className="inner" key={round}>
       {showModal && isDrawing && <Ailen keyword={"내가 그릴 순서!"} />}
       {showModal && !isDrawing && (
-        <Ailen keyword={`${nickname}님이 그릴 순서!`} />
+          <Ailen keyword={`${nickname}님이 그릴 순서!`} />
       )}
       <div ref={keywordRef}>{showKeyword && <Keyword keyword={keyword} />}</div>
       <div className="game container">
@@ -135,26 +120,24 @@ const Game1 = () => {
           <User />
         </div>
         <div className="center">
+          <Gaugebar gameStart = {gameStart} setGameStart={setGameStart}/>
+
           <div className="drawing-container">
             <div ref={containerRef} className="canvas-container">
               <Drawing
-                width={parentwidth * 0.9}
-                height={parentheight * 0.9}
                 zIndex={isDrawing ? 10 : 9}
                 position={isDrawing ? "absolute" : "relative"}
               />
               <LaserPointer
-                width={parentwidth * 0.9}
-                height={parentheight * 0.9}
                 zIndex={!isDrawing ? 10 : 9}
                 position={!isDrawing ? "absolute" : "relative"}
               />
             </div>
           </div>
-          <div className="canvas-tools"></div>
+          <div className="canvas-tools">
+          </div>
         </div>
         <div className="right-section">
-          {clockStart && <Clock />}
           <Tools />
           <Palette />
         </div>
