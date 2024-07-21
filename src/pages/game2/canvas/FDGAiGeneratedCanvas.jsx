@@ -1,12 +1,11 @@
 import {useEffect, useRef} from 'react';
-import useFDGFileStore from "../../../store/game/findDiffGame/useFDGFileStore.js";
+import useFDGCanvasStore from "../../../store/game/findDiffGame/useFDGCanvasStore.js";
 
-const FDGAiGeneratedCanvas = () => {
+const FDGAiGeneratedCanvas = ({ image }) => {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
-  const toolRef = useRef(null);
 
-  const { aiGeneratedImage, setAiGeneratedImage } = useFDGFileStore();
+  const { setAnswerX, setAnswerY } = useFDGCanvasStore();
 
   // 캔버스 셋팅
   useEffect(() => {
@@ -17,16 +16,30 @@ const FDGAiGeneratedCanvas = () => {
   }, []);
 
   useEffect(() => {
-    if(!aiGeneratedImage) return;
+    if(!image) return;
 
-    drawImg();
-  }, [aiGeneratedImage]);
+    drawImg(image);
+  }, [image]);
+
+  const getCursorPosition = (e) => {
+    const { top, left } = canvasRef.current.getBoundingClientRect();
+    return {
+      x: e.clientX - left,
+      y: e.clientY - top,
+    };
+  };
+
+  const onMouseDown = (e) => {
+    const { x, y } = getCursorPosition(e);
+    setAnswerX(x);
+    setAnswerY(y);
+  };
 
 
-  const drawImg = (callback) => {
+  const drawImg = (image) => {
     return new Promise((resolve) => {
-      if(aiGeneratedImage){
-        const imageURL = typeof aiGeneratedImage === 'string' ? aiGeneratedImage : URL.createObjectURL(aiGeneratedImage);
+      if(image){
+        const imageURL = typeof image === 'string' ? image : URL.createObjectURL(image);
         const img = new Image();
         img.src = imageURL;
     
@@ -54,8 +67,6 @@ const FDGAiGeneratedCanvas = () => {
             0, 0, canvasWidth, canvasHeight 
           );
     
-          if (callback) callback();
-    
           // URL 해제
           URL.revokeObjectURL(imageURL);
   
@@ -71,6 +82,7 @@ const FDGAiGeneratedCanvas = () => {
         ref={canvasRef}
         width={512}
         height={512}
+        onMouseDown={onMouseDown}
       />
     </>
   )

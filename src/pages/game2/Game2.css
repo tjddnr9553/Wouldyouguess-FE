@@ -164,3 +164,13 @@
 .swiper-parent {
   width: 100%;
 }
+
+.ai-generated-img-wrap {
+  width: 512px;
+  height: 512px;
+}
+
+.original-img-wrap {
+  width: 512px;
+  height: 512px;
+}

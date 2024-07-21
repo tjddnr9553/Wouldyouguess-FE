@@ -45,7 +45,7 @@ const FDGUploadCanvas = () => {
     setStartX(x);
     setStartY(y);
 
-    toolRef.current.onMouseDown(x, y, '#ff0000', 8, false);
+    toolRef.current.onMouseDown(x, y, '#ff0000', 4, false);
   };
 
   const onMouseUp = (e) => {

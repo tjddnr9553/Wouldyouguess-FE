@@ -4,7 +4,6 @@ import {useNavigate} from "react-router-dom";
 
 import NewButton from "../../components/button/newButton";
 import FDGUploadCanvas from "./canvas/FDGUploadCanvas.jsx";
-import FDGAiGeneratedCanvas from "./canvas/FDGAiGeneratedCanvas.jsx";
 
 import useRoomStore from "../../store/room/useRoomStore.js";
 import useUserStore from "../../store/user/useUserStore.js";
@@ -12,10 +11,9 @@ import useSocketStore from "../../store/socket/useSocketStore.js";
 import useAudioStore from "../../store/bgm/useAudioStore";
 import useFDGCanvasStore from "../../store/game/findDiffGame/useFDGCanvasStore.js";
 import useFDGFileStore from "../../store/game/findDiffGame/useFDGFileStore.js";
-import useFDGStore from "../../store/game/findDiffGame/useFDGStore.js";
 
 import ImgResizer from "./ImgResizer.js";
-import {findDiff_upload} from "../../api/game/FindDiff.js";
+import { findDiff_upload } from "../../api/game/FindDiff.js";
 
 
 const Game2_upload = () => {
@@ -73,7 +71,7 @@ const Game2_upload = () => {
 
   const readyToStart = () => {
     navigate(`/loading`, {state : { title: "파일 업로드 중입니다." }});
-    socket?.emit("game_loading", { roomId, nextPageUrl: "/game2" });
+    socket?.emit("game_loading", { roomId, nextPageUrl: "/game2?round=1" });
   }
 
   return (
@@ -88,7 +86,7 @@ const Game2_upload = () => {
                 ) : aiGeneratedImage == null ? (
                   <strong>Select your masking area</strong>
                 ) : (
-                  <strong>슛 ~!</strong>
+                  <strong>AI Image Generation Complete</strong>
                 )}
               </div>
             </div>
@@ -97,7 +95,11 @@ const Game2_upload = () => {
               <div className="containerWrapper">
                 <div className="game2-canvas-container">
                   <FDGUploadCanvas />
-                  <FDGAiGeneratedCanvas />
+                  {aiGeneratedImage == null ? (
+                    <div className="ai-generated-img-wrap"></div>
+                  ) : (
+                    <img src={aiGeneratedImage} className="ai-generated-img-wrap" />
+                  )}
                 </div>
               </div>
 

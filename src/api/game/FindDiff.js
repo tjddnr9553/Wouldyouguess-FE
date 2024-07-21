@@ -28,7 +28,6 @@ export const findDiff_upload = async (upload_form) => {
     return response;
   } catch (error) {
     console.error("이미지 처리 중 오류 발생:", error);
-    throw error; // 에러를 다시 던져서 호출하는 쪽에서 처리할 수 있게 합니다.
   }
 };
 
@@ -61,3 +60,20 @@ export const findDiff_result = async (findDiffGameId) => {
     }
 }
 
+export const findDiff_update_score = async (userId, chance, isFound) => {
+    try {
+        const response = await axios({
+            method: "POST",
+            url: `${API_SERVER_URL}/api/findDiff/score`,
+            data: {
+                userId,
+                chance,
+                isFound
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Error starting Find Diff game:", error);
+    }
+}
