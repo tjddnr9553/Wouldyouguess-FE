@@ -18,7 +18,6 @@ import Keyword from "../../components/game/Keyword.jsx";
 import KeywordText from "../../components/game/KeywordText.jsx";
 import LaserPointer from "./LaserPointer.jsx";
 import Gaugebar from "./Gaugebar.jsx";
-import Test from "../Test.jsx";
 
 const Game1 = () => {
   const [searchParams] = useSearchParams();
@@ -26,16 +25,10 @@ const Game1 = () => {
 
   const containerRef = useRef(null);
 
-  const [parentwidth, setParentWidth] = useState(0);
-  const [parentheight, setParentHeight] = useState(0);
   const [waitText, setWaitText] = useState(null);
   const [showModal, setShowModal] = useState(true); // 모달 표시 상태
   const [gameStart, setGameStart] = useState(false); // 게임 시작 상태, 30초 시작
   const [titleOn, setTitleOn] = useState(false);
-  const [windowSize, setWindowSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
 
   const { userId } = useUserStore();
   const {
@@ -75,8 +68,6 @@ const Game1 = () => {
     } else {
       setWaitText("다른 플레이어의 차례");
     }
-
-    setGameStart(false);
     setShowModal(true);
     setTitleOn(false);
 
@@ -94,7 +85,6 @@ const Game1 = () => {
 
   return (
     <div className="mainwrap" >
-      <Test />
       <div className="inner" key={round}>
         {showModal && isDrawing && <Keyword keyword={keyword} />}
         {showModal && !isDrawing && <Keyword keyword={"다른 플레이어의 차례"} />}
@@ -103,15 +93,16 @@ const Game1 = () => {
             <User />
           </div>
           <div className="center">
-            <Gaugebar gameStart = {gameStart}/>
-            <div className="keyword-title">
-              {titleOn && isDrawing && <KeywordText text={keyword} />}
-              {titleOn && !isDrawing && (
-                <KeywordText text={"다른 플레이어의 차례"} />
-              )}
-              {/* <hr /> */}
-            </div>
+            <Gaugebar gameStart = {gameStart} setGameStart={setGameStart}/>
+
             <div className="drawing-container">
+              <div className="keyword-title">
+                {titleOn && isDrawing && <KeywordText text={keyword} />}
+                {titleOn && !isDrawing && (
+                  <KeywordText text={"다른 플레이어의 차례"} />
+                )}
+                {/* <hr /> */}
+              </div>
               <div ref={containerRef} className="canvas-container">
                 <Drawing
                   zIndex={isDrawing ? 10 : 9}

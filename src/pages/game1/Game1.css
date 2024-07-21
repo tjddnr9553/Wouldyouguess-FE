@@ -1,9 +1,8 @@
 .game.container {
   /* 캔버스 고정 사이즈 */
-  width: 1300px;
-  height: 650px;
+  width: 100%;
+  height: 80%;
   display: flex;
-  position: relative;
 }
 
 .game .left-section {
@@ -24,9 +23,38 @@
   height: 100%;
 }
 
+
+/* hr {
+  border: 0px;
+  width: 100%;
+  height: 0.3rem;
+  background: linear-gradient(
+    to left,
+    transparent,
+    rgb(177, 176, 238),
+    transparent
+    );
+    z-index: 7;
+    } */
+
+.drawing-container {
+  filter: drop-shadow(0px 10px 10px #4444dd);
+
+  width: 1100px;
+  height: 750px;
+  
+  border-radius: 1rem;
+  width: 100%;
+  height: 90%;
+  margin-bottom: 5%;
+  
+  position: relative;
+}
+
 .keyword-title {
+  width: 100%;
   position: absolute;
-  top: 8%;
+  top: 10px;
   z-index: 6;
 }
 
@@ -48,32 +76,10 @@
   border-radius: 10px;
 }
 
-/* hr {
-  border: 0px;
-  width: 100%;
-  height: 0.3rem;
-  background: linear-gradient(
-    to left,
-    transparent,
-    rgb(177, 176, 238),
-    transparent
-  );
-  z-index: 7;
-} */
-
-.drawing-container {
-  filter: drop-shadow(0px 10px 10px #4444dd);
-
-  border-radius: 1rem;
-  width: 100%;
-  height: 90%;
-  margin-bottom: 5%;
-}
 .canvas-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 6%;
   width: 100%;
   height: 100%;
   background-color: white;
