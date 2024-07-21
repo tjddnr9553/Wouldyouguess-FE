@@ -116,6 +116,7 @@ const Drawing = ({ width, height, zIndex, position }) => {
 
   const handleDrawerDrawStart = (data) => {
     const { tool, xAxis, yAxis, color, size, fillColor } = data;
+    initTool(tool);
 
     if (tool === TOOL_PENCIL) {
       toolRef.current.onMouseDown(xAxis, yAxis, color, size);
