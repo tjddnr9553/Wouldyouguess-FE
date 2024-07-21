@@ -15,7 +15,6 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [input, setInput] = useState({ username: "", nickname: "" });
-  // const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [error, setError] = useState("");
   const [usernameError, setUsernameError] = useState("");
   const [discriptionError, setDiscriptionError] = useState("");
@@ -26,10 +25,6 @@ const Login = () => {
 
   useEffect(() => {
     play("/bgm/bgm.mp3");
-
-    // setIsButtonDisabled(
-    //   input.username.trim() === "" || input.nickname.trim() === ""
-    // );
 
     return () => {
       stop();
@@ -53,7 +48,6 @@ const Login = () => {
 
   const onSubmitBtnClick = async (e) => {
     e.preventDefault();
-    // if (isButtonDisabled) return;
 
     // if (input.username.trim() === "") {
     //   setError("닉네임을 입력해주세요.");
@@ -79,7 +73,7 @@ const Login = () => {
 
     window.localStorage.removeItem("inviteRoomId");
     window.localStorage.removeItem("isInvited");
-    navigate(`/lobby/${roomId}`);
+    navigate(`/lobby/${roomId}`, { state: { from: location.pathname } });
   };
 
   return (

@@ -1,23 +1,25 @@
-import { useNavigate } from "react-router-dom";
-
 import "./Lobby.css";
+import { useEffect, useRef } from "react";
+import {useLocation, useNavigate} from "react-router-dom";
+import { io } from "socket.io-client";
+
 import PlayerSidebar from "./PlayerSidebar.jsx";
 import Planet from "../../components/game/Planet.jsx";
 import Header from "../../components/game/Header.jsx";
 import Invite from "../../components/lobby/Invite.jsx";
+import Modal from "../../components/lobby/Modal.jsx";
+
 import useSocketStore from "../../store/socket/useSocketStore.js";
 import useUserStore from "../../store/user/useUserStore.js";
-import { io } from "socket.io-client";
-import { useEffect, useRef } from "react";
-import { room_create } from "../../api/home/Room.js";
-import Modal from "../../components/lobby/Modal.jsx";
 import useRoomStore from "../../store/room/useRoomStore.js";
-import { catchLiar_start } from "../../api/game/CatchLiar.js";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 import useWebrtcStore from "../../store/webrtc/useWebrtcStore.tsx";
-import { findDiff_start } from "../../api/game/FindDiff.js";
 import useAudioStore from "../../store/bgm/useAudioStore.js";
 import useFDGStore from "../../store/game/findDiffGame/useFDGStore.js";
+
+import { room_create } from "../../api/home/Room.js";
+import { catchLiar_start } from "../../api/game/CatchLiar.js";
+import { findDiff_start } from "../../api/game/FindDiff.js";
 
 const textList = [
   {
@@ -36,6 +38,7 @@ const textList = [
 
 const Lobby = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   let modalOn = false;
   const modalRef = useRef(null);
@@ -64,18 +67,22 @@ const Lobby = () => {
   }, [roomId, userId]); // 의존성 배열 추가
 
   useEffect(() => {
-    const socketConnect = io(import.meta.env.VITE_SOCKET_SERVER_URL);
-    setSocket(socketConnect);
+    if (location.state?.from === '/temp/login') {
+      const socketConnect = io(import.meta.env.VITE_SOCKET_SERVER_URL);
+      setSocket(socketConnect);
 
-    socketConnect.on("connect", () => {
-      if (isInvite) {
-        socketConnect.emit("room_join", { roomId, userId });
-      } else {
-        socketConnect.emit("room_create", { roomId, userId });
-      }
-    });
+      socketConnect.on("connect", () => {
+        if (isInvite) {
+          socketConnect.emit("room_join", {roomId, userId});
+        } else {
+          socketConnect.emit("room_create", {roomId, userId});
+        }
+      });
+    }
+  }, [location.state]);
 
-    socketConnect.on("game_start", (data) => {
+  useEffect(() => {
+    socket?.on("game_start", (data) => {
       if (data.mode === 1) {
         setGameId(data.gameId);
         navigate(`/game1?gameId=${data.gameId}&round=1`);
@@ -86,11 +93,11 @@ const Lobby = () => {
     });
 
     return () => {
-      socketConnect?.off("game_start", (data) => {
+      socket?.off("game_start", (data) => {
         navigate(`/game1?gameId=${data.gameId}&round=1`);
       });
     };
-  }, [setSocket]);
+  }, [socket])
 
   // 친구 초대 모달창
   const handleModal = () => {
