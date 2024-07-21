@@ -52,8 +52,8 @@ const Result1 = () => {
     const votingUserId = Number(e.currentTarget.getAttribute("data-user-id"));
     await catchLiar_vote(gameId, votingUserId);
 
-    socket?.emit("game_loading", { roomId, nextPageUrl: "/game1/result" });
     navigate(`/loading`, { state: { title: "라이어 투표 중입니다." } });
+    socket?.emit("game_loading", { roomId, nextPageUrl: "/game1/result" });
   };
   let i = 0;
   return (
