@@ -44,11 +44,11 @@ const Game2 = () => {
     };
   }, [])
 
-  useEffect(() => {
-    setTimeout(() => {
-      setStartSearch(true);
-    }, 3000);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setStartSearch(true);
+  //   }, 3000);
+  // }, []);
 
   useEffect(() => {
     const sync_func = async () => {
@@ -70,7 +70,7 @@ const Game2 = () => {
   useEffect(() => {
     if (chance === 0) {
       findDiff_update_score(userId, chance, false);
-      setStartSearch(true);
+      // setStartSearch(true);
       setEndSearch(true);
     }
   }, [chance])
@@ -84,7 +84,7 @@ const Game2 = () => {
 
     if (maskX1 <= answerX && answerX <= maskX2 && maskY1 <= answerY && answerY <= maskY2) {
       await findDiff_update_score(userId, chance, true);
-      setStartSearch(true);
+      // setStartSearch(true);
       setEndSearch(true);
     } else {
       setChance(chance - 1);
@@ -96,6 +96,7 @@ const Game2 = () => {
       navigate(`/loading`, {state : { title: "다른 플레이어들을 기다리고 있습니다." }});
       socket?.emit("game_loading", { roomId, nextPageUrl: "/game2/result2" });
     } else {
+      setEndSearch(false);
       navigate(`/game2?round=${round + 1}`);
     }
   }
