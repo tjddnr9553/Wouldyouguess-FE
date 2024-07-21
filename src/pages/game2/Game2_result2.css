@@ -11,7 +11,7 @@
   flex-direction: column;
 }
 
-.result > .homeBtn {
+.game2.result > .homeBtn {
   margin-top: 3%;
 
   width: 160px;

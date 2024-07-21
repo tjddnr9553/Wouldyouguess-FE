@@ -34,7 +34,7 @@
   background-color: #ffffff;
 }
 
-.result > .homeBtn {
+.game1.result > .homeBtn {
   position: fixed;
   right: 50px;
   bottom: 30px;
@@ -49,11 +49,12 @@
 
   background-image: url("/images/btn/home-btn.png");
   background-size: contain;
+  background-repeat: no-repeat;
 
   cursor: pointer;
 
-  width: 80px;
-  height: 100px;
+  width: 5%;
+  height: 10%;
 }
 
 /* 여기서부터 새로 작성 */
