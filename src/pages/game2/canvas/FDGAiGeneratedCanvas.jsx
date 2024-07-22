@@ -1,7 +1,7 @@
 import {useEffect, useRef} from 'react';
 import useFDGCanvasStore from "../../../store/game/findDiffGame/useFDGCanvasStore.js";
 
-const FDGAiGeneratedCanvas = ({ image, mode, endSearch, maskX1, maskY1, maskX2, maskY2 }) => {
+const FDGAiGeneratedCanvas = ({ image, setNewMasking, mode, endSearch, maskX1, maskY1, maskX2, maskY2 }) => {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
 
@@ -22,7 +22,11 @@ const FDGAiGeneratedCanvas = ({ image, mode, endSearch, maskX1, maskY1, maskX2, 
     if(!image) return;
 
     drawImg(image);
-  }, [image]);
+    
+    if(setNewMasking) {
+      setNewMasking(false); // 마스킹 이미지 캔버스에 그리기 완료
+    }
+  }, [image, maskX1, maskX2, maskY1, maskY2]);
 
   useEffect(() => {
     if (endSearch) {
