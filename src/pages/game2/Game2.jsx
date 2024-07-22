@@ -118,10 +118,14 @@ const Game2 = () => {
                   {gameImages && <img className="original-img-wrap" src={gameImages.originalImageUrl} alt="ai-img"/>
                     // : <div className="original-img-wrap"></div>
                   }
-                  {!endSearch ? <FDGAiGeneratedCanvas image={gameImages && gameImages.aiGeneratedImageUrl} />
-                    : <img className="original-img-wrap" src={gameImages.maskingImageUrl} alt="mask-img"/>
-                  }
-
+                  {gameImages && <FDGAiGeneratedCanvas 
+                    image={gameImages && gameImages.aiGeneratedImageUrl} 
+                    endSearch={endSearch} 
+                    maskX1={gameImages.maskX1}
+                    maskY1={gameImages.maskY1}
+                    maskX2={gameImages.maskX2}
+                    maskY2={gameImages.maskY2}
+                    />}
                 </div>
               </div>
 
