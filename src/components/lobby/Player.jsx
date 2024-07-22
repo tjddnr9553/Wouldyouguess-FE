@@ -1,7 +1,10 @@
 import './Player.css'
 import styled from 'styled-components';
 
-const Player = ({nickname, username, imgUrl}) => {
+const Player = ({nickname, username}) => {
+  const randomNumber = Math.floor(Math.random()*4 + 1);
+  const imgUrl = `/images/astronaut/astronaut${randomNumber}.png`;
+
   return (
     <div className='player'>
       <div className="wrap">
@@ -10,7 +13,7 @@ const Player = ({nickname, username, imgUrl}) => {
         <div className="aurora-base aurora-three"></div>
       </div>
       <div className="profile-section">
-        <Profile imgUrl={imgUrl}/>
+        <Profile url = {imgUrl}/>
       </div>
       <div className="name-section">
         <h1 className='nickname'>{username}</h1>
@@ -23,11 +26,13 @@ const Player = ({nickname, username, imgUrl}) => {
 export default Player;
 
 const Profile = styled.div`
-  background-image: ${({ imgUrl }) => `url(${imgUrl})`};
+  background-image: url('${props => props.url}');
+  background-color: pink;
   width: 100%;
   height: 100%;
-  background-size:cover;
-  background-repeat: no-repeat;
+
+  background-size:contain;
   background-position: center;
+  background-repeat: no-repeat;
   border-radius: 50%;
 `
