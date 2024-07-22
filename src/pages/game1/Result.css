@@ -64,7 +64,7 @@
   height: auto;
   object-fit: cover;
 }
-.title strong {
+.game1 .title strong {
   position: absolute;
   top: 17px;
   left: 473px;
@@ -72,7 +72,7 @@
   font-size: 5rem;
 }
 
-.result-title {
+.game1 .result-title {
   width: 100%;
   max-width: 636px;
   max-height: 127px;
