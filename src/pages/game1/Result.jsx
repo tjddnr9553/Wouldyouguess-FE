@@ -101,8 +101,8 @@ const Result = () => {
       <div className="title">
         <div className="result-title">
           {players.find((player) => player.isWinner)?.isLiar
-            ? "Liar  Win !"
-            : "Catch Liar !"}{" "}
+            ? "Spy  Win !"
+            : "Catch Spy !"}{" "}
         </div>
       </div>
       <div
