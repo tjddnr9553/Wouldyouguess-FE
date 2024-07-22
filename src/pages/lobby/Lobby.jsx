@@ -1,6 +1,6 @@
 import "./Lobby.css";
 import { useEffect, useRef } from "react";
-import {useLocation, useNavigate} from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 
 import PlayerSidebar from "./PlayerSidebar.jsx";
@@ -17,24 +17,8 @@ import useWebrtcStore from "../../store/webrtc/useWebrtcStore.tsx";
 import useAudioStore from "../../store/bgm/useAudioStore.js";
 import useFDGStore from "../../store/game/findDiffGame/useFDGStore.js";
 
-import { room_create } from "../../api/home/Room.js";
 import { catchLiar_start } from "../../api/game/CatchLiar.js";
 import { findDiff_start } from "../../api/game/FindDiff.js";
-
-const textList = [
-  {
-    id: "game1",
-    text: "재미있는 라이어 게임 입니다.",
-  },
-  {
-    id: "game2",
-    text: "틀린 그림을 찾아보세요!!",
-  },
-  {
-    id: "game3",
-    text: "",
-  },
-];
 
 const Lobby = () => {
   const navigate = useNavigate();
@@ -67,15 +51,15 @@ const Lobby = () => {
   }, [roomId, userId]); // 의존성 배열 추가
 
   useEffect(() => {
-    if (location.state?.from === '/temp/login') {
+    if (location.state?.from === "/temp/login") {
       const socketConnect = io(import.meta.env.VITE_SOCKET_SERVER_URL);
       setSocket(socketConnect);
 
       socketConnect.on("connect", () => {
         if (isInvite) {
-          socketConnect.emit("room_join", {roomId, userId});
+          socketConnect.emit("room_join", { roomId, userId });
         } else {
-          socketConnect.emit("room_create", {roomId, userId});
+          socketConnect.emit("room_create", { roomId, userId });
         }
       });
     }
@@ -97,7 +81,7 @@ const Lobby = () => {
         navigate(`/game1?gameId=${data.gameId}&round=1`);
       });
     };
-  }, [socket])
+  }, [socket]);
 
   // 친구 초대 모달창
   const handleModal = () => {
@@ -144,16 +128,16 @@ const Lobby = () => {
               id={"planet1"}
               min={5}
               max={15}
-              text={textList[0].text}
               onClick={startCatchLiar}
+              game={"game1"}
             />
             <Planet
               style={{ bottom: "0%", left: "30%" }}
               id={"planet2"}
               min={5}
               max={25}
-              text={textList[1].text}
               onClick={startFindDIff}
+              game={"game2"}
             />
             <Planet style={{ right: "3%" }} id={"planet3"} min={5} max={30} />
           </div>
