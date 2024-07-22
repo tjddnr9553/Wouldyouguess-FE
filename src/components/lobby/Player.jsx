@@ -1,7 +1,7 @@
 import './Player.css'
 import styled from 'styled-components';
 
-const Player = ({nickname, username}) => {
+const Player = ({nickname, username, imgUrl}) => {
   return (
     <div className='player'>
       <div className="wrap">
@@ -10,7 +10,7 @@ const Player = ({nickname, username}) => {
         <div className="aurora-base aurora-three"></div>
       </div>
       <div className="profile-section">
-        <Profile />
+        <Profile imgUrl={imgUrl}/>
       </div>
       <div className="name-section">
         <h1 className='nickname'>{username}</h1>
@@ -23,10 +23,11 @@ const Player = ({nickname, username}) => {
 export default Player;
 
 const Profile = styled.div`
-  background-image: url('/images/characters/astronaut-soccer.png');
+  background-image: ${({ imgUrl }) => `url(${imgUrl})`};
   width: 100%;
   height: 100%;
-  background-size:contain;
+  background-size:cover;
   background-repeat: no-repeat;
+  background-position: center;
   border-radius: 50%;
 `
