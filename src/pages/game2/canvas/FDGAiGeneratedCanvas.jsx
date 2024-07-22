@@ -54,10 +54,30 @@ const FDGAiGeneratedCanvas = ({ image, mode, endSearch, maskX1, maskY1, maskX2, 
         const imageURL = typeof image === 'string' ? image : URL.createObjectURL(image);
         const img = new Image();
         img.src = imageURL;
-    
+
+
         img.onload = () => {
           if (mode === 'aiImgUpload') {
-            contextRef.current.drawImage(img, maskX1, maskY1, lengthX, lengthY, maskX1, maskY1, lengthX, lengthY);
+            let startTime;
+            const duration = 1000; // 애니메이션 진행 시간 조절 여기서
+      
+            const animate = (timestamp) => {
+              if (!startTime) startTime = timestamp;
+              const elapsed = timestamp - startTime;
+      
+              const progress = Math.min(elapsed / duration, 1);
+      
+              const currentWidth = lengthX * progress;
+              const currentHeight = lengthY * progress;
+      
+              contextRef.current.drawImage(img, maskX1, maskY1, currentWidth, currentHeight, maskX1, maskY1, currentWidth, currentHeight);
+
+              if (progress < 1) {
+                requestAnimationFrame(animate);
+              }
+            };
+      
+            requestAnimationFrame(animate);
           } else {
             contextRef.current.drawImage(img, 0, 0);
           }
