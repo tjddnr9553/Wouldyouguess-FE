@@ -29,7 +29,7 @@ const Gaugebar = ({gameStart, setGameStart}) => {
         {
           width: '99.9%',
           backgroundColor: 'red',
-          duration: 30,
+          duration: 20,
           onComplete: () => {
             handleCountdownComplete();
             setGameStart(false);

@@ -8,6 +8,7 @@ interface VideoComponentProps {
   participantIdentity: string;
   color: string;
   local: boolean;
+  classNameCss: string;
 }
 
 function VideoComponent({
@@ -15,6 +16,7 @@ function VideoComponent({
   participantIdentity,
   color,
   local,
+  classNameCss,
 }: VideoComponentProps) {
   const videoElement = useRef<HTMLVideoElement | null>(null);
 
@@ -31,7 +33,7 @@ function VideoComponent({
   }, [track]);
 
   return (
-    <div id={"camera-" + participantIdentity} className="video-container">
+    <div id={"camera-" + participantIdentity} className={classNameCss ? classNameCss : "video-container"}>
       <video ref={videoElement} id={track.sid}></video>
     </div>
   );
