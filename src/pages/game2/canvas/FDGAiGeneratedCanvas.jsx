@@ -1,11 +1,14 @@
 import {useEffect, useRef} from 'react';
 import useFDGCanvasStore from "../../../store/game/findDiffGame/useFDGCanvasStore.js";
 
-const FDGAiGeneratedCanvas = ({ image, endSearch, maskX1, maskY1, maskX2, maskY2 }) => {
+const FDGAiGeneratedCanvas = ({ image, mode, endSearch, maskX1, maskY1, maskX2, maskY2 }) => {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
 
   const { setAnswerX, setAnswerY } = useFDGCanvasStore();
+
+  const lengthX = Math.abs(maskX1- maskX2);
+  const lengthY = Math.abs(maskY1 - maskY2);
 
   // 캔버스 셋팅
   useEffect(() => {
@@ -25,8 +28,6 @@ const FDGAiGeneratedCanvas = ({ image, endSearch, maskX1, maskY1, maskX2, maskY2
     if (endSearch) {
       contextRef.current.lineWidth = 4;
       contextRef.current.strokeStyle = '#ff0000'
-      const lengthX = Math.abs(maskX1 - maskX2);
-      const lengthY = Math.abs(maskY1 - maskY2);
 
       contextRef.current.strokeRect(maskX1, maskY1, lengthX, lengthY);
     }
@@ -55,31 +56,19 @@ const FDGAiGeneratedCanvas = ({ image, endSearch, maskX1, maskY1, maskX2, maskY2
         img.src = imageURL;
     
         img.onload = () => {
-          const canvasWidth = canvasRef.current.width;
-          const canvasHeight = canvasRef.current.height;
-    
-          const imgWidth = img.width;
-          const imgHeight = img.height;
-          
-          let sLength = 0;
-    
-          if (imgWidth < imgHeight) {
-            sLength = imgWidth;
+          if (mode === 'aiImgUpload') {
+            contextRef.current.drawImage(img, maskX1, maskY1, lengthX, lengthY, maskX1, maskY1, lengthX, lengthY);
           } else {
-            sLength = imgHeight;
+            contextRef.current.drawImage(img, 0, 0);
           }
     
-          const sx = imgWidth/2 - sLength/2;
-          const sy = imgHeight/2 - sLength/2;
-    
-          contextRef.current.drawImage(
-            img,
-            sx, sy, sLength, sLength, 
-            0, 0, canvasWidth, canvasHeight 
-          );
-    
+          if (mode === 'upload') {
+            contextRef.current.fillStyle = "#ffffff";
+            contextRef.current.fillRect(maskX1, maskY1, lengthX, lengthY);
+          }
+
           // URL 해제
-          URL.revokeObjectURL(imageURL);
+          URL.revokeObjectURL(imageURL, 0, 0);
   
           resolve();
         }

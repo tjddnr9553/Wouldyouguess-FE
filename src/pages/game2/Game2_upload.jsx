@@ -14,6 +14,7 @@ import useFDGFileStore from "../../store/game/findDiffGame/useFDGFileStore.js";
 
 import ImgResizer from "./ImgResizer.js";
 import { findDiff_upload } from "../../api/game/FindDiff.js";
+import FDGAiGeneratedCanvas from "./canvas/FDGAiGeneratedCanvas.jsx";
 
 
 const Game2_upload = () => {
@@ -95,11 +96,32 @@ const Game2_upload = () => {
               <div className="containerWrapper">
                 <div className="game2-canvas-container">
                   <FDGUploadCanvas />
-                  {aiGeneratedImage == null ? (
-                    <div className="ai-generated-img-wrap"></div>
-                  ) : (
-                    <img src={aiGeneratedImage} className="ai-generated-img-wrap" />
-                  )}
+                  {
+                    aiGeneratedImage == null ? (
+                      oneClick ? (
+                        <FDGAiGeneratedCanvas
+                          mode={'upload'}
+                          image={originalImage} 
+                          maskX1={Math.round(startX)}
+                          maskY1={Math.round(startY)}
+                          maskX2={Math.round(endX)}
+                          maskY2={Math.round(endY)}
+                        />
+                      ) : (
+                        <div className="ai-generated-img-wrap"></div>
+                      )
+                    ) : (
+                      <FDGAiGeneratedCanvas
+                        mode={'aiImgUpload'}
+                        image={aiGeneratedImage} 
+                        maskX1={Math.round(startX)}
+                        maskY1={Math.round(startY)}
+                        maskX2={Math.round(endX)}
+                        maskY2={Math.round(endY)}
+                      />
+                      // <img src={aiGeneratedImage} className="ai-generated-img-wrap" alt="AI Generated" />
+                    )
+                  }
                 </div>
               </div>
 
