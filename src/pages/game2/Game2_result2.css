@@ -1,4 +1,4 @@
-.result > .title {
+.game2 .result > .title {
   font-size: 3rem;
   margin-bottom: 3%;
   font-family: "Keania One";
@@ -24,4 +24,20 @@
   font-size: 1.3rem;
 
   background-color: rgba(145, 161, 175, 0.704);
+}
+
+.game2 .player-list *{
+  height: 15%;
+}
+
+.player-list {
+  display: flex;
+  gap: 30px;
+}
+
+.game2 .playerResult {
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
