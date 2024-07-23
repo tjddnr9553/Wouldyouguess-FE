@@ -24,14 +24,14 @@ const Gaugebar = ({ gameStart, setGameStart, time }) => {
   const { gameId, isDrawing, totalRound, setImageKey, setImagePath } =
     useCatchLiarStore();
   const tensionSound = new Audio("/sound_effects/tension_sound.mp3");
-  
+
   useEffect(() => {
     setTimeout(() => {
       tensionSound.loop = true;
       tensionSound.play();
-      setTimeout(()=>{
+      setTimeout(() => {
         tensionSound.pause();
-      },7000)
+      }, 7000);
     }, time + 13000);
   }, []);
 
@@ -41,6 +41,7 @@ const Gaugebar = ({ gameStart, setGameStart, time }) => {
         width: "99.9%",
         backgroundColor: "red",
         duration: 20,
+        ease:"none",
         onComplete: () => {
           handleCountdownComplete();
           setGameStart(false);
