@@ -15,7 +15,7 @@ import Game2_playerResult from "./Game2_playerResult.jsx";
 
 const Game2_result2 = () => {
   const navigate = useNavigate();
-  const [players, setPlayers] = useState([]);
+  // const [players, setPlayers] = useState([]);
 
   const { roomId } = useRoomStore();
   const { findDiffGameId } = useFDGStore();
@@ -41,24 +41,48 @@ const Game2_result2 = () => {
     navigate(`/lobby/${roomId}`);
   };
 
+  const players = [
+    {
+      nickname: '채윤',
+      score: 100,
+    },
+    {
+      nickname: '채윤',
+      score: 100,
+    },
+    {
+      nickname: '채윤',
+      score: 100,
+    },
+    {
+      nickname: '채윤',
+      score: 100,
+    }
+  ]
+
   return (
-    <div className="game2 result inner">
-      <div className="title">
-        <strong>Result</strong>
+    <div className="inner">
+      <div className="game2 result container-stars">
+        <div className="title">
+          <strong>Result</strong>
+        </div>
+        <div className="game2-result-content">
+          <div className="tropy">
+            <div className="tropy-img"></div>
+          </div>
+          <div className="player-list">
+            {players && players.map((player, index) => (
+              <Game2_playerResult
+                key={index}
+                player={`${index + 1}`}
+                userNickname={player.nickname}
+                score={player.score}
+              />
+            ))}
+          </div>
+        </div>
+        <button onClick={goHome} className="homeBtn" />
       </div>
-      <div className="player-list">
-        {players && players.map((player, index) => (
-          <Game2_playerResult
-            key={index}
-            player={`${index + 1}`}
-            nickname={player.nickname}
-            score={player.score}
-          />
-        ))}
-      </div>
-      <button onClick={goHome} className="homeBtn">
-        HOME
-      </button>
     </div>
   );
 };

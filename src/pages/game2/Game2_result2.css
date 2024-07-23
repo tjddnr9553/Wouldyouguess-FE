@@ -1,43 +1,78 @@
-.game2.result > .title {
-  font-size: 5rem;
-  margin-bottom: 3%;
-  font-family: "Keania One";
-}
-.player-list {
-  width: 50%;
-  height: 50%;
+.game2.result {
+  width: 1060px;
+  height: 750px;
 
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  border: 6px solid white;
+  border-radius: 20px;
+
+  box-shadow: 0 0 2em #b320e722, 0.7rem 0.7rem 2em #b320e722,
+  -0.5rem 0.5rem 2em #b320e722, 0.5rem -0.5rem 2em #b320e722,
+  -0.5rem -0.5rem 2em #b320e722, 0 0 2em #b320e722 inset,
+  0.7rem 0.7rem 2em #b320e722 inset, -0.5rem 0.5rem 2em #b320e722 inset,
+  0.5rem -0.5rem 2em #b320e722 inset, -0.5rem -0.5rem 2em #b320e722 inset;
+
+  background-color: #4158D0;
+  background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
+  /* box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px; */
 }
 
-.game2.result > .homeBtn {
-  margin-top: 3%;
-
-  width: 160px;
-  height: 45px;
-
-  border-radius: 15px;
-  border: none;
-
-  font-weight: 700;
-  font-size: 1.3rem;
-
-  background-color: rgba(145, 161, 175, 0.704);
-}
-
-.game2 .player-list *{
-  height: 15%;
+.game2.result .title {
+  font-size: 5rem;
+  margin: 40px 0 50px 0;
+  font-family: "Keania One";
 }
 
 .player-list {
+  width: 60%;
+  height: 70%;
+
   display: flex;
-  gap: 30px;
+  flex-direction: column;
+  gap: 38px;
 }
 
-.game2 .playerResult {
-  height: 60px;
+.game2.result .homeBtn {
+  background-image: url('/images/btn/home-btn2.png');
+  background-position: center;
+  background-size: contain;
+
+  width: 150px;
+  height: 150px;
+
+  border-radius: 15px;
+  border: none;
+  margin-top: 27px;
+
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+.game2-result-content {
+  display: flex;
+  flex-direction: row;
+
+  width: 100%;
+}
+
+.game2-result-content .tropy {
+  width: 40%;
+
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.tropy-img{
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+
+  background-image: url('/images/game/game2/tropy.png');
+  background-position: center;
+  background-size: contain;
 }

@@ -115,7 +115,7 @@ const Game2 = () => {
               <div className="findDifference containerWrapper" >
                 <div className="generatedImg game2-canvas-container" ref={generatedImgRef} >
                   {gameImages && 
-                    <img className="original-img-wrap" src={gameImages.originalImageUrl} alt="ai-img"/>
+                    <img className="original-img-wrap " src={gameImages.originalImageUrl} alt="ai-img"/>
                   }
                   {gameImages && <FDGAiGeneratedCanvas 
                     image={gameImages && gameImages.aiGeneratedImageUrl} 

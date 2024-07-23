@@ -29,7 +29,7 @@
 .game1-result > .lose {
   color: slategray;
 }
-.playerResult {
+.game1-result .playerResult {
   width: 100%;
   background-color: rgba(145, 161, 175, 0.704);
 
@@ -39,7 +39,7 @@
   background: #e0e0e0;
   box-shadow: 0px 5px 10px #bebebe, 0px -5px 10px #ffffff;
 }
-.playerResult * {
+.game1-result .playerResult * {
   text-align: center;
   font-size: 1.75rem;
 
@@ -52,7 +52,7 @@
 .leftItem {
   width: 25%;
 }
-.playerResult > .nickname {
+.game1-result .playerResult > .nickname {
   width: 50%;
 }
 .nickname .liar-icon {
