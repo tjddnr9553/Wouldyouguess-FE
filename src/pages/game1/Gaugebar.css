@@ -4,19 +4,19 @@
 
   margin-bottom: 28px;
 
-  border: 5px solid #DAA520;
+  border: 5px solid #daa520;
   border-radius: 20px;
 
-  box-shadow: 
-    -0.05rem -0.05rem 0.08rem rgba(252, 230, 151, 0.6), 0.05rem 0.05rem 0.1rem #DAA520, 
-    inset 0.5rem 0.5rem 2rem rgb(73 73 106 / 50%), 
-    inset 0.1rem 0.1rem 0.2rem rgba(238, 246, 104, 0.75), 
-    inset -0.5rem -0.5rem 4rem #DAA520;
+  box-shadow: -0.05rem -0.05rem 0.08rem rgba(252, 230, 151, 0.6),
+    0.05rem 0.05rem 0.1rem #daa520,
+    inset 0.5rem 0.5rem 2rem rgb(73 73 106 / 50%),
+    inset 0.1rem 0.1rem 0.2rem rgba(238, 246, 104, 0.75),
+    inset -0.5rem -0.5rem 4rem #daa520;
 
-  animation: size1 0.5s linear infinite 20s,
-            size2 0.3s linear infinite 22s,
-            vibrationAndScale1 0.2s linear infinite 25s,
-            vibrationAndScale2 0.2s infinite 27s;
+  /* animation: size1 0.5s linear infinite 20s, size2 0.3s linear infinite 22s,
+    vibrationAndScale1 0.2s linear infinite 25s,
+    vibrationAndScale2 0.2s infinite 27s; */
+  overflow: hidden;
 }
 
 @keyframes size1 {
@@ -52,7 +52,6 @@
   from {
     transform: rotate(0.3deg);
     transform: scale(1);
-
   }
   to {
     transform: rotate(-0.3deg);
@@ -67,22 +66,22 @@
   display: inline-block;
   position: relative;
 
-  background-color: #DAA520;
-  
-  box-shadow: 10px 0px 15px 0px #DAA520;
+  background-color: #daa520;
+
+  box-shadow: 10px 0px 15px 0px #daa520;
   box-sizing: border-box;
 
   border-radius: 20px;
 
-  animation: progress-animation 30s linear infinite;
+  /* animation: progress-animation 30s linear infinite; */
 }
 
 .loader::after,
-  .loader::before {
-  content: '';
+.loader::before {
+  content: "";
   width: 10px;
   height: 1px;
-  background: #FFF;
+  background: #fff;
   position: absolute;
   top: 30px;
   right: -2px;
@@ -95,13 +94,13 @@
   top: -4px;
   transform: rotate(45deg);
 }
-  
+
 .rocket {
   position: absolute;
-  top: -11.5px;
-  right: 0;
+  top: 0%;
+  right: 0%;
 
-  height: 45px;
+  height: 100%;
   animation: vibrationAndScale1 0.2s linear infinite 25s,
-            vibrationAndScale2 0.1s infinite 27s;
+    vibrationAndScale2 0.1s infinite 27s;
 }
