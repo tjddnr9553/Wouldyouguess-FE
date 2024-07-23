@@ -11,6 +11,7 @@ import {catchLiar_vote, catchLiar_vote_candidates} from "../../api/game/CatchLia
 import VideoComponent from "../../components/webrtc/VideoComponent";
 import AudioComponent from "../../components/webrtc/AudioComponent";
 
+
 const colors = [
     "blue",
     "purple",
@@ -23,6 +24,8 @@ const Vote_new = () => {
 
     const [players, setPlayers] = useState([]);
     const [playersCam, setPlayersCam] = useState([]);
+    const [votes, setVotes] = useState({});
+    const [voteCounts, setVoteCounts] = useState({});
 
     const { userId, username } = useUserStore();
     const { roomId } = useRoomStore();
@@ -40,13 +43,42 @@ const Vote_new = () => {
 
     useEffect(() => {
         const sync_func = async () => {
-            const res = await catchLiar_vote_candidates(1);
-            setPlayers(res.sort((a, b) => b.userId - a.userId));
+            const res = await catchLiar_vote_candidates(gameId);
+            setPlayers(res.sort((a, b) => a.userId - b.userId));
+
+            const initialVotes = res.reduce((dict, player) => {
+                dict[player.userId] = 0;
+                return dict;
+            }, {});
+            setVotes(initialVotes);
+            setVoteCounts(initialVotes);
         };
 
         sync_func();
     }, []);
 
+    useEffect(() => {
+        socket?.on("game_voting", (data) => {
+            const { userId, votingUserId } = data;
+            setVotes(prevVotes => {
+                const newVotes = { ...prevVotes, [userId]: votingUserId };
+
+                const newVoteCounts = Object.values(newVotes).reduce((acc, votedUserId) => {
+                    if (votedUserId) {
+                        acc[votedUserId] = (acc[votedUserId] || 0) + 1;
+                    }
+                    return acc;
+                }, {});
+
+                setVoteCounts(newVoteCounts);
+                return newVotes;
+            });
+        });
+
+        return () => {
+            socket?.off("game_voting");
+        };
+    }, [socket]);
 
     useEffect(() => {
         const sortedRemoteTracks = remoteTracks.sort((a, b) => {
@@ -59,10 +91,7 @@ const Vote_new = () => {
 
     const liarVote = async (e) => {
         const votingUserId = Number(e.currentTarget.getAttribute("data-user-id"));
-        await catchLiar_vote(gameId, votingUserId);
-
-        navigate(`/loading`, { state: { title: "라이어 투표 중입니다." } });
-        socket?.emit("game_loading", { roomId, nextPageUrl: "/game1/result" });
+        socket?.emit("game_voting", { roomId, userId, votingUserId });
     };
 
     return (
@@ -76,6 +105,7 @@ const Vote_new = () => {
 
                 <div className="vote-image-container">
                     {players && players.map((player, index) => {
+                        const boxShadowStyle = `0 0 15px 15px ${colors[index]}`;
                         const isCurrentUser = player.userId === userId;
                         const absolutePosition = index % 2 === 1 ? "vote-camera-wrap-right" : "vote-camera-wrap-left";
                         const colorIndex = index;
@@ -85,14 +115,15 @@ const Vote_new = () => {
                                 key={index}
                                 data-user-id={player.userId}
                                 className="vote-user-painting-image-wrap"
+                                style={{boxShadow: boxShadowStyle}}
                                 onClick={liarVote}
                             >
+                                <div className="vote-voted-cnt">{voteCounts && voteCounts[player.userId]}</div>
                                 {isCurrentUser ? (
                                     <>
                                         <VideoComponent
                                             track={localTrack}
                                             participantIdentity={username}
-                                            local={true}
                                             color={colors[colorIndex]}
                                             classNameCss={absolutePosition}
                                         />
@@ -101,23 +132,26 @@ const Vote_new = () => {
                                 ) : (
                                     <>
                                         {playersCam.map((remoteTrack) => {
-                                            return remoteTrack.trackPublication.kind === "video" ? (
-                                                <React.Fragment key={remoteTrack.trackPublication.trackSid}>
-                                                    <VideoComponent
-                                                        track={remoteTrack.trackPublication.videoTrack}
-                                                        participantIdentity={remoteTrack.participantIdentity}
-                                                        color={colors[colorIndex]}
-                                                        local={false}
-                                                        classNameCss={absolutePosition}
+                                            if (String(remoteTrack.participantIdentity) === String(player.userId)) {
+                                                return remoteTrack.trackPublication.kind === "video" ? (
+                                                    <React.Fragment key={remoteTrack.trackPublication.trackSid}>
+                                                        <VideoComponent
+                                                            track={remoteTrack.trackPublication.videoTrack}
+                                                            participantIdentity={remoteTrack.participantIdentity}
+                                                            color={colors[colorIndex]}
+                                                            classNameCss={absolutePosition}
+                                                        />
+                                                        <img src={player.imagePath} className="vote-paint-img"
+                                                             alt={`${player.userId} image`}/>
+                                                    </React.Fragment>
+                                                ) : (
+                                                    <AudioComponent
+                                                        key={remoteTrack.trackPublication.trackSid}
+                                                        track={remoteTrack.trackPublication.audioTrack}
                                                     />
-                                                    <img src={player.imagePath} className="vote-paint-img" alt={`${player.userId} image`} />
-                                                </React.Fragment>
-                                            ) : (
-                                                <AudioComponent
-                                                    key={remoteTrack.trackPublication.trackSid}
-                                                    track={remoteTrack.trackPublication.audioTrack}
-                                                />
-                                            );
+                                                );
+                                            }
+                                            return null;
                                         })}
                                     </>
                                 )}
