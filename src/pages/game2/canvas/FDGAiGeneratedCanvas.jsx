@@ -1,7 +1,7 @@
 import {useEffect, useRef} from 'react';
 import useFDGCanvasStore from "../../../store/game/findDiffGame/useFDGCanvasStore.js";
 
-const FDGAiGeneratedCanvas = ({ image, setNewMasking, mode, endSearch, maskX1, maskY1, maskX2, maskY2 }) => {
+const FDGAiGeneratedCanvas = ({ image, setNewMasking, mode, endSearch, maskX1, maskY1, maskX2, maskY2, checkAnswerAndCondition }) => {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
 
@@ -45,10 +45,26 @@ const FDGAiGeneratedCanvas = ({ image, setNewMasking, mode, endSearch, maskX1, m
     };
   };
 
-  const onMouseDown = (e) => {
+  const onMouseDown = async (e) => {
+    if (endSearch) return;
+    
     const { x, y } = getCursorPosition(e);
-    setAnswerX(x);
-    setAnswerY(y);
+
+    const isSuccess = await checkAnswerAndCondition(x, y);
+
+    console.log("s?", isSuccess);
+
+    const image = new Image();
+
+    if(isSuccess) {
+      image.src = '/images/game/game2/success.png';
+    } else {
+      image.src = '/images/game/game2/fail.png';
+    }
+
+    image.onload = () => {
+      contextRef.current.drawImage(image, x-25, y-30, 50, 50);
+    }
   };
 
 

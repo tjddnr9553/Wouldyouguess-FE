@@ -18,12 +18,12 @@ const useFDGCanvasStore = create((set)=>({
     canvasClick: false,
     setCanvasClick: (canvasClick) => set({canvasClick}),
 
-    answerClick: false,
-    setAnswerClick: (answerClick) => set({ answerClick }),
-    answerX: 0,
-    setAnswerX: (answerX) => set({ answerX }),
-    answerY: 0,
-    setAnswerY: (answerY) => set({ answerY }),
+    // answerClick: false,
+    // setAnswerClick: (answerClick) => set({ answerClick }),
+    // answerX: 0,
+    // setAnswerX: (answerX) => set({ answerX }),
+    // answerY: 0,
+    // setAnswerY: (answerY) => set({ answerY }),
 }));
 
 export default useFDGCanvasStore;
