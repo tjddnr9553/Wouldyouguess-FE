@@ -1,21 +1,21 @@
 import "./Game1.css";
 
-import {useEffect, useRef, useState} from "react";
-import {useSearchParams} from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import User from "../../components/game/User.tsx";
 import Drawing from "./canvas/Drawing.jsx";
 import Palette from "./canvas/Palette.jsx";
 import Tools from "./canvas/CanvasTools.jsx";
 
-import {catchLiar_info} from "../../api/game/CatchLiar.js";
+import { catchLiar_info } from "../../api/game/CatchLiar.js";
 
 import useUserStore from "../../store/user/useUserStore.js";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 import useAudioStore from "../../store/bgm/useAudioStore.js";
 import Ailen from "../../components/game/Ailen.jsx";
 import LaserPointer from "./LaserPointer.jsx";
-import {useCanvasStore} from "../../store/canvas/useCanvasStore.js";
+import { useCanvasStore } from "../../store/canvas/useCanvasStore.js";
 import Keyword from "../../components/game/Keyword.jsx";
 import Gaugebar from "./Gaugebar.jsx";
 import AilenText from "../../components/game/AilenText.jsx";
@@ -115,7 +115,7 @@ const Game1 = () => {
     <div className="inner" key={round}>
       {showModal && isDrawing && <Ailen keyword={"내가 그릴 순서!"} />}
       {showModal && !isDrawing && thisTurnUser && (
-          <Ailen keyword={`${thisTurnUser}님이 그릴 순서!`} />
+        <Ailen keyword={`${thisTurnUser}님이 그릴 순서!`} />
       )}
       <div ref={keywordRef}>{showKeyword && <Keyword keyword={keyword} />}</div>
       <div className="game container">
@@ -123,13 +123,17 @@ const Game1 = () => {
           <User />
         </div>
         <div className="center">
-          <Gaugebar gameStart = {gameStart} setGameStart={setGameStart}/>
+          <Gaugebar
+            gameStart={gameStart}
+            setGameStart={setGameStart}
+            time={round === 1 ? 9500 : 6000}
+          />
 
           <div className="drawing-container">
             <div className="keyword-title">
               {titleOn && isDrawing && <AilenText text={keyword} />}
               {titleOn && !isDrawing && (
-                  <AilenText text={"다른 플레이어의 차례"} />
+                <AilenText text={"다른 플레이어의 차례"} />
               )}
             </div>
             <div ref={containerRef} className="canvas-container">
@@ -143,8 +147,7 @@ const Game1 = () => {
               />
             </div>
           </div>
-          <div className="canvas-tools">
-          </div>
+          <div className="canvas-tools"></div>
         </div>
         <div className="right-section">
           <Tools />
