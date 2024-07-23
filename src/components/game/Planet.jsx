@@ -5,15 +5,7 @@ import { createPortal } from "react-dom"; // 포털 기능 import
 import GameInfo from "../../pages/lobby/GameInfo";
 import "./Planet.css";
 
-const Planet = ({
-  style,
-  id,
-  min,
-  max,
-  text,
-  onClick,
-  game,
-}) => {
+const Planet = ({ style, id, min, max, text, onClick, game }) => {
   const imagePath = `/images/planet/${id}.png`;
 
   const [hoveredGame, setHoveredGame] = useState(null);
@@ -52,6 +44,16 @@ const Planet = ({
     }
   };
 
+  const hoverSound = () => {
+    const hoverAudio = new Audio("/sound_effects/hover_sound.mp3");
+    hoverAudio.play();
+  };
+
+  const hoverSoundGame3 = () => {
+    const hoverAudio = new Audio("/sound_effects/hover_sound_planet3.mp3");
+    // hoverAudio.play();
+  };
+
   return (
     <div className={`${id} item-hints`} style={style}>
       {createPortal(
@@ -62,8 +64,14 @@ const Planet = ({
           {hoveredGame === game && (
             <GameInfo
               mode={game === "game1" ? "Catch Spy" : "Find Difference"}
-              title={game === "game1" ? "스파이를 찾아라!" : "틀린 부분을 찾아라!"}
-              discription={game === "game1" ? "그림을 보고 스파이를 색출하세요!" : "그림을 보고 틀린 그림을 찾아보세요!"}
+              title={
+                game === "game1" ? "스파이를 찾아라!" : "틀린 부분을 찾아라!"
+              }
+              discription={
+                game === "game1"
+                  ? "그림을 보고 스파이를 색출하세요!"
+                  : "그림을 보고 틀린 그림을 찾아보세요!"
+              }
               onclick={handleClick}
             />
           )}
@@ -73,7 +81,12 @@ const Planet = ({
 
       <div className="hint" data-position="4">
         <span className={`hint-dot ${id === "planet3" ? "locked-planet" : ""}`}>
-          <img src={imagePath} alt="planet image" onClick={onClick} />
+          <img
+            src={imagePath}
+            alt="planet image"
+            onClick={onClick}
+            onMouseOver={id !== "planet3" ? hoverSound : hoverSoundGame3}
+          />
           {id === "planet3" && (
             <img
               src="/images/planet/lock.png"
