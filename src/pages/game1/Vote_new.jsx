@@ -91,6 +91,7 @@ const Vote_new = () => {
 
         if (!votePageShowGameOver) return;
         sync_func();
+        setMyVotingUserId(0);
     }, [votePageShowGameOver])
 
     const liarVote = async (e) => {

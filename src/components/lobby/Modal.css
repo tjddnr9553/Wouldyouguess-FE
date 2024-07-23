@@ -73,7 +73,7 @@
     cursor: pointer;
   }
   
-  .copy {
+  .modal .copy {
     margin-top: 4px;
     background-color: #008cff10;
     display: flex;
