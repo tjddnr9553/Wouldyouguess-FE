@@ -1,16 +1,19 @@
 import "./Vote_new.css";
-import React, {useEffect, useRef, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import React, {useEffect, useState} from "react";
+
+import VideoComponent from "../../components/webrtc/VideoComponent";
+import AudioComponent from "../../components/webrtc/AudioComponent";
+import VoteGaugebar from "./VoteGaugebar.jsx";
+import GameOver from "./GameOver.jsx";
+
 import useUserStore from "../../store/user/useUserStore.js";
 import useRoomStore from "../../store/room/useRoomStore.js";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 import useSocketStore from "../../store/socket/useSocketStore.js";
 import useWebrtcStore from "../../store/webrtc/useWebrtcStore.tsx";
-import useAudioStore from "../../store/bgm/useAudioStore.js";
-import {catchLiar_vote, catchLiar_vote_candidates} from "../../api/game/CatchLiar.js";
-import VideoComponent from "../../components/webrtc/VideoComponent";
-import AudioComponent from "../../components/webrtc/AudioComponent";
 
+import {catchLiar_vote_candidates} from "../../api/game/CatchLiar.js";
+import useAudioStore from "../../store/bgm/useAudioStore.js";
 
 const colors = [
     "blue",
@@ -20,26 +23,17 @@ const colors = [
 ];
 
 const Vote_new = () => {
-    const navigate = useNavigate();
-
+    const [gameStart, setGameStart] = useState(true); // 게임 시작 상태, 30초 시작
     const [players, setPlayers] = useState([]);
     const [playersCam, setPlayersCam] = useState([]);
-    const [votes, setVotes] = useState({});
     const [voteCounts, setVoteCounts] = useState({});
 
     const { userId, username } = useUserStore();
     const { roomId } = useRoomStore();
-    const { gameId } = useCatchLiarStore();
+    const { gameId,  myVotingUserId, votePageShowGameOver, setMyVotingUserId } = useCatchLiarStore();
     const { socket } = useSocketStore();
     const { localTrack, remoteTracks } = useWebrtcStore();
-    const { play, stop } = useAudioStore();
-
-    useEffect(() => {
-        play("/bgm/Game1_bgm.mp3");
-        return () => {
-            stop();
-        };
-    }, []);
+    const { stop } = useAudioStore();
 
     useEffect(() => {
         const sync_func = async () => {
@@ -50,29 +44,31 @@ const Vote_new = () => {
                 dict[player.userId] = 0;
                 return dict;
             }, {});
-            setVotes(initialVotes);
             setVoteCounts(initialVotes);
         };
-
+        stop();
         sync_func();
     }, []);
 
     useEffect(() => {
         socket?.on("game_voting", (data) => {
-            const { userId, votingUserId } = data;
-            setVotes(prevVotes => {
-                const newVotes = { ...prevVotes, [userId]: votingUserId };
+            const { votingUserId, previousVotingUserId } = data;
+            console.log(`socket data : 1. ${votingUserId}, 2. ${previousVotingUserId}`)
 
-                const newVoteCounts = Object.values(newVotes).reduce((acc, votedUserId) => {
-                    if (votedUserId) {
-                        acc[votedUserId] = (acc[votedUserId] || 0) + 1;
-                    }
-                    return acc;
-                }, {});
+            setVoteCounts(prevVoteCounts => {
+                const newVoteCounts = { ...prevVoteCounts };
 
-                setVoteCounts(newVoteCounts);
-                return newVotes;
+                if (previousVotingUserId > 0) {
+                    newVoteCounts[previousVotingUserId] = (newVoteCounts[previousVotingUserId] || 0) - 1;
+                }
+
+                if (votingUserId > 0) {
+                    newVoteCounts[votingUserId] = (newVoteCounts[votingUserId] || 0) + 1;
+                }
+
+                return newVoteCounts;
             });
+
         });
 
         return () => {
@@ -91,14 +87,18 @@ const Vote_new = () => {
 
     const liarVote = async (e) => {
         const votingUserId = Number(e.currentTarget.getAttribute("data-user-id"));
-        socket?.emit("game_voting", { roomId, userId, votingUserId });
+        socket?.emit("game_voting", { roomId, userId, votingUserId, previousVotingUserId : myVotingUserId });
+        setMyVotingUserId(votingUserId);
     };
 
     return (
         <div className="vote-container-wrap">
-            <div className="vote-container">
-                {/* 게이지바 추가 */}
+            {votePageShowGameOver && <GameOver />}
+            <div className="vote-gaugebar-wrap">
+                <VoteGaugebar gameStart={gameStart} setGameStart={setGameStart} />
+            </div>
 
+            <div className="vote-container">
                 <div className="vote-title-container">
                     <strong className="vote-title">Vote</strong>
                 </div>
@@ -118,7 +118,9 @@ const Vote_new = () => {
                                 style={{boxShadow: boxShadowStyle}}
                                 onClick={liarVote}
                             >
-                                <div className="vote-voted-cnt">{voteCounts && voteCounts[player.userId]}</div>
+                                <div className="vote-voted-cnt">
+                                    <strong>{voteCounts && voteCounts[player.userId]}</strong>
+                                </div>
                                 {isCurrentUser ? (
                                     <>
                                         <VideoComponent
