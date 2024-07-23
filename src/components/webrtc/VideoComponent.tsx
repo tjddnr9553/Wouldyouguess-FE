@@ -34,7 +34,7 @@ function VideoComponent({
 
   return (
     <div id={"camera-" + participantIdentity} className={classNameCss ? classNameCss : "video-container"}>
-      <video ref={videoElement} id={track.sid}></video>
+      <video ref={videoElement} id={track.sid} />
     </div>
   );
 }

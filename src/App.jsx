@@ -24,6 +24,7 @@ import Game2_result2 from "./pages/game2/Game2_result2.jsx";
 
 import useWebrtcStore from "./store/webrtc/useWebrtcStore.tsx";
 import useAudioStore from "./store/bgm/useAudioStore.js";
+import Vote_new from "./pages/game1/Vote_new.jsx";
 
 function App() {
   const nav = useNavigate();
@@ -63,6 +64,7 @@ function App() {
 
         <Route path="/game1" element={<Game1 />} />
         <Route path="/game1/vote" element={<Vote />} />
+        <Route path="/game1/vote2" element={<Vote_new />} />
         <Route path="/game1/result" element={<Result />} />
 
         <Route path="/game2/upload" element={<Game2_upload />} />
