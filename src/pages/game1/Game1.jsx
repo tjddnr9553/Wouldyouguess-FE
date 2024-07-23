@@ -18,7 +18,7 @@ import LaserPointer from "./LaserPointer.jsx";
 import { useCanvasStore } from "../../store/canvas/useCanvasStore.js";
 import Keyword from "../../components/game/Keyword.jsx";
 import Gaugebar from "./Gaugebar.jsx";
-import AilenText from "../../components/game/AilenText.jsx";
+import ModalKeyword from "../../components/game/ModalKeyword.jsx";
 
 const Game1 = () => {
   const [searchParams] = useSearchParams();
@@ -31,7 +31,6 @@ const Game1 = () => {
   const [showModal, setShowModal] = useState(false); // 모달 표시 상태
   const [gameStart, setGameStart] = useState(false); // 게임 시작 상태, 30초 시작
   const [showKeyword, setShowKeyword] = useState(true);
-  const [titleOn, setTitleOn] = useState(false);
   const [thisTurnUser, setThisTurnUser] = useState(null);
 
   const { userId, nickname, cameraId, isLocal } = useUserStore();
@@ -86,7 +85,6 @@ const Game1 = () => {
         setTimeout(() => {
           setShowModal(false);
           setGameStart(true);
-          setTitleOn(true);
         }, 6000);
         setShowKeyword(false);
       }, 3500);
@@ -117,7 +115,7 @@ const Game1 = () => {
       {showModal && !isDrawing && thisTurnUser && (
         <Ailen keyword={`${thisTurnUser}님이 그릴 순서!`} />
       )}
-      <div ref={keywordRef}>{showKeyword && <Keyword keyword={keyword} />}</div>
+      <div ref={keywordRef}>{showKeyword && <ModalKeyword keyword={keyword} />}</div>
       <div className="game container">
         <div className="left-section">
           <User />
@@ -128,16 +126,11 @@ const Game1 = () => {
             setGameStart={setGameStart}
             time={round === 1 ? 9500 : 6000}
           />
-
           <div className="drawing-container">
             <div className="keyword-title">
-              {titleOn && isDrawing && <AilenText text={keyword} />}
-              {titleOn && !isDrawing && (
-                <AilenText text={"다른 플레이어의 차례"} />
-              )}
             </div>
             <div ref={containerRef} className="canvas-container">
-              <Keyword />
+              <Keyword keyword={keyword}/>
               <Drawing
                 zIndex={isDrawing ? 10 : 9}
                 position={isDrawing ? "absolute" : "relative"}
