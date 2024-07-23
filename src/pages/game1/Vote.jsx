@@ -29,9 +29,10 @@ const Result1 = () => {
   const { play, stop } = useAudioStore();
 
   const colors = [
-    "blue", // Blue
-    "purple", // Purple
-    "green", // Green
+    "blue",
+    "purple",
+    "green",
+    "red",
   ];
 
   useEffect(() => {

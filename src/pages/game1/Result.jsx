@@ -36,8 +36,8 @@ const dummy = [
 ];
 
 const dummy2 = {
-  liar: "파인애플",
-  normal: "사과",
+  liar: "초코파이",
+  normal: "몽쉘",
   win: "normal",
 };
 
