@@ -48,7 +48,7 @@ const Gaugebar = ({gameStart, setGameStart}) => {
     });
 
     socket?.on("game_end", () => {
-      navigate(`/game1/vote`);
+      navigate(`/game1/vote2`);
     });
 
     return () => {
@@ -58,7 +58,7 @@ const Gaugebar = ({gameStart, setGameStart}) => {
       });
 
       socket?.off("game_end", () => {
-        navigate(`/game1/vote`);
+        navigate(`/game1/vote2`);
       });
     }
   }, [socket])
