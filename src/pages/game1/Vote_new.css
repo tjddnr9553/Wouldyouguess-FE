@@ -12,6 +12,14 @@
     height: auto;
 }
 
+.vote-gaugebar-wrap {
+    width: 71.5%;
+    height: 100vh;
+    position: fixed;
+
+    margin-top: 6rem;
+}
+
 .vote-title-container {
     display: flex;
     justify-content: center;
@@ -62,16 +70,39 @@
     border-radius: inherit;
 }
 
+.vote-voted-cnt {
+    width: 60px;
+    height: 60px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: black;
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    border-radius: 1rem;
+}
+
+.vote-voted-cnt strong{
+    color: white;
+    font-size: 42px;
+    font-family: "Keania One";
+    font-weight: bold;
+}
+
 .vote-paint-img {
-  /*width: 100%;*/
+  width: 100%;
   height: 100%;
 }
+
 .vote-camera-wrap-left {
     display: flex;
     justify-content: center;
 
     position: absolute;
-    left: -56%;
+    left: -52%;
 
     border-radius: 1rem;
 }
@@ -81,15 +112,15 @@
     justify-content: center;
 
     position: absolute;
-    right: -56%;
+    right: -52%;
 
     border-radius: 1rem;
 }
 
 .vote-camera-wrap-right video {
-    width: 74%;
+    width: 260px;
 }
 
 .vote-camera-wrap-left video {
-    width: 74%;
+    width: 260px;
 }

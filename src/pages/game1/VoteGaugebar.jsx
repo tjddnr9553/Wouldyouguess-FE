@@ -1,13 +1,16 @@
-import GameOver from "./GameOver";
 import "./Gaugebar.css";
-import { useEffect, useRef, useState } from "react";
+import {useEffect, useRef} from "react";
+import {useNavigate} from "react-router-dom";
+
+import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
+
 import gsap from "gsap";
-import { useNavigate } from "react-router-dom";
 
 const VoteGaugebar = ({ gameStart, setGameStart }) => {
   const navigate = useNavigate();
   const loaderRef = useRef(null);
-  const [showGameover, setShowGameover] = useState(false);
+
+  const { setVotePageShowGameOver } = useCatchLiarStore();
 
   const tensionSound = new Audio("/sound_effects/tension_sound.mp3");
   useEffect(() => {
@@ -41,18 +44,18 @@ const VoteGaugebar = ({ gameStart, setGameStart }) => {
     const endVoteSound = new Audio("/sound_effects/end_vote.mp3");
     endVoteSound.loop = true;
     endVoteSound.play();
-    setShowGameover(true);
+    setVotePageShowGameOver(true);
 
     setTimeout(() => {
       endVoteSound.pause();
       navigate(`/game1/result`);
-      setShowGameover(false);
+      setVotePageShowGameOver(false);
     }, 3000);
   };
 
   return (
     <div className={`gaugebar ${gameStart ? "start" : ""}`}>
-      {showGameover && <GameOver />}
+
       <div className={`loader ${gameStart ? "start" : ""}`} ref={loaderRef}>
         <img
           src="/images/game/rocket.svg"
