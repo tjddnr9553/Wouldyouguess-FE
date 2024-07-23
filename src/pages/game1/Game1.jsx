@@ -124,6 +124,7 @@ const Game1 = () => {
 
           <div className="drawing-container">
             <div ref={containerRef} className="canvas-container">
+              <Keyword />
               <Drawing
                 zIndex={isDrawing ? 10 : 9}
                 position={isDrawing ? "absolute" : "relative"}
