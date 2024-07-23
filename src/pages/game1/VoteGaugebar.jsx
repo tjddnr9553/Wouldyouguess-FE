@@ -4,15 +4,13 @@ import {useNavigate} from "react-router-dom";
 
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 
-import {catchLiar_vote} from "../../api/game/CatchLiar.js";
-
 import gsap from "gsap";
 
 const VoteGaugebar = ({ gameStart, setGameStart }) => {
   const navigate = useNavigate();
   const loaderRef = useRef(null);
 
-  const { gameId, myVotingUserId, setVotePageShowGameOver } = useCatchLiarStore();
+  const { setVotePageShowGameOver } = useCatchLiarStore();
 
   const tensionSound = new Audio("/sound_effects/tension_sound.mp3");
   useEffect(() => {
@@ -43,8 +41,6 @@ const VoteGaugebar = ({ gameStart, setGameStart }) => {
   }, [gameStart]);
 
   const handleCountdownComplete = async () => {
-    await catchLiar_vote(gameId, myVotingUserId);
-
     const endVoteSound = new Audio("/sound_effects/end_vote.mp3");
     endVoteSound.loop = true;
     endVoteSound.play();

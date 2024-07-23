@@ -12,7 +12,7 @@ import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 import useSocketStore from "../../store/socket/useSocketStore.js";
 import useWebrtcStore from "../../store/webrtc/useWebrtcStore.tsx";
 
-import {catchLiar_vote_candidates} from "../../api/game/CatchLiar.js";
+import {catchLiar_vote, catchLiar_vote_candidates} from "../../api/game/CatchLiar.js";
 import useAudioStore from "../../store/bgm/useAudioStore.js";
 
 const colors = [
@@ -53,7 +53,6 @@ const Vote_new = () => {
     useEffect(() => {
         socket?.on("game_voting", (data) => {
             const { votingUserId, previousVotingUserId } = data;
-            console.log(`socket data : 1. ${votingUserId}, 2. ${previousVotingUserId}`)
 
             setVoteCounts(prevVoteCounts => {
                 const newVoteCounts = { ...prevVoteCounts };
@@ -84,6 +83,15 @@ const Vote_new = () => {
         })
         setPlayersCam(sortedRemoteTracks);
     }, [remoteTracks])
+
+    useEffect(() => {
+        const sync_func = async () => {
+            await catchLiar_vote(gameId, myVotingUserId);
+        }
+
+        if (!votePageShowGameOver) return;
+        sync_func();
+    }, [votePageShowGameOver])
 
     const liarVote = async (e) => {
         const votingUserId = Number(e.currentTarget.getAttribute("data-user-id"));
