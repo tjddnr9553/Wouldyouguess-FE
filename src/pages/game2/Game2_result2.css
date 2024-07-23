@@ -1,5 +1,5 @@
 .game2.result > .title {
-  font-size: 5rem; !important;
+  font-size: 5rem;
   margin-bottom: 3%;
   font-family: "Keania One";
 }
@@ -27,8 +27,8 @@
 }
 
 .game2 .player-list *{
-  height: 15%;
   width: 100%;
+  height: 15%;
 }
 
 .player-list {
@@ -39,5 +39,6 @@
 .game2 .playerResult {
   height: 60px;
   display: flex;
+  justify-content: center;
   align-items: center;
 }

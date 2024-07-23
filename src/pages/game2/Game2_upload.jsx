@@ -14,6 +14,7 @@ import useFDGFileStore from "../../store/game/findDiffGame/useFDGFileStore.js";
 
 import ImgResizer from "./ImgResizer.js";
 import { findDiff_upload } from "../../api/game/FindDiff.js";
+import FDGAiGeneratedCanvas from "./canvas/FDGAiGeneratedCanvas.jsx";
 import useFDGStore from "../../store/game/findDiffGame/useFDGStore.js";
 
 
@@ -21,6 +22,7 @@ const Game2_upload = () => {
   const navigate = useNavigate();
 
   const [oneClick, setOneClick] = useState(false);
+  const [canvasBlocking, setCanvasBlocking] = useState(false); // 게임 준비 완료 후 마스킹 금지
 
   const imgUploadBtn = useRef(null);
 
@@ -49,7 +51,7 @@ const Game2_upload = () => {
   };
 
   const sendToServer = async () => {
-    if (oneClick) return;
+    // if (oneClick) return;
 
     await FDGCanvasRef.toBlob( async (blob) => {
       setOneClick(true);
@@ -74,6 +76,7 @@ const Game2_upload = () => {
   };
 
   const readyToStart = () => {
+    setCanvasBlocking(true);
     navigate(`/loading`, {state : { title: "파일 업로드 중입니다." }});
     socket?.emit("game_loading", { roomId, nextPageUrl: "/game2?round=1" });
   }
@@ -98,12 +101,33 @@ const Game2_upload = () => {
             <div className="imageContainer">
               <div className="containerWrapper">
                 <div className="game2-canvas-container">
-                  <FDGUploadCanvas />
-                  {aiGeneratedImage == null ? (
-                    <div className="ai-generated-img-wrap"></div>
-                  ) : (
-                    <img src={aiGeneratedImage} className="ai-generated-img-wrap" />
-                  )}
+                  <FDGUploadCanvas canvasBlocking={canvasBlocking} />
+                  {
+                    aiGeneratedImage == null ? (
+                      oneClick ? (
+                        <FDGAiGeneratedCanvas
+                          mode={'upload'}
+                          image={originalImage}
+                          maskX1={Math.round(startX)}
+                          maskY1={Math.round(startY)}
+                          maskX2={Math.round(endX)}
+                          maskY2={Math.round(endY)}
+                        />
+                      ) : (
+                        <div className="ai-generated-img-wrap"></div>
+                      )
+                    ) : (
+                      <FDGAiGeneratedCanvas
+                        mode={'aiImgUpload'}
+                        image={aiGeneratedImage}
+                        maskX1={Math.round(startX)}
+                        maskY1={Math.round(startY)}
+                        maskX2={Math.round(endX)}
+                        maskY2={Math.round(endY)}
+                      />
+                      // <img src={aiGeneratedImage} className="ai-generated-img-wrap" alt="AI Generated" />
+                    )
+                  }
                 </div>
               </div>
 
@@ -117,11 +141,14 @@ const Game2_upload = () => {
                   style={{ display: "none" }}
                 />
                 {originalImage === null ? (
-                  <NewButton text={"파일 업로드 하기!"} onClick={() => imgUploadBtn.current.click()}/>
+                  <NewButton text={"Upload"} onClick={() => imgUploadBtn.current.click()}/>
                 ) : aiGeneratedImage === null ? (
                   <NewButton text={"AI 이미지 생성하기!"} onClick={sendToServer}/>
                 ) : (
-                  <NewButton text={"게임 준비 완료!"} onClick={readyToStart}/>
+                  <div className="game2-bottom">
+                    <NewButton text={"AI 이미지 다시 생성!"} onClick={sendToServer}/>
+                    <NewButton text={"게임 준비 완료!"} onClick={readyToStart}/>
+                  </div>
                 )}
               </div>
             </div>

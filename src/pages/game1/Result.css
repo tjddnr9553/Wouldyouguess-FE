@@ -1,4 +1,4 @@
-.result {
+.game1.result {
   width: 100vw;
   height: 100vh;
 
@@ -9,7 +9,7 @@
   text-align: center;
 }
 
-.result > .title {
+.game1.result > .title {
   position: relative;
 
   margin-bottom: 2%;

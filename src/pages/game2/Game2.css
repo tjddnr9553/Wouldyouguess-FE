@@ -145,8 +145,8 @@
   width: 100%;
 }
 
-.findDiffrence:hover {
-  /* cursor: url("/images/cursor_1.png") 20 30, auto !important; */
+.findDiffrence {
+  cursor: url("/images/cursor_1.png") 20 30, auto;
 }
 
 .swiper-button-next {
@@ -173,4 +173,39 @@
 .original-img-wrap {
   width: 512px;
   height: 512px;
+
+  animation: blur 35s forwards;
+}
+
+@keyframes blur {
+  from {
+    opacity: 1;
+    filter: blur(0);
+  } to {
+    opacity: 0.5;
+    filter: blur(12px);
+  }
+}
+
+.game2-bottom {
+  width: 100%;
+
+  margin: 0 37px;
+
+  display: flex;
+  justify-content:center;
+  align-items: center;
+  gap: 40px;
+}
+
+.find-arrow {
+  width: 91px;
+
+  position: absolute;
+  top: 16px;
+  right: -107;
+
+  transform: rotate(-46deg);
+
+  z-index: 3;
 }

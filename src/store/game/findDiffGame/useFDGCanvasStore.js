@@ -8,9 +8,9 @@ const initialState = {
     endY: 0,
     isImgUploaded: false,
     canvasClick: false,
-    answerClick: false,
-    answerX: 0,
-    answerY: 0,
+    // answerClick: false,
+    // answerX: 0,
+    // answerY: 0,
 };
 
 
@@ -26,9 +26,9 @@ const useFDGCanvasStore = create((set)=>({
     setIsImgUploaded: (isImgUploaded) => set({isImgUploaded}),
     setCanvasClick: (canvasClick) => set({canvasClick}),
 
-    setAnswerClick: (answerClick) => set({ answerClick }),
-    setAnswerX: (answerX) => set({ answerX }),
-    setAnswerY: (answerY) => set({ answerY }),
+    // setAnswerClick: (answerClick) => set({ answerClick }),
+    // setAnswerX: (answerX) => set({ answerX }),
+    // setAnswerY: (answerY) => set({ answerY }),
 
     resetFDGCanvasStore: () => set(initialState)
 }));
