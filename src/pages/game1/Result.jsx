@@ -36,7 +36,7 @@ const dummy = [
 ];
 
 const dummy2 = {
-  liar: "풋사과",
+  liar: "파인애플",
   normal: "사과",
   win: "normal",
 };
@@ -101,8 +101,8 @@ const Result = () => {
       <div className="title">
         <div className="result-title">
           {players.find((player) => player.isWinner)?.isLiar
-            ? "Liar  Win !"
-            : "Catch Liar !"}{" "}
+            ? "Spy  Win !"
+            : "Catch Spy !"}{" "}
         </div>
       </div>
       <div
