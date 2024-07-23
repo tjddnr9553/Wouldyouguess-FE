@@ -51,7 +51,7 @@ const Game2_result2 = () => {
         <strong>Result</strong>
       </div>
       <div className="player-list">
-        {players.map((player, index) => (
+        {players && players.map((player, index) => (
           <Game2_playerResult
             key={index}
             player={`${index + 1}`}

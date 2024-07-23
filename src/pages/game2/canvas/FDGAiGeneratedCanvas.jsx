@@ -52,8 +52,6 @@ const FDGAiGeneratedCanvas = ({ image, setNewMasking, mode, endSearch, maskX1, m
 
     const isSuccess = await checkAnswerAndCondition(x, y);
 
-    console.log("s?", isSuccess);
-
     const image = new Image();
 
     if(isSuccess) {
