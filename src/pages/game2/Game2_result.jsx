@@ -55,7 +55,7 @@ const Game2_result = () => {
               navigation={true}
               direction={"horizontal"}
             >
-              {resultList.map((result, index) => (
+              {resultList && resultList.map((result, index) => (
                 <SwiperSlide key={index}>
                   <div className="slide-container">
                     <div
