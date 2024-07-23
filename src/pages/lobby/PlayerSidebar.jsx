@@ -16,7 +16,6 @@ const PlayerSidebar = () => {
         setPlayers(roomUsers);
     }
 
-
     useEffect(() => {
         sync_func(roomId);
     }, [])
@@ -37,9 +36,11 @@ const PlayerSidebar = () => {
       </div>
       <div className="sidebar">
         <div className="player-section">
-            {players.map((player, index) => (
-                <Player key={index} username={player.username} nickname={player.nickname}/>
-            ))}
+            {players.map((player, index) => 
+              (
+                <Player key={index} username={player.username} nickname={player.nickname} />
+              )
+            )}
         </div>
       </div>
     </>

@@ -5,7 +5,7 @@ import useFDGFileStore from "../../../store/game/findDiffGame/useFDGFileStore.js
 
 import Rectangle from "../../game1/canvas/tools/Rectangle.js";
 
-const FDGUploadCanvas = () => {
+const FDGUploadCanvas = ({canvasBlocking}) => {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
   const toolRef = useRef(null);
@@ -43,6 +43,8 @@ const FDGUploadCanvas = () => {
   };
 
   const onMouseDown = (e) => {
+    if (canvasBlocking) return;
+
     contextRef.current.clearRect(0,0,512,512);
     const { x, y } = getCursorPosition(e);
     setStartX(x);
@@ -52,6 +54,8 @@ const FDGUploadCanvas = () => {
   };
 
   const onMouseUp = (e) => {
+    if (canvasBlocking) return;
+
     const { x, y } = getCursorPosition(e);
     setEndX(x);
     setEndY(y);
@@ -59,6 +63,8 @@ const FDGUploadCanvas = () => {
   };
 
   const onMouseMove = (e) => {
+    if (canvasBlocking) return;
+
     const { x, y } = getCursorPosition(e);
     toolRef.current.onMouseMove(x, y);
   };

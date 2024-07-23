@@ -34,7 +34,7 @@ const Game2 = () => {
   const { findDiffGameId } = useFDGStore();
   const { play, stop } = useAudioStore();
 
-  const { answerClick, answerX, answerY } = useFDGCanvasStore();
+  // const { answerClick, answerX, answerY } = useFDGCanvasStore();
 
 
   useEffect(() => {
@@ -62,12 +62,6 @@ const Game2 = () => {
   }, [round]);
 
   useEffect(() => {
-    if (answerX > 0) {
-      checkAnswerAndCondition();
-    }
-  }, [answerX])
-
-  useEffect(() => {
     if (chance === 0) {
       findDiff_update_score(userId, chance, false);
       // setStartSearch(true);
@@ -75,7 +69,7 @@ const Game2 = () => {
     }
   }, [chance])
 
-  const checkAnswerAndCondition = async () => {
+  const checkAnswerAndCondition = async (answerX, answerY) => {
     // 정답
     const maskX1 = gameImages.maskX1;
     const maskY1 = gameImages.maskY1;
@@ -86,8 +80,12 @@ const Game2 = () => {
       await findDiff_update_score(userId, chance, true);
       // setStartSearch(true);
       setEndSearch(true);
+
+      return true;
     } else {
       setChance(chance - 1);
+
+      return false;
     }
   }
 
@@ -107,24 +105,27 @@ const Game2 = () => {
         <div className="center">
           <div className="game2_border">
             <div className="titleContainer">
-              <div>
+              <div style={{position: 'relative'}}>
                 <strong>Find Difference !</strong>
+                <img src="/images/game/game2/arrow.png" className="find-arrow"/>
               </div>
             </div>
             <div className="imageContainer">
 
               <div className="findDifference containerWrapper" >
                 <div className="generatedImg game2-canvas-container" ref={generatedImgRef} >
-                  {gameImages && <img className="original-img-wrap" src={gameImages.originalImageUrl} alt="ai-img"/>
-                    // : <div className="original-img-wrap"></div>
+                  {gameImages && 
+                    <img className="original-img-wrap" src={gameImages.originalImageUrl} alt="ai-img"/>
                   }
                   {gameImages && <FDGAiGeneratedCanvas 
                     image={gameImages && gameImages.aiGeneratedImageUrl} 
+                    mode={'findDifference'}
                     endSearch={endSearch} 
                     maskX1={gameImages.maskX1}
                     maskY1={gameImages.maskY1}
                     maskX2={gameImages.maskX2}
                     maskY2={gameImages.maskY2}
+                    checkAnswerAndCondition={checkAnswerAndCondition}
                     />}
                 </div>
               </div>
