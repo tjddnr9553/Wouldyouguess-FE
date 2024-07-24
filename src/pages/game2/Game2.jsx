@@ -139,7 +139,7 @@ const Game2 = () => {
                       alt="ai-img"
                       style={{
                         animation: `${
-                          isBlurred ? "blur 15s forwards" : "none"
+                          isBlurred ? "blur 25s forwards" : "none"
                         }`,
                       }}
                     />
