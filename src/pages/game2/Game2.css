@@ -165,23 +165,17 @@
   width: 100%;
 }
 
-.ai-generated-img-wrap {
+.original-img-wrap{
   width: 512px;
   height: 512px;
-}
-
-.original-img-wrap {
-  width: 512px;
-  height: 512px;
-
-  animation: blur 35s forwards;
 }
 
 @keyframes blur {
   from {
     opacity: 1;
     filter: blur(0);
-  } to {
+  }
+  to {
     opacity: 0.5;
     filter: blur(12px);
   }
@@ -193,7 +187,7 @@
   margin: 0 37px;
 
   display: flex;
-  justify-content:center;
+  justify-content: center;
   align-items: center;
   gap: 40px;
 }
@@ -217,7 +211,7 @@
   height: 100%;
   width: 100%;
   position: absolute;
-  overflow: hidden; 
+  overflow: hidden;
   z-index: 0;
   /* Border Radius */
 	border-radius: 10px;

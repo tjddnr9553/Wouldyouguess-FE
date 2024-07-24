@@ -15,7 +15,7 @@ import {findDiff_result} from "../../api/game/FindDiff.js";
 
 const Game2_result2 = () => {
   const navigate = useNavigate();
-  // const [players, setPlayers] = useState([]);
+  const [players, setPlayers] = useState([]);
 
   const { roomId } = useRoomStore();
   const { findDiffGameId } = useFDGStore();
@@ -44,25 +44,6 @@ const Game2_result2 = () => {
     resetFDGCanvasStore();
     navigate(`/lobby/${roomId}`);
   };
-
-  const players = [
-    {
-      nickname: '채윤',
-      score: 100,
-    },
-    {
-      nickname: '채윤',
-      score: 100,
-    },
-    {
-      nickname: '채윤',
-      score: 100,
-    },
-    {
-      nickname: '채윤',
-      score: 100,
-    }
-  ]
 
   return (
     <div className="inner">
