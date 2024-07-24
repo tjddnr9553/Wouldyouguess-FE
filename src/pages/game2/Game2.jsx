@@ -130,54 +130,54 @@ const Game2 = () => {
 
               <div className="findDifference containerWrapper">
                 <div
-                    className="generatedImg game2-canvas-container"
-                    ref={generatedImgRef}
+                  className="generatedImg game2-canvas-container"
+                  ref={generatedImgRef}
                 >
                   {gameImages && (
-                      <img
-                          className="original-img-wrap"
-                          src={gameImages.originalImageUrl}
-                          alt="ai-img"
-                          style={{
-                            animation: `${
-                                isBlurred ? "blur 15s forwards" : "none"
-                            }`,
-                          }}
-                      />
+                    <img
+                      className="original-img-wrap"
+                      src={gameImages.originalImageUrl}
+                      alt="ai-img"
+                      style={{
+                        animation: `${
+                          isBlurred ? "blur 25s forwards" : "none"
+                        }`,
+                      }}
+                    />
                   )}
                   {gameImages && (
-                      <FDGAiGeneratedCanvas
-                          image={gameImages && gameImages.aiGeneratedImageUrl}
-                          mode={"findDifference"}
-                          endSearch={endSearch}
-                          maskX1={gameImages.maskX1}
-                          maskY1={gameImages.maskY1}
-                          maskX2={gameImages.maskX2}
-                          maskY2={gameImages.maskY2}
-                          checkAnswerAndCondition={checkAnswerAndCondition}
-                      />
+                    <FDGAiGeneratedCanvas
+                      image={gameImages && gameImages.aiGeneratedImageUrl}
+                      mode={"findDifference"}
+                      endSearch={endSearch}
+                      maskX1={gameImages.maskX1}
+                      maskY1={gameImages.maskY1}
+                      maskX2={gameImages.maskX2}
+                      maskY2={gameImages.maskY2}
+                      checkAnswerAndCondition={checkAnswerAndCondition}
+                    />
                   )}
                 </div>
               </div>
 
               <div className="magnifierContainer">
                 {!endSearch ? (
-                    <NewButton
-                        text={Array.from({ length: chance }, (_, index) => (
-                            <img
-                                key={index}
-                                src="/images/magnifier.png"
-                                style={{ width: "2rem" }}
-                            />
-                        ))}
-                    />
+                  <NewButton
+                    text={Array.from({ length: chance }, (_, index) => (
+                      <img
+                        key={index}
+                        src="/images/magnifier.png"
+                        style={{ width: "2rem" }}
+                      />
+                    ))}
+                  />
                 ) : (
-                    <NewButton
-                        text={
-                          round === roundLength ? "결과 보기" : "다음 문제 보기"
-                        }
-                        onClick={goNextPage}
-                    />
+                  <NewButton
+                    text={
+                      round === roundLength ? "결과 보기" : "다음 문제 보기"
+                    }
+                    onClick={goNextPage}
+                  />
                 )}
               </div>
             </div>
