@@ -14,32 +14,32 @@ import { catchLiar_result } from "../../api/game/CatchLiar.js";
 
 const dummy = [
   {
-    nickname: '채윤',
-    role: '라이어',
-    isWin: 'lose',
+    nickname: "채윤",
+    role: "라이어",
+    isWin: "lose",
   },
   {
-    nickname: '현민',
-    role: '일반시민',
-    isWin: 'win',
+    nickname: "현민",
+    role: "일반시민",
+    isWin: "win",
   },
   {
-    nickname: '성욱',
-    role: '일반시민',
-    isWin: 'win',
+    nickname: "성욱",
+    role: "일반시민",
+    isWin: "win",
   },
   {
-    nickname: '광윤',
-    role: '일반시민',
-    isWin: 'win',
+    nickname: "광윤",
+    role: "일반시민",
+    isWin: "win",
   },
-]
+];
 
 const dummy2 = {
-  liar: '풋사과',
-  normal: '사과',
-  win: 'normal'
-}
+  liar: "초코파이",
+  normal: "몽쉘",
+  win: "normal",
+};
 
 const Result = () => {
   const navigate = useNavigate();
@@ -55,18 +55,19 @@ const Result = () => {
 
   const showKewordRef = useRef(null);
 
-  useEffect(() => {
-    if(showKewordRef.current && dummy2) {
-      if(dummy2.win === 'normal') {
-        showKewordRef.current.firstChild.classList.add('winKeyword');
-        showKewordRef.current.lastChild.classList.add('loseKeyword');
-      } else {
-        showKewordRef.current.firstChild.classList.add('loseKeyword');
-        showKewordRef.current.lastChild.classList.add('winKeyword');
+  const isLiarWin = players.find((player) => player.isWinner)?.isLiar || false; // 라이어 승리 여부
 
+  useEffect(() => {
+    if (showKewordRef.current && dummy2) {
+      if (dummy2.win === "normal") {
+        showKewordRef.current.firstChild.classList.add("winKeyword");
+        showKewordRef.current.lastChild.classList.add("loseKeyword");
+      } else {
+        showKewordRef.current.firstChild.classList.add("loseKeyword");
+        showKewordRef.current.lastChild.classList.add("winKeyword");
       }
     }
-  }, [dummy2])
+  }, [dummy2]);
 
   useEffect(() => {
     play("/bgm/Result_bgm.mp3");
@@ -100,24 +101,28 @@ const Result = () => {
       <div className="title">
         <div className="result-title">
           {players.find((player) => player.isWinner)?.isLiar
-            ? "라이어"
-            : "시민"}{" "}
-          승리 !!
+            ? "Spy  Win !"
+            : "Catch Spy !"}{" "}
         </div>
       </div>
-      <div className="player-list">
-        {winnerIds &&
-          winnerIds.length > 0 &&
-          remoteTracks.length > 0 && ( // remoteTracks 길이 확인 추가
-            <VoteUser targetId={winnerIds} />
-          )}
+      <div
+        className={`winnerVideo-container ${
+          isLiarWin ? "liar-win" : "citizen-win"
+        }`}
+      >
+        <div className="player-list">
+          {winnerIds &&
+            winnerIds.length > 0 &&
+            remoteTracks.length > 0 && ( // remoteTracks 길이 확인 추가
+              <VoteUser targetId={winnerIds} />
+            )}
+        </div>
       </div>
       <div className="showKeyword" ref={showKewordRef}>
         <div className="normalKeyword">normal {dummy2.normal}</div>
         <div className="liarKeyword">liar {dummy2.liar}</div>
       </div>
-      <button onClick={goHome} className="homeBtn">
-      </button>
+      <button onClick={goHome} className="homeBtn"></button>
     </div>
   );
 };

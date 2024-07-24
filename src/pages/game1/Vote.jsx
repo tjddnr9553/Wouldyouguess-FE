@@ -1,43 +1,36 @@
 import "./Vote.css";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+
+import VideoComponent from "../../components/webrtc/VideoComponent";
+import AudioComponent from "../../components/webrtc/AudioComponent";
+
 import useAudioStore from "../../store/bgm/useAudioStore";
+import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
+import useUserStore from "../../store/user/useUserStore.js";
+import useWebrtcStore from "../../store/webrtc/useWebrtcStore.tsx";
+
 import {
-  catchLiar_vote,
   catchLiar_vote_candidates,
 } from "../../api/game/CatchLiar.js";
-import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
-import { useNavigate } from "react-router-dom";
-import User from "../../components/game/User.tsx";
-import useSocketStore from "../../store/socket/useSocketStore.js";
-import useUserStore from "../../store/user/useUserStore.js";
-import useRoomStore from "../../store/room/useRoomStore.js";
+import VoteGaugebar from "./VoteGaugebar.jsx";
 
-const Result1 = () => {
-  const navigate = useNavigate();
-
+const Vote = () => {
   const [players, setPlayers] = useState([]);
-  const [isLiarVoteEnded, setIsLiarVoteEnede] = useState(false);
-
   const previewImage = useRef(null);
-
-  const { userId } = useUserStore();
-  const { roomId } = useRoomStore();
+  const [gameStart, setGameStart] = useState(true); // 게임 시작 상태, 30초 시작
+  const { userId, username } = useUserStore();
   const { gameId } = useCatchLiarStore();
-  const { socket } = useSocketStore();
+  const { localTrack, remoteTracks } = useWebrtcStore();
   const { play, stop } = useAudioStore();
 
-  const colors = [
-    "blue", // Blue
-    "purple", // Purple
-    "green", // Green
-  ];
+  const colors = ["blue", "purple", "green", "red"];
 
-  useEffect(() => {
-    play("/bgm/Game1_bgm.mp3");
-    return () => {
-      stop();
-    };
-  }, []);
+  // useEffect(() => {
+  //   play("/bgm/Game1_bgm.mp3");
+  //   return () => {
+  //     stop();
+  //   };
+  // }, []);
 
   useEffect(() => {
     const sync_func = async () => {
@@ -48,71 +41,101 @@ const Result1 = () => {
     sync_func();
   }, []);
 
-  const liarVote = async (e) => {
-    const votingUserId = Number(e.currentTarget.getAttribute("data-user-id"));
-    await catchLiar_vote(gameId, votingUserId);
-
-    socket?.emit("game_loading", { roomId, nextPageUrl: "/game1/result" });
-    navigate(`/loading`, { state: { title: "라이어 투표 중입니다." } });
-  };
-  let i = 0;
   return (
     <div className="inner">
       <div className="game container">
-        <div className="left-section">
-          <User />
-        </div>
         <div className="center">
+          <VoteGaugebar
+            gameStart={gameStart}
+            setGameStart={setGameStart}
+          />
           <div className="game2_border">
             <div className="titleContainer">
-              <div>
-                <strong>Vote</strong>
-              </div>
+              <strong>Vote</strong>
             </div>
             <div className="imageContainer">
               <div className="findDiffrence" ref={previewImage}>
                 {players &&
-                  players.map((player, index) =>
-                    index === 1 ? (
+                  players.map((player, index) => {
+                    const isCurrentUser = player.userId === userId;
+                    const boxShadowStyle = `0 0 15px 15px ${colors[index]}`;
+
+                    return (
                       <div
                         key={index}
                         data-user-id={player.userId}
                         className="user-painting"
-                        onClick={liarVote}
                         style={{
-                          boxShadow: "0 0 15px 15px red",
+                          boxShadow: boxShadowStyle,
                           margin: "5%",
                           borderRadius: "inherit",
                         }}
                       >
-                        <div id={`image${index}`} className="img-border">
-                          <img
-                            src={player.imagePath}
-                            alt={`${player.userId} image`}
-                          />
-                        </div>
+                        {isCurrentUser ? (
+                          <>
+                            <VideoComponent
+                              track={localTrack}
+                              participantIdentity={username}
+                              local={true}
+                              color={colors[index]}
+                              classNameCss={"vote-camera"}
+                            />
+                            <div id={`image${index}`} className="img-border">
+                              <img
+                                src={player.imagePath}
+                                alt={`${player.userId} image`}
+                              />
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            {remoteTracks.map((remoteTrack) => {
+                              if (
+                                String(remoteTrack.participantIdentity) ===
+                                String(player.userId)
+                              ) {
+                                return remoteTrack.trackPublication.kind ===
+                                  "video" ? (
+                                  <React.Fragment
+                                    key={remoteTrack.trackPublication.trackSid}
+                                  >
+                                    <VideoComponent
+                                      track={
+                                        remoteTrack.trackPublication.videoTrack
+                                      }
+                                      participantIdentity={
+                                        remoteTrack.participantIdentity
+                                      }
+                                      color={colors[index]}
+                                      local={false}
+                                      classNameCss={"vote-camera"}
+                                    />
+                                    <div
+                                      id={`image${index}`}
+                                      className="img-border"
+                                    >
+                                      <img
+                                        src={player.imagePath}
+                                        alt={`${player.userId} image`}
+                                      />
+                                    </div>
+                                  </React.Fragment>
+                                ) : (
+                                  <AudioComponent
+                                    key={remoteTrack.trackPublication.trackSid}
+                                    track={
+                                      remoteTrack.trackPublication.audioTrack
+                                    }
+                                  />
+                                );
+                              }
+                              return null; // Return null to avoid rendering empty fragments
+                            })}
+                          </>
+                        )}
                       </div>
-                    ) : (
-                      <div
-                        key={index}
-                        data-user-id={player.userId}
-                        className="user-painting"
-                        onClick={liarVote}
-                        style={{
-                          boxShadow: `0 0 15px 15px ${colors[i++]}`,
-                          margin: "5%",
-                          borderRadius: "inherit",
-                        }}
-                      >
-                        <div id={`image${index}`} className="img-border">
-                          <img
-                            src={player.imagePath}
-                            alt={`${player.userId} image`}
-                          />
-                        </div>
-                      </div>
-                    )
-                  )}
+                    );
+                  })}
               </div>
             </div>
           </div>
@@ -122,4 +145,4 @@ const Result1 = () => {
   );
 };
 
-export default Result1;
+export default Vote;

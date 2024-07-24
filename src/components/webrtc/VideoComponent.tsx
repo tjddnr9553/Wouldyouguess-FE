@@ -7,14 +7,14 @@ interface VideoComponentProps {
   track: LocalVideoTrack | RemoteVideoTrack;
   participantIdentity: string;
   color: string;
-  local: boolean;
+  classNameCss: string;
 }
 
 function VideoComponent({
   track,
   participantIdentity,
   color,
-  local,
+  classNameCss,
 }: VideoComponentProps) {
   const videoElement = useRef<HTMLVideoElement | null>(null);
 
@@ -31,8 +31,8 @@ function VideoComponent({
   }, [track]);
 
   return (
-    <div id={"camera-" + participantIdentity} className="video-container">
-      <video ref={videoElement} id={track.sid}></video>
+    <div id={"camera-" + participantIdentity} className={classNameCss ? classNameCss : "video-container"}>
+      <video ref={videoElement} id={track.sid} />
     </div>
   );
 }

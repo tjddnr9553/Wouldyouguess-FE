@@ -12,7 +12,7 @@ const FDGUploadCanvas = ({canvasBlocking}) => {
   const containerRef = useRef(null);
 
   const { resizingImage, setOriginalImage  } = useFDGFileStore();
-  const { setFDGCanvasRef, setStartX, setEndX, setStartY, setEndY } = useFDGCanvasStore();
+  const { setFDGCanvasRef, setStartX, setEndX, setStartY, setEndY, startX, startY } = useFDGCanvasStore();
 
   // 캔버스 셋팅
   useEffect(() => {
@@ -50,7 +50,7 @@ const FDGUploadCanvas = ({canvasBlocking}) => {
     setStartX(x);
     setStartY(y);
     
-    toolRef.current.onMouseDown(x, y, '#ff0000', 4, false);
+    toolRef.current.onMouseDown(x, y, '#ffffff', 10, false);
   };
 
   const onMouseUp = (e) => {
@@ -60,6 +60,14 @@ const FDGUploadCanvas = ({canvasBlocking}) => {
     setEndX(x);
     setEndY(y);
     toolRef.current.onMouseUp(x, y);
+
+    // 임시로 캔버스 두 줄 처리
+    const lengthX = Math.abs(startX - x);
+    const lengthY = Math.abs(startY - y);
+
+    contextRef.current.lineWidth = 4;
+    contextRef.current.strokeStyle = '#ff0000'
+    contextRef.current.strokeRect(startX, startY, lengthX, lengthY);
   };
 
   const onMouseMove = (e) => {

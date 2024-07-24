@@ -1,29 +1,36 @@
 import { create } from "zustand";
 
-const useFDGCanvasStore = create((set)=>({
+const initialState = {
     FDGCanvasRef: null,
+    startX: 0,
+    endX: 0,
+    startY: 0,
+    endY: 0,
+    isImgUploaded: false,
+    canvasClick: false,
+    // answerClick: false,
+    // answerX: 0,
+    // answerY: 0,
+};
+
+
+const useFDGCanvasStore = create((set)=>({
+    ...initialState,
     setFDGCanvasRef: (FDGCanvasRef) => set({FDGCanvasRef}),
 
-    startX: 0,
     setStartX: (startX) => set({ startX }),
-    endX: 0,
     setEndX: (endX) => set({ endX }),
-    startY: 0,
     setStartY: (startY) => set({ startY }),
-    endY: 0,
     setEndY: (endY) => set({ endY }),
 
-    isImgUploaded: false,
     setIsImgUploaded: (isImgUploaded) => set({isImgUploaded}),
-    canvasClick: false,
     setCanvasClick: (canvasClick) => set({canvasClick}),
 
-    // answerClick: false,
     // setAnswerClick: (answerClick) => set({ answerClick }),
-    // answerX: 0,
     // setAnswerX: (answerX) => set({ answerX }),
-    // answerY: 0,
     // setAnswerY: (answerY) => set({ answerY }),
+
+    resetFDGCanvasStore: () => set(initialState)
 }));
 
 export default useFDGCanvasStore;

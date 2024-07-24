@@ -5,6 +5,9 @@
 .game.container {
   width: 100%;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .game .left-section {
@@ -86,8 +89,6 @@
 .img-border,
 .user-painting {
   display: flex;
-  align-items: center;
-  justify-content: center;
 }
 .user-painting {
   box-sizing: border-box;
@@ -96,10 +97,10 @@
 .img-border {
   width: 100%;
   height: 100%;
-
-  /* border: 1px solid rgb(22, 16, 16);
-  border-radius: 30px; */
-
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
   box-shadow: 10px 10px 10px -5px rgba(68, 68, 221, 0.7);
 }
 .user-painting:hover {
@@ -120,7 +121,7 @@
 
 .user-painting img {
   display: block;
-  height: 90%;
+  height: 100%;
   object-fit: cover;
   border-radius: 20px;
 }

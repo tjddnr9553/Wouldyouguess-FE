@@ -8,6 +8,8 @@ const useCatchLiarStore = create((set) => ({
     totalRound: 0,
     imageKey: '',
     imagePath: '',
+    myVotingUserId: 0,
+    votePageShowGameOver: false,
 
     setGameId: (gameId) => set({ gameId }),
     setIsDrawing: (isDrawing) => set({ isDrawing }),
@@ -16,6 +18,8 @@ const useCatchLiarStore = create((set) => ({
     setTotalRound: (totalRound) => set({ totalRound }),
     setImageKey: (imageKey) => set({ imageKey }),
     setImagePath: (imagePath) => set({ imagePath }),
+    setMyVotingUserId: (myVotingUserId) => set({ myVotingUserId }),
+    setVotePageShowGameOver: (votePageShowGameOver) => set({ votePageShowGameOver }),
 }));
 
 export default useCatchLiarStore;

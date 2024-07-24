@@ -1,54 +1,65 @@
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import './Gaugebar.css'
-import useSocketStore from '../../store/socket/useSocketStore';
-import useRoomStore from '../../store/room/useRoomStore';
-import useUserStore from '../../store/user/useUserStore';
-import { useCanvasStore } from '../../store/canvas/useCanvasStore';
-import useCatchLiarStore from '../../store/game/useCatchLiarStore';
-import { useEffect, useRef } from 'react';
-import { catchLiar_image_upload } from '../../api/game/CatchLiar';
-import gsap from 'gsap';
+import { useNavigate, useSearchParams } from "react-router-dom";
+import "./Gaugebar.css";
+import useSocketStore from "../../store/socket/useSocketStore";
+import useRoomStore from "../../store/room/useRoomStore";
+import useUserStore from "../../store/user/useUserStore";
+import { useCanvasStore } from "../../store/canvas/useCanvasStore";
+import useCatchLiarStore from "../../store/game/useCatchLiarStore";
+import { useEffect, useRef } from "react";
+import { catchLiar_image_upload } from "../../api/game/CatchLiar";
+import gsap from "gsap";
 
-const Gaugebar = ({gameStart, setGameStart}) => {
+const Gaugebar = ({ gameStart, setGameStart, time }) => {
   const loaderRef = useRef(null);
 
   const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
-  const round = Number(searchParams.get('round'));
+  const round = Number(searchParams.get("round"));
 
   const { socket } = useSocketStore();
   const { userId } = useUserStore();
   const { roomId } = useRoomStore();
   const { canvas } = useCanvasStore();
-  const { gameId, isDrawing, totalRound, setImageKey, setImagePath } = useCatchLiarStore();
+  const { gameId, isDrawing, totalRound, setImageKey, setImagePath } =
+    useCatchLiarStore();
+  const tensionSound = new Audio("/sound_effects/tension_sound.mp3");
+
+  useEffect(() => {
+    setTimeout(() => {
+      tensionSound.loop = true;
+      tensionSound.play();
+      setTimeout(() => {
+        tensionSound.pause();
+      }, 7000);
+    }, time + 13000);
+  }, []);
 
   useEffect(() => {
     if (gameStart) {
-      gsap.to(".loader", 
-        {
-          width: '99.9%',
-          backgroundColor: 'red',
-          duration: 30,
-          onComplete: () => {
-            handleCountdownComplete();
-            setGameStart(false);
-          }
-        })
+      gsap.to(".loader", {
+        width: "99.9%",
+        backgroundColor: "red",
+        duration: 20,
+        ease:"none",
+        onComplete: () => {
+          handleCountdownComplete();
+          setGameStart(false);
+        },
+      });
     } else {
       gsap.killTweensOf(".loader");
     }
-    
-  }, [gameStart])
+  }, [gameStart]);
 
   useEffect(() => {
     socket?.on("game_round_change", (data) => {
       const { gameId, round } = data;
-      navigate(`/game1?gameId=${gameId}&round=${round + 1}`)
+      navigate(`/game1?gameId=${gameId}&round=${round + 1}`);
     });
 
     socket?.on("game_end", () => {
-      navigate(`/game1/vote`);
+      navigate(`/game1/vote2`);
     });
 
     return () => {
@@ -58,19 +69,19 @@ const Gaugebar = ({gameStart, setGameStart}) => {
       });
 
       socket?.off("game_end", () => {
-        navigate(`/game1/vote`);
+        navigate(`/game1/vote2`);
       });
-    }
-  }, [socket])
+    };
+  }, [socket]);
 
   const handleCountdownComplete = async () => {
-    if (!isDrawing) return ;
+    if (!isDrawing) return;
 
-    await canvas.toBlob( async (blob) => {
+    await canvas.toBlob(async (blob) => {
       const formData = new FormData();
-      formData.append('userId', userId);
-      formData.append('catchLiarGameId', gameId);
-      formData.append('file', blob, 'image.png');
+      formData.append("userId", userId);
+      formData.append("catchLiarGameId", gameId);
+      formData.append("file", blob, "image.png");
 
       const res = await catchLiar_image_upload(formData);
       setImageKey(res.imageKey);
@@ -81,16 +92,19 @@ const Gaugebar = ({gameStart, setGameStart}) => {
       } else {
         socket?.emit("game_end", { roomId });
       }
-    }, 'image/png');
-  }
+    }, "image/png");
+  };
 
   return (
-    <div className={`gaugebar ${gameStart ? 'start' : ''}`} >
-      <div className={`loader ${gameStart ? 'start' : ''}`} ref={loaderRef} >
-        <img src="/images/game/rocket.svg" className={`rocket ${gameStart ? 'start' : ''}`} />
+    <div className={`gaugebar ${gameStart ? "start" : ""}`}>
+      <div className={`loader ${gameStart ? "start" : ""}`} ref={loaderRef}>
+        <img
+          src="/images/game/rocket.svg"
+          className={`rocket ${gameStart ? "start" : ""}`}
+        />
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Gaugebar;

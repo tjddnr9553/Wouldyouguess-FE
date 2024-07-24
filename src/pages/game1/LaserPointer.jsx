@@ -133,6 +133,7 @@ const LaserPointer = ({ zIndex, position }) => {
       yAxis: newPoint.y,
       time: newPoint.time,
       roomId,
+      userId
     });
   };
 
@@ -150,6 +151,7 @@ const LaserPointer = ({ zIndex, position }) => {
         yAxis: newPoint.y,
         time: newPoint.time,
         roomId,
+        userId
       });
 
       setClientLines((prevLines) => {
@@ -173,7 +175,7 @@ const LaserPointer = ({ zIndex, position }) => {
 
   const handleWatcherDrawStart = (data) => {
     if (isDrawing) return;
-    const { xAxis, yAxis, time } = data;
+    const { xAxis, yAxis, time, userId } = data;
 
     const newPoint = {
       x: xAxis,
@@ -191,7 +193,7 @@ const LaserPointer = ({ zIndex, position }) => {
 
   const handleWatcherDrawMove = (data) => {
     if (isDrawing) return;
-    const { xAxis, yAxis, time } = data;
+    const { xAxis, yAxis, time, userId } = data;
 
     const newPoint = {
       x: xAxis,

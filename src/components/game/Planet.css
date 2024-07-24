@@ -1,11 +1,11 @@
 /* 행성 */
 .item-hints {
   /* 행성 사이즈 조절 여기서 하면 됨 */
-  width: 31%; 
+  width: 31%;
   position: absolute;
 }
 .item-hints .hint {
-  display: flex;   
+  display: flex;
   justify-content: center;
   align-items: center;
 }
@@ -17,16 +17,20 @@
   transform: translate(-0%, -0%) scale(0.95);
 }
 
+.locked-planet{
+  width: 80%;
+}
 
 .item-hints .hint-dot img {
-  width: 100%;
+  width: 120%;
   height: auto;
   display: block;
-  object-fit: cover;
+  object-fit: contain;
 
   filter: drop-shadow(0 0 2px rgba(252, 255, 253, 0.7))
     drop-shadow(0 0 5px rgba(237, 255, 243, 0.7))
     drop-shadow(0 0 15px rgba(243, 255, 246, 0.7));
+  z-index: 5;
 }
 
 .item-hints .hint-content {
@@ -42,6 +46,7 @@
   visibility: hidden;
   pointer-events: none;
 }
+
 .item-hints .hint:hover .hint-content {
   position: absolute;
   z-index: 5;
@@ -93,4 +98,13 @@
   width: 300px;
   top: -13%;
   left: 80%;
+}
+
+.hintBtn {
+  border: 1px solid blue;
+  filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.9));
+  margin-left: 100%;
+  margin-bottom: 250%;
+  width: 80%;
+  border-radius: 50%;
 }

@@ -35,10 +35,11 @@ const User = ({ targetId }) => {
             local={false}
           />
         ) : (
-          <AudioComponent
-            key={remoteTrack.trackPublication.trackSid}
-            track={remoteTrack.trackPublication.audioTrack!}
-          />
+            <></>
+          // <AudioComponent
+          //   key={remoteTrack.trackPublication.trackSid}
+          //   track={remoteTrack.trackPublication.audioTrack!}
+          // />
         )
       )}
     </div>

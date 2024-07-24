@@ -1,17 +1,20 @@
 import { create } from "zustand";
 
-const useFDGFileStore = create((set)=>({
+const initialState = {
     resizingImage: null,
-    setResizingImage: (resizingImage) => set({resizingImage}),
-
     originalImage: null,
-    setOriginalImage: (originalImage) => set({originalImage}),
-
     maskingImage: null,
-    setMaskingImage: (maskingImage) => set({maskingImage}),
-
     aiGeneratedImage: null,
+};
+
+const useFDGFileStore = create((set)=>({
+    ...initialState,
+    setResizingImage: (resizingImage) => set({resizingImage}),
+    setOriginalImage: (originalImage) => set({originalImage}),
+    setMaskingImage: (maskingImage) => set({maskingImage}),
     setAiGeneratedImage: (aiGeneratedImage) => set({aiGeneratedImage}),
+
+    resetFDGFileStore: () => set(initialState)
 }))
 
 export default useFDGFileStore;
