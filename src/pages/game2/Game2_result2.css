@@ -36,6 +36,10 @@
   gap: 38px;
 }
 
+.player-list * {
+  width: 100%;
+}
+
 .game2.result .homeBtn {
   background-image: url('/images/btn/home-btn2.png');
   background-position: center;
