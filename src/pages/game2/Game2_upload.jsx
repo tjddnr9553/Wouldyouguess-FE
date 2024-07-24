@@ -143,11 +143,11 @@ const Game2_upload = () => {
                 {originalImage === null ? (
                   <NewButton text={"Upload"} onClick={() => imgUploadBtn.current.click()}/>
                 ) : aiGeneratedImage === null ? (
-                  <NewButton text={"AI 이미지 생성하기!"} onClick={sendToServer}/>
+                  <NewButton text={"이미지 생성"} onClick={sendToServer}/>
                 ) : (
                   <div className="game2-bottom">
-                    <NewButton text={"AI 이미지 다시 생성!"} onClick={sendToServer}/>
-                    <NewButton text={"게임 준비 완료!"} onClick={readyToStart}/>
+                    <NewButton text={"이미지 다시 생성"} onClick={sendToServer}/>
+                    <NewButton text={"준비 완료!"} onClick={readyToStart}/>
                   </div>
                 )}
               </div>

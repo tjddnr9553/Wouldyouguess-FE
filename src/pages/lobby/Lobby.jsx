@@ -34,7 +34,7 @@ const Lobby = () => {
   const { setGameId } = useCatchLiarStore();
   const { joinRoom } = useWebrtcStore();
   const { play, stop } = useAudioStore();
-
+  const gameStartSound = new Audio("/sound_effects/game_start_sound.mp3");
   useEffect(() => {
     play("/bgm/bgm.mp3");
 
@@ -95,13 +95,21 @@ const Lobby = () => {
   };
 
   const startCatchLiar = async () => {
+    gameStartSound.play();
     const gameId = await catchLiar_start(roomId);
-    socket.emit("game_start", { mode: 1, userId, roomId, gameId });
+    setTimeout(() => {
+      socket.emit("game_start", { mode: 1, userId, roomId, gameId });
+      gameStartSound.pause();
+    }, 3000);
   };
 
   const startFindDIff = async () => {
+    gameStartSound.play();
     const gameId = await findDiff_start(roomId);
-    socket?.emit("game_start", { mode: 2, userId, roomId, gameId });
+    setTimeout(() => {
+      socket?.emit("game_start", { mode: 2, userId, roomId, gameId });
+      gameStartSound.pause();
+    }, 3000);
   };
 
   return (

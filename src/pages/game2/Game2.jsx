@@ -91,7 +91,7 @@ const Game2 = () => {
       await findDiff_update_score(userId, chance, true);
       // setStartSearch(true);
       setEndSearch(true);
-
+      
       return true;
     } else {
       setChance(chance - 1);
@@ -167,9 +167,10 @@ const Game2 = () => {
                       <img
                         key={index}
                         src="/images/magnifier.png"
-                        style={{ width: "2rem" }}
+                        style={{ width: "3rem" }}
                       />
                     ))}
+                    style={{width:"30%"}}
                   />
                 ) : (
                   <NewButton

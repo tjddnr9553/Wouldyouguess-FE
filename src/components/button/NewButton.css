@@ -2,8 +2,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 13rem;
-  height: 3rem;
+  width: 50%;
+  height: 5rem;
+  font-size: 3rem;
   background-size: 300% 300%;
   backdrop-filter: blur(0.5rem);
   border-radius: 5rem;
@@ -36,7 +37,6 @@
 strong {
   z-index: 2;
   /* font-family: "Avalors Personal Use"; */
-  font-size: 12px;
   letter-spacing: 5px;
   color: #ffffff;
   text-shadow: 0 0 4px white;

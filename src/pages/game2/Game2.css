@@ -165,7 +165,7 @@
   width: 100%;
 }
 
-.original-img-wrap{
+.original-img-wrap {
   width: 512px;
   height: 512px;
 }
@@ -205,7 +205,8 @@
 }
 
 /* glow 효과 */
-.animated-border-box, .animated-border-box-glow{
+.animated-border-box,
+.animated-border-box-glow {
   max-height: 200px;
   max-width: 250px;
   height: 100%;
@@ -214,68 +215,77 @@
   overflow: hidden;
   z-index: 0;
   /* Border Radius */
-	border-radius: 10px;
+  border-radius: 10px;
 }
 
-.animated-border-box-glow{
+.animated-border-box-glow {
   overflow: hidden;
   /* Glow Blur */
   filter: blur(20px);
 }
 
-.animated-border-box:before, .animated-border-box-glow:before {
-  content: '';
+.animated-border-box:before,
+.animated-border-box-glow:before {
+  content: "";
   z-index: -2;
   text-align: center;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%) rotate(0deg);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(0deg);
   position: absolute;
-	width: 99999px;
-	height: 99999px;
-	background-repeat: no-repeat;
-	background-position: 0 0;
+  width: 99999px;
+  height: 99999px;
+  background-repeat: no-repeat;
+  background-position: 0 0;
   /*border color, change middle color*/
-	background-image: conic-gradient(rgba(0,0,0,0), #1976ed, rgba(0,0,0,0) 25%);
+  background-image: conic-gradient(
+    rgba(0, 0, 0, 0),
+    #1976ed,
+    rgba(0, 0, 0, 0) 25%
+  );
   /* change speed here */
-	animation: rotate 4s linear infinite;
+  animation: rotate 4s linear infinite;
 }
 
 .animated-border-box:after {
-	content: '';
-	position: absolute;
-	z-index: -1;
+  content: "";
+  position: absolute;
+  z-index: -1;
   /* border width */
-	left: 5px;
-	top: 5px;
+  left: 5px;
+  top: 5px;
   /* double the px from the border width left */
-	width: calc(100% - 10px);
-	height: calc(100% - 10px);
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
   /*bg color*/
-	background: #292a2e;
+  background: #292a2e;
   /*box border radius*/
-	border-radius: 7px;
+  border-radius: 7px;
 }
 
 @keyframes rotate {
-	100% {
-		transform: translate(-50%, -50%) rotate(1turn);
-	}
+  100% {
+    transform: translate(-50%, -50%) rotate(1turn);
+  }
 }
 
 /*// Border Animation END//*/
-
-
 
 /*// Ignore This //*/
 body {
   margin: 0px;
 }
 
-.center-box{
+.center-box {
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #1D1E22;
+  background-color: #1d1e22;
+}
+
+.magnifierContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
