@@ -127,6 +127,7 @@ const Game2 = () => {
               </div>
             </div>
             <div className="imageContainer">
+
               <div className="findDifference containerWrapper">
                 <div
                   className="generatedImg game2-canvas-container"

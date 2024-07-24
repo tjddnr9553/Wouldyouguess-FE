@@ -46,23 +46,28 @@ const Game2_result2 = () => {
   };
 
   return (
-    <div className="game2 result inner">
-      <div className="title">
-        <strong>Result</strong>
+    <div className="inner">
+      <div className="game2 result container-stars">
+        <div className="title">
+          <strong>Result</strong>
+        </div>
+        <div className="game2-result-content">
+          <div className="tropy">
+            <div className="tropy-img"></div>
+          </div>
+          <div className="player-list">
+            {players && players.map((player, index) => (
+              <Game2_playerResult
+                key={index}
+                player={`${index + 1}`}
+                userNickname={player.nickname}
+                score={player.score}
+              />
+            ))}
+          </div>
+        </div>
+        <button onClick={goHome} className="homeBtn" />
       </div>
-      <div className="player-list">
-        {players && players.map((player, index) => (
-          <Game2_playerResult
-            key={index}
-            player={`${index + 1}`}
-            nickname={player.nickname}
-            score={player.score}
-          />
-        ))}
-      </div>
-      <button onClick={goHome} className="homeBtn">
-        HOME
-      </button>
     </div>
   );
 };
