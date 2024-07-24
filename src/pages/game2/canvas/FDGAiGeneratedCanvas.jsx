@@ -63,6 +63,7 @@ const FDGAiGeneratedCanvas = ({
     const isSuccess = await checkAnswerAndCondition(x, y);
 
     const image = new Image();
+    image.style.boxShadow = "5px 5px 10px rgba(0, 0, 0, 0.5)";
     const successSound = new Audio("/sound_effects/success_sound.mp3");
     const failSound = new Audio("/sound_effects/fail_sound.mp3");
     if (isSuccess) {
@@ -74,7 +75,12 @@ const FDGAiGeneratedCanvas = ({
     }
 
     image.onload = () => {
-      contextRef.current.drawImage(image, x - 25, y - 30, 50, 50);
+      contextRef.current.shadowColor = "rgba(0, 0, 0, 0.9)";
+      contextRef.current.shadowBlur = 10;
+      contextRef.current.shadowOffsetX = 10;
+      contextRef.current.shadowOffsetY = 10; 
+
+      contextRef.current.drawImage(image, x - 25, y - 30, 100, 100);
     };
   };
 
