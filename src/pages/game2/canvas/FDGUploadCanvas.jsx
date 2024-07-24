@@ -12,7 +12,7 @@ const FDGUploadCanvas = ({canvasBlocking}) => {
   const containerRef = useRef(null);
 
   const { resizingImage, setOriginalImage  } = useFDGFileStore();
-  const { setFDGCanvasRef, setStartX, setEndX, setStartY, setEndY } = useFDGCanvasStore();
+  const { setFDGCanvasRef, setStartX, setEndX, setStartY, setEndY, startX, startY } = useFDGCanvasStore();
 
   // 캔버스 셋팅
   useEffect(() => {

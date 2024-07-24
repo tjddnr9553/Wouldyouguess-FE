@@ -279,3 +279,13 @@ body {
   align-items: center;
   background-color: #1D1E22;
 }
+
+.game2-container {
+  cursor: url('/images/game/game2/cursor.png') 35 0, auto;
+  /* cursor: url("/images/cursor_1.png") 20 30, auto !important; */
+}
+
+.ai-generated-img-wrap {
+  width: 512px;
+  height: 100%;
+}
