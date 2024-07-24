@@ -50,7 +50,7 @@ const FDGUploadCanvas = ({canvasBlocking}) => {
     setStartX(x);
     setStartY(y);
     
-    toolRef.current.onMouseDown(x, y, '#ffffff', 10, false);
+    toolRef.current.onMouseDown(x, y, '#ffffff', 13, false);
   };
 
   const onMouseUp = (e) => {
@@ -65,7 +65,7 @@ const FDGUploadCanvas = ({canvasBlocking}) => {
     const lengthX = Math.abs(startX - x);
     const lengthY = Math.abs(startY - y);
 
-    contextRef.current.lineWidth = 4;
+    contextRef.current.lineWidth = 6;
     contextRef.current.strokeStyle = '#ff0000'
     contextRef.current.strokeRect(startX, startY, lengthX, lengthY);
   };
