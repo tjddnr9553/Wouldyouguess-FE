@@ -15,7 +15,7 @@
 
 .video-container video {
   width: 100%;
-  height: 90%;
+  /*height: 90%;*/
 }
 
 .video-container .participant-data {
@@ -58,4 +58,24 @@
 
 .vote-camera strong {
   color: black;
+}
+
+.video-container-small {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  border-radius: 1rem;
+  transition: 0.5s;
+  width: 100%;
+  padding: 3%;
+  animation: 5s ease infinite;
+  background-image: white;
+  margin-bottom: 10%;
+}
+
+.video-container-small video {
+  width: 80%;
+  height: 90%;
 }

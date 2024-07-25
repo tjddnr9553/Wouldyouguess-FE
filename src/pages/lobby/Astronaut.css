@@ -1,0 +1,37 @@
+
+@import url('https://fonts.googleapis.com/css?family=Dosis:300,400,500');
+
+@-moz-keyframes move-astronaut {
+    100% { -moz-transform: translate(-160px, -160px);}
+}
+@-webkit-keyframes move-astronaut {
+    100% { -webkit-transform: translate(-160px, -160px);}
+}
+@keyframes move-astronaut{
+    100% { -webkit-transform: translate(-160px, -160px); transform:translate(-160px, -160px); }
+}
+@-moz-keyframes rotate-astronaut {
+    100% { -moz-transform: rotate(-720deg);}
+}
+@-webkit-keyframes rotate-astronaut {
+    100% { -webkit-transform: rotate(-720deg);}
+}
+@keyframes rotate-astronaut{
+    100% { -webkit-transform: rotate(-720deg); transform:rotate(-720deg); }
+}
+
+.object_astronaut{
+    animation: rotate-astronaut 200s infinite linear both alternate;
+    z-index: 10;
+    cursor: pointer;
+}
+
+.box_astronaut{
+    z-index: 110 !important;
+    position: absolute;
+    top: 10px;
+    right: -55px;
+    width: 100px;
+    will-change: transform;
+    animation: move-astronaut 50s infinite linear both alternate;
+}
