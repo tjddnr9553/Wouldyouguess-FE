@@ -21,14 +21,14 @@
   height: 18vh;
 }
 
-.player-list {
+.player-list1 {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 50%;
 }
 
-.player-list .player-video {
+.player-list1 .player-video {
   border-radius: 0 10px 10px 10px;
 
   background-color: #ffffff;
@@ -91,7 +91,17 @@
   letter-spacing: 5px;
 }
 
-.player-list .nick {
+.player-list1 {
+  width: 60%;
+  height: 70%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 38px;
+}
+
+
+.player-list1 .nick {
   background: white;
 
   text-align: center;

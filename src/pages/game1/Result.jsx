@@ -110,12 +110,10 @@ const Result = () => {
           isLiarWin ? "liar-win" : "citizen-win"
         }`}
       >
-        <div className="player-list">
-          {winnerIds &&
-            winnerIds.length > 0 &&
-            remoteTracks.length > 0 && ( // remoteTracks 길이 확인 추가
-              <VoteUser targetId={winnerIds} />
-            )}
+        <div className="player-list1">
+          {winnerIds && winnerIds.length > 0 && remoteTracks.length > 0 && (
+            <VoteUser targetId={winnerIds} />
+          )}
         </div>
       </div>
       <div className="showKeyword" ref={showKewordRef}>
