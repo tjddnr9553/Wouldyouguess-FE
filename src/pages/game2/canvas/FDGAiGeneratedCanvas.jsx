@@ -130,14 +130,18 @@ const FDGAiGeneratedCanvas = ({
             };
 
             requestAnimationFrame(animate);
+
+            contextRef.current.lineWidth = 20;
+            contextRef.current.strokeStyle = '#fff'
+            contextRef.current.strokeRect(maskX1, maskY1, lengthX, lengthY);
           } else {
             contextRef.current.drawImage(img, 0, 0);
           }
 
-          if (mode === "upload") {
-            contextRef.current.fillStyle = "#ffffff";
-            contextRef.current.fillRect(maskX1, maskY1, lengthX, lengthY);
-          }
+          // if (mode === "upload") {
+          //   contextRef.current.fillStyle = "#ffffff";
+          //   contextRef.current.fillRect(maskX1, maskY1, lengthX, lengthY);
+          // }
 
           // URL 해제
           URL.revokeObjectURL(imageURL, 0, 0);

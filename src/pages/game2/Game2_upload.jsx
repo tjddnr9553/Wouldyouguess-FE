@@ -1,4 +1,5 @@
 import "./Game2.css";
+import "./DancingPeople.css"
 import {useEffect, useRef, useState} from "react";
 import {useNavigate} from "react-router-dom";
 
@@ -16,6 +17,8 @@ import ImgResizer from "./ImgResizer.js";
 import { findDiff_upload } from "../../api/game/FindDiff.js";
 import FDGAiGeneratedCanvas from "./canvas/FDGAiGeneratedCanvas.jsx";
 import useFDGStore from "../../store/game/findDiffGame/useFDGStore.js";
+import LoadingCat from "./LoadingCat.jsx";
+import ImageLoading from "./ImageLoading.jsx";
 
 
 const Game2_upload = () => {
@@ -81,6 +84,36 @@ const Game2_upload = () => {
     socket?.emit("game_loading", { roomId, nextPageUrl: "/game2?round=1" });
   }
 
+  const thisRef = useRef();
+  const [animation, setAnimation] = useState(false);
+  useEffect(() => {
+    if(thisRef.current && oneClick) {
+      const maskX1 = Math.round(startX);
+      const maskY1 = Math.round(startY);
+      const maskX2 = Math.round(endX);
+      const maskY2 = Math.round(endY);
+
+      const lengthX = Math.abs(maskX1 - maskX2);
+      const lengthY = Math.abs(maskY1 - maskY2);
+      
+      thisRef.current.style.width = `${lengthX}px`;
+      thisRef.current.style.height = `${lengthY}px`;
+      thisRef.current.style.backgroundColor = 'white';
+      thisRef.current.style.top = `${maskY1}px`;
+      thisRef.current.style.left = `${maskX1}px`;  
+      
+      setAnimation(true);
+    }
+  }, [oneClick])
+
+  useEffect(() => {
+    if(thisRef.current && animation) {
+      thisRef.current.style.border = '7px solid red';
+      thisRef.current.style.backgroundColor = 'transparent';
+      thisRef.current.style.transition = 'all 1s';
+    }
+  }, [aiGeneratedImage])
+
   return (
     <div className="inner">
       <div className="game2 container">
@@ -117,17 +150,62 @@ const Game2_upload = () => {
                         <div className="ai-generated-img-wrap"></div>
                       )
                     ) : (
-                      <FDGAiGeneratedCanvas
-                        mode={'aiImgUpload'}
-                        image={aiGeneratedImage}
-                        maskX1={Math.round(startX)}
-                        maskY1={Math.round(startY)}
-                        maskX2={Math.round(endX)}
-                        maskY2={Math.round(endY)}
-                      />
+                        <FDGAiGeneratedCanvas
+                          mode={'aiImgUpload'}
+                          image={aiGeneratedImage}
+                          maskX1={Math.round(startX)}
+                          maskY1={Math.round(startY)}
+                          maskX2={Math.round(endX)}
+                          maskY2={Math.round(endY)}
+                        />
                       // <img src={aiGeneratedImage} className="ai-generated-img-wrap" alt="AI Generated" />
                     )
                   }
+                  <div style={{width: '512px', height: '512px', position:'absolute', right: '59px'}}>
+                    {/* {aiGeneratedImage == null ? 
+                      (oneClick &&
+                        <div
+                          ref={thisRef}
+                          style={{position: 'absolute'}}
+                        >
+                        <LoadingCat />
+                      </div>)
+                      : null
+                    } */}
+
+                    {
+                      oneClick ? (
+                        <div
+                          ref={thisRef}
+                          className="boundingBox"
+                          style={{
+                            position: 'absolute',
+                            zIndex: 10,
+                          }}
+                        >
+                          {/* <ImageLoading /> */}
+                          {/* <LoadingCat /> */}
+                          {/* <div className="dancingPeople"></div> */}
+                        </div>
+                      ) : (
+                        animation ? (
+                          <div
+                            ref={thisRef}
+                            className="boundingBox"
+                            style={{
+                              position: 'absolute',
+                              zIndex: 10,
+                            }}
+                          >
+                            {/* <ImageLoading /> */}
+                            {/* <LoadingCat /> */}
+                            {/* <div className="dancingPeople"></div> */}
+                          </div>
+                        ) : null
+                      )
+                    }
+
+                  </div>
                 </div>
               </div>
 
