@@ -3,9 +3,9 @@ import VideoComponent from "../../components/webrtc/VideoComponent";
 import useUserStore from "../../store/user/useUserStore";
 import useWebrtcStore from "../../store/webrtc/useWebrtcStore";
 
-const colors = ["blue", "purple", "green"];
-
 const User = ( ) => {
+  const colors = ["blue", "purple", "green", "yellow"];
+
   const { userId } = useUserStore();
   const { localTrack, remoteTracks } = useWebrtcStore();
 
