@@ -71,8 +71,8 @@
 }
 
 .vote-voted-cnt {
-    width: 60px;
-    height: 60px;
+    width: 100px;
+    height: 100px;
 
     display: flex;
     justify-content: center;
@@ -87,7 +87,7 @@
 
 .vote-voted-cnt strong{
     color: white;
-    font-size: 42px;
+    font-size: 50px;
     font-family: "Keania One";
     font-weight: bold;
 }

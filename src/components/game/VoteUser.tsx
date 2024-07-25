@@ -32,7 +32,7 @@ const VoteUser = ({ targetId }) => {
             track={localTrack}
             participantIdentity={userId}
             color="red"
-            local={true}
+            classNameCss="video-container"
           />
         )
       }
@@ -44,7 +44,7 @@ const VoteUser = ({ targetId }) => {
               track={remoteTrack.trackPublication.videoTrack!}
               participantIdentity={remoteTrack.participantIdentity}
               color={colors[i++]}
-              local={false}
+              classNameCss="video-container"
             />
           )
         ) : (

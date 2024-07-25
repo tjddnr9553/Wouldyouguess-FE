@@ -7,18 +7,18 @@ import User from "../../components/game/User.tsx";
 import Drawing from "./canvas/Drawing.jsx";
 import Palette from "./canvas/Palette.jsx";
 import Tools from "./canvas/CanvasTools.jsx";
-
-import { catchLiar_info } from "../../api/game/CatchLiar.js";
+import Ailen from "../../components/game/Ailen.jsx";
+import LaserPointer from "./LaserPointer.jsx";
+import Keyword from "../../components/game/Keyword.jsx";
+import Gaugebar from "./Gaugebar.jsx";
+import ModalKeyword from "../../components/game/ModalKeyword.jsx";
 
 import useUserStore from "../../store/user/useUserStore.js";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 import useAudioStore from "../../store/bgm/useAudioStore.js";
-import Ailen from "../../components/game/Ailen.jsx";
-import LaserPointer from "./LaserPointer.jsx";
 import { useCanvasStore } from "../../store/canvas/useCanvasStore.js";
-import Keyword from "../../components/game/Keyword.jsx";
-import Gaugebar from "./Gaugebar.jsx";
-import ModalKeyword from "../../components/game/ModalKeyword.jsx";
+
+import { catchLiar_info } from "../../api/game/CatchLiar.js";
 
 const Game1 = () => {
   const [searchParams] = useSearchParams();
@@ -42,6 +42,7 @@ const Game1 = () => {
     setIsDrawing,
     setIsLiar,
     setKeyword,
+    setThisTurnUserId,
     setTotalRound,
   } = useCatchLiarStore();
   const { play, stop } = useAudioStore();
@@ -67,6 +68,7 @@ const Game1 = () => {
       setKeyword(response.keyword);
       setTotalRound(response.totalRound);
       setThisTurnUser(response.thisTurnNick);
+      setThisTurnUserId(response.thisTurnUserId);
     };
     sync_func();
     setTool("pencil");

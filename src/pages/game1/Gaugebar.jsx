@@ -21,8 +21,8 @@ const Gaugebar = ({ gameStart, setGameStart, time }) => {
   const { userId } = useUserStore();
   const { roomId } = useRoomStore();
   const { canvas } = useCanvasStore();
-  const { gameId, isDrawing, totalRound, setImageKey, setImagePath } =
-    useCatchLiarStore();
+  const { gameId, isDrawing, totalRound,
+          setImageKey, setImagePath, setThisTurnUserId } = useCatchLiarStore();
   const tensionSound = new Audio("/sound_effects/tension_sound.mp3");
 
   useEffect(() => {
@@ -44,6 +44,7 @@ const Gaugebar = ({ gameStart, setGameStart, time }) => {
         ease:"none",
         onComplete: () => {
           handleCountdownComplete();
+          setThisTurnUserId(0);
           setGameStart(false);
         },
       });

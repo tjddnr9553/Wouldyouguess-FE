@@ -1,22 +1,18 @@
 import "./Game2.css";
 
-import { useEffect, useRef, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import React, {useEffect, useRef, useState} from "react";
+import {useNavigate, useSearchParams} from "react-router-dom";
 
 import NewButton from "../../components/button/newButton";
+import FDGAiGeneratedCanvas from "./canvas/FDGAiGeneratedCanvas.jsx";
 
 import useUserStore from "../../store/user/useUserStore.js";
 import useAudioStore from "../../store/bgm/useAudioStore";
 import useFDGStore from "../../store/game/findDiffGame/useFDGStore.js";
-import useFDGCanvasStore from "../../store/game/findDiffGame/useFDGCanvasStore.js";
-
-import {
-  findDiff_game_images,
-  findDiff_update_score,
-} from "../../api/game/FindDiff.js";
-import FDGAiGeneratedCanvas from "./canvas/FDGAiGeneratedCanvas.jsx";
 import useRoomStore from "../../store/room/useRoomStore.js";
 import useSocketStore from "../../store/socket/useSocketStore.js";
+
+import {findDiff_game_images, findDiff_update_score,} from "../../api/game/FindDiff.js";
 
 const Game2 = () => {
   const navigate = useNavigate();
@@ -24,9 +20,8 @@ const Game2 = () => {
   const round = Number(searchParams.get("round"));
 
   const generatedImgRef = useRef(null);
-  const [isBlurred, setIsBlurred] = useState(false);
 
-  const [startSearch, setStartSearch] = useState(false);
+  const [isBlurred, setIsBlurred] = useState(false);
   const [endSearch, setEndSearch] = useState(false);
   const [gameImages, setGameImages] = useState(null);
   const [chance, setChance] = useState(3);
@@ -38,20 +33,12 @@ const Game2 = () => {
   const { findDiffGameId } = useFDGStore();
   const { play, stop } = useAudioStore();
 
-  // const { answerClick, answerX, answerY } = useFDGCanvasStore();
-
   useEffect(() => {
     play("/bgm/Game2_bgm.mp3");
     return () => {
       stop();
     };
   }, []);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setStartSearch(true);
-  //   }, 3000);
-  // }, []);
 
   useEffect(() => {
     const sync_func = async () => {
@@ -70,7 +57,6 @@ const Game2 = () => {
   useEffect(() => {
     if (chance === 0) {
       findDiff_update_score(userId, chance, false);
-      // setStartSearch(true);
       setEndSearch(true);
     }
   }, [chance]);
