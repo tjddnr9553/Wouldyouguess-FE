@@ -284,6 +284,12 @@ body {
   background-color: #1d1e22;
 }
 
+.magnifierContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .game2-container {
   cursor: url('/images/game/game2/cursor.png') 35 0, auto;
   /* cursor: url("/images/cursor_1.png") 20 30, auto !important; */
