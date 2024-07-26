@@ -60,13 +60,14 @@ export const findDiff_result = async (findDiffGameId) => {
     }
 }
 
-export const findDiff_update_score = async (userId, chance, isFound) => {
+export const findDiff_update_score = async (userId, gameId, chance, isFound) => {
     try {
         const response = await axios({
             method: "POST",
             url: `${API_SERVER_URL}/api/findDiff/score`,
             data: {
                 userId,
+                gameId,
                 chance,
                 isFound
             },
