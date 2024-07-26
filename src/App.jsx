@@ -44,7 +44,7 @@ function App() {
     if (urlType === "invite") {
       window.localStorage.setItem("inviteRoomId", inviteRoomId);
       window.localStorage.setItem("isInvited", "true");
-      nav("/temp/login");
+      nav("/login");
       // window.location.href = KAKAO_AUTH_URL;
     }
   }, []);
@@ -76,7 +76,7 @@ function App() {
         <Route path="/loading" element={<Loading />} />
 
         <Route path="/auth/kakao/callback" element={<LoginHandler />} />
-        <Route path="/temp/login" element={<Login />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </>
   );
