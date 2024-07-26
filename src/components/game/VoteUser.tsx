@@ -8,7 +8,6 @@ const VoteUser = ({ targetId }) => {
   const { userId } = useUserStore();
   const { localTrack, remoteTracks } = useWebrtcStore();
 
-  const colors = ["blue", "purple", "green"];
   let i = 0;
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 import "./Video.css";
 
-import React from "react";
+import React, { useState } from "react";
 import { useEffect, useRef } from "react";
 
 import { LocalVideoTrack, RemoteVideoTrack } from "livekit-client";
@@ -8,6 +8,9 @@ import { LocalVideoTrack, RemoteVideoTrack } from "livekit-client";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore";
 
 import { gsap, Power1 } from "gsap";
+import useUserStore from "../../store/user/useUserStore";
+import { catchLiar_result } from "../../api/game/CatchLiar";
+import { unwatchFile } from "fs";
 
 interface VideoComponentProps {
   track: LocalVideoTrack | RemoteVideoTrack;
@@ -25,6 +28,28 @@ function Video({
   const videoElement = useRef<HTMLVideoElement | null>(null);
 
   const { thisTurnUserId, isVotePage } = useCatchLiarStore();
+  const { userId } = useUserStore();
+  const { gameId ,setIsVotePage } = useCatchLiarStore();
+
+  const [players, setPlayers] = useState([]);
+  const [currentPlayer, setCurrentPlayer] = useState(null);
+  const [isSpy, setIsSpy] = useState(false);
+  const [isWinner, setIsWinner] = useState(null);
+
+  useEffect(() => {
+    const sync_func = async () => {
+      const res = await catchLiar_result(gameId, userId);
+      setPlayers(res);
+
+      const player = res.find(player => Number(participantIdentity) === player.userId);
+      setCurrentPlayer(player.username);
+      setIsSpy(player.isLiar);
+      setIsWinner(player.isWinner);
+
+      console.log(player.isWinner);
+    }
+    sync_func();
+  }, []);
 
   useEffect(() => {
     if (videoElement.current) {
@@ -63,15 +88,49 @@ function Video({
     });
   };
 
+
   useEffect(() => {
-    const delay = 5;
+    const delay = 1.5;
     const id = "camera-" + participantIdentity;
     floatingObj(id, delay);
-  }, [])
+
+    if (isWinner === false && isWinner !== null) {
+      gsap.to('.loser', {
+        duration: 1,
+        delay: 3.5,
+        x: 1000,
+        y: -300,
+        rotateX: 360,
+        rotationY: 360,
+        rotationZ: 360, 
+        opacity: 0,
+        ease: "pwer1.easeInOut"
+      })
+    }
+    // if (isWinner === true && isWinner !== null) {
+    //   gsap.to(".winner", {
+    //     duration: 1,    
+    //     delay: 2.5,  
+    //     top: "-10%",           // Y축으로 50% 이동
+    //     left: "15%",          // X축으로 50% 이동
+    //     transform: "translate(50%, 50%)", // 가운데 정렬
+    //     ease: "power1.inOut" // 애니메이션의 easing 함수
+    //   });
+    // }
+  }, [isWinner])
+
+
 
   return (
-    <div id={"camera-" + participantIdentity} className={classNameCss && classNameCss} style={{position: 'relative'}}>
-      <div></div>
+    <div id={"camera-" + participantIdentity} className={`${classNameCss ? classNameCss : ''} ${isWinner ? 'winner' : 'loser'}`}
+    style={{position: 'relative'}}>
+      <div className="ufo-nick">
+        {currentPlayer && 
+          (isSpy ? 
+            `Spy ${currentPlayer}`:
+            `Player ${currentPlayer}`)
+        }
+      </div>
       <img src="/images/game/game1/ufo-body.png" className="ufo-body"/>
       {isVotePage && <video ref={videoElement} id={track.sid} />}
     </div>
