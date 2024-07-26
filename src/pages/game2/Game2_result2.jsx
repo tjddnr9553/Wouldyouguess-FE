@@ -1,7 +1,7 @@
 import "./Game2_result2.css";
 
-import {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Game2_playerResult from "./Game2_playerResult.jsx";
 
@@ -10,9 +10,8 @@ import useAudioStore from "../../store/bgm/useAudioStore.js";
 import useFDGStore from "../../store/game/findDiffGame/useFDGStore.js";
 import useFDGCanvasStore from "../../store/game/findDiffGame/useFDGCanvasStore.js";
 import useFDGFileStore from "../../store/game/findDiffGame/useFDGFileStore.js";
-import NewButton from "../../components/button/newButton.jsx";
 
-import {findDiff_result} from "../../api/game/FindDiff.js";
+import { findDiff_result } from "../../api/game/FindDiff.js";
 
 const Game2_result2 = () => {
   const navigate = useNavigate();
@@ -53,25 +52,26 @@ const Game2_result2 = () => {
           <strong>Result</strong>
         </div>
         <div className="game2-result-content">
-
           <div className="player-list">
-            {players && players.map((player, index) => (
-              <Game2_playerResult
-                key={index}
-                player={`${index + 1}`}
-                userNickname={player.nickname}
-                score={player.score}
-              />
-            ))}
+            {players &&
+              players.map((player, index) => (
+                <Game2_playerResult
+                  key={index}
+                  player={`${index + 1}`}
+                  userNickname={player.nickname}
+                  score={player.score}
+                />
+              ))}
           </div>
 
-                    <div className="tropy">
+          <div className="tropy">
             <div className="tropy-img"></div>
           </div>
         </div>
-        {/* <NewButton onClick={goHome} className="homeBtn" /> */}
-        <div class="pixel-container">
-          <button class="pixel-btn">HOME</button>
+        <div className="pixel-container">
+          <button className="pixel-btn" onClick={goHome}>
+            HOME
+          </button>
         </div>
       </div>
     </div>

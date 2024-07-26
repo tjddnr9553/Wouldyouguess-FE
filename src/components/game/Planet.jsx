@@ -66,8 +66,8 @@ const Planet = ({ style, id, min, max, text, onClick, game }) => {
   };
 
   return (
-    <div 
-      className={`${id} item-hints`} 
+    <div
+      className={`${id} item-hints`}
       style={style}
       ref={planetRef}
       onMouseOver={handleMouseOver}
@@ -113,9 +113,9 @@ const Planet = ({ style, id, min, max, text, onClick, game }) => {
               src="/images/planet/lock.png"
               style={{
                 position: "absolute",
-                width: "20%",
-                top: "37%",
-                left: "50%",
+                width: "18%",
+                top: "36%",
+                left: "41.7%",
                 opacity: "0.7",
               }}
             />
@@ -126,7 +126,7 @@ const Planet = ({ style, id, min, max, text, onClick, game }) => {
             </div>
           )}
         </span>
-        <span>
+        {/* <span>
           {id !== "planet3" && (
             <img
               src="/images/planet/hintBtn.png"
@@ -134,7 +134,7 @@ const Planet = ({ style, id, min, max, text, onClick, game }) => {
               handleMouseEnter={handleMouseEnter}
             />
           )}
-        </span>
+        </span> */}
       </div>
     </div>
   );

@@ -19,6 +19,20 @@ import useFDGStore from "../../store/game/findDiffGame/useFDGStore.js";
 
 import { catchLiar_start } from "../../api/game/CatchLiar.js";
 import { findDiff_start } from "../../api/game/FindDiff.js";
+const textList = [
+  {
+    id: "game1",
+    text: "Catch Spy",
+  },
+  {
+    id: "game2",
+    text: "Find Difference",
+  },
+  {
+    id: "game3",
+    text: "",
+  },
+];
 
 const Lobby = () => {
   const navigate = useNavigate();
@@ -136,6 +150,7 @@ const Lobby = () => {
               id={"planet1"}
               min={5}
               max={15}
+              text={textList[0].text}
               onClick={startCatchLiar}
               game={"game1"}
             />
@@ -144,6 +159,7 @@ const Lobby = () => {
               id={"planet2"}
               min={5}
               max={25}
+              text={textList[1].text}
               onClick={startFindDIff}
               game={"game2"}
             />
