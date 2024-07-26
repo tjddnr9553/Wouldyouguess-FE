@@ -1,7 +1,6 @@
 import "./Game2.css";
-import "./DancingPeople.css"
-import {useEffect, useRef, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import NewButton from "../../components/button/newButton";
 import FDGUploadCanvas from "./canvas/FDGUploadCanvas.jsx";
@@ -17,14 +16,12 @@ import ImgResizer from "./ImgResizer.js";
 import { findDiff_upload } from "../../api/game/FindDiff.js";
 import FDGAiGeneratedCanvas from "./canvas/FDGAiGeneratedCanvas.jsx";
 import useFDGStore from "../../store/game/findDiffGame/useFDGStore.js";
-import LoadingCat from "./LoadingCat.jsx";
 import ImageLoading from "./ImageLoading.jsx";
-
 
 const Game2_upload = () => {
   const navigate = useNavigate();
 
-  const [oneClick, setOneClick] = useState(false);
+  const [showAnimation, setShowAnimation] = useState(false);
   const [canvasBlocking, setCanvasBlocking] = useState(false); // 게임 준비 완료 후 마스킹 금지
 
   const imgUploadBtn = useRef(null);
@@ -34,10 +31,16 @@ const Game2_upload = () => {
   const { socket } = useSocketStore();
   const { play, stop } = useAudioStore();
 
-  const { findDiffGameId  } = useFDGStore();
-  const { originalImage, maskingImage, aiGeneratedImage,
-            setResizingImage, setMaskingImage, setAiGeneratedImage } = useFDGFileStore();
-  const { FDGCanvasRef, startX, endX, startY, endY  } = useFDGCanvasStore();
+  const { findDiffGameId } = useFDGStore();
+  const {
+    originalImage,
+    maskingImage,
+    aiGeneratedImage,
+    setResizingImage,
+    setMaskingImage,
+    setAiGeneratedImage,
+  } = useFDGFileStore();
+  const { FDGCanvasRef, startX, endX, startY, endY } = useFDGCanvasStore();
 
   useEffect(() => {
     play("/bgm/Game2_bgm.mp3");
@@ -54,14 +57,14 @@ const Game2_upload = () => {
   };
 
   const sendToServer = async () => {
-    // if (oneClick) return;
+    // if (showAnimation) return;
 
-    await FDGCanvasRef.toBlob( async (blob) => {
-      setOneClick(true);
+    await FDGCanvasRef.toBlob(async (blob) => {
+      setShowAnimation(true);
       setMaskingImage(blob);
       const upload_form = new FormData();
-      upload_form.append('originalImage', originalImage, 'originalImage.png');
-      upload_form.append('maskingImage', blob, 'maskingImage.png');
+      upload_form.append("originalImage", originalImage, "originalImage.png");
+      upload_form.append("maskingImage", blob, "maskingImage.png");
       upload_form.append("userId", userId);
       upload_form.append("gameId", findDiffGameId);
       upload_form.append("prompt", "Modify safely.");
@@ -73,21 +76,21 @@ const Game2_upload = () => {
       const upload_res = await findDiff_upload(upload_form);
       if (upload_res.status === 200) {
         setAiGeneratedImage(upload_res.data.aiGeneratedImageUrl);
-        setOneClick(false);
+        setShowAnimation(false);
       }
-    }, 'image/png');
+    }, "image/png");
+    setCanvasBlocking(true);
   };
 
   const readyToStart = () => {
-    setCanvasBlocking(true);
-    navigate(`/loading`, {state : { title: "파일 업로드 중입니다." }});
+    navigate(`/loading`, { state: { title: "파일 업로드 중입니다." } });
     socket?.emit("game_loading", { roomId, nextPageUrl: "/game2?round=1" });
-  }
+  };
 
   const thisRef = useRef();
   const [animation, setAnimation] = useState(false);
   useEffect(() => {
-    if(thisRef.current && oneClick) {
+    if (thisRef.current && showAnimation) {
       const maskX1 = Math.round(startX);
       const maskY1 = Math.round(startY);
       const maskX2 = Math.round(endX);
@@ -95,24 +98,24 @@ const Game2_upload = () => {
 
       const lengthX = Math.abs(maskX1 - maskX2);
       const lengthY = Math.abs(maskY1 - maskY2);
-      
+
       thisRef.current.style.width = `${lengthX}px`;
       thisRef.current.style.height = `${lengthY}px`;
-      thisRef.current.style.backgroundColor = 'white';
+      thisRef.current.style.backgroundColor = "white";
       thisRef.current.style.top = `${maskY1}px`;
-      thisRef.current.style.left = `${maskX1}px`;  
-      
+      thisRef.current.style.left = `${maskX1}px`;
+
       setAnimation(true);
     }
-  }, [oneClick])
+  }, [showAnimation]);
 
   useEffect(() => {
-    if(thisRef.current && animation) {
-      thisRef.current.style.border = '7px solid red';
-      thisRef.current.style.backgroundColor = 'transparent';
-      thisRef.current.style.transition = 'all 1s';
+    if (thisRef.current && animation) {
+      thisRef.current.style.border = "7px solid red";
+      thisRef.current.style.backgroundColor = "transparent";
+      thisRef.current.style.transition = "all 1s";
     }
-  }, [aiGeneratedImage])
+  }, [aiGeneratedImage]);
 
   return (
     <div className="inner">
@@ -135,76 +138,64 @@ const Game2_upload = () => {
               <div className="containerWrapper">
                 <div className="game2-canvas-container">
                   <FDGUploadCanvas canvasBlocking={canvasBlocking} />
-                  {
-                    aiGeneratedImage == null ? (
-                      oneClick ? (
-                        <FDGAiGeneratedCanvas
-                          mode={'upload'}
-                          image={originalImage}
-                          maskX1={Math.round(startX)}
-                          maskY1={Math.round(startY)}
-                          maskX2={Math.round(endX)}
-                          maskY2={Math.round(endY)}
-                        />
-                      ) : (
-                        <div className="ai-generated-img-wrap"></div>
-                      )
+                  {aiGeneratedImage == null ? (
+                    showAnimation ? (
+                      <FDGAiGeneratedCanvas
+                        mode={"upload"}
+                        image={originalImage}
+                        maskX1={Math.round(startX)}
+                        maskY1={Math.round(startY)}
+                        maskX2={Math.round(endX)}
+                        maskY2={Math.round(endY)}
+                      />
                     ) : (
-                        <FDGAiGeneratedCanvas
-                          mode={'aiImgUpload'}
-                          image={aiGeneratedImage}
-                          maskX1={Math.round(startX)}
-                          maskY1={Math.round(startY)}
-                          maskX2={Math.round(endX)}
-                          maskY2={Math.round(endY)}
-                        />
-                      // <img src={aiGeneratedImage} className="ai-generated-img-wrap" alt="AI Generated" />
+                      <div className="ai-generated-img-wrap"></div>
                     )
-                  }
-                  <div style={{width: '512px', height: '512px', position:'absolute', right: '59px'}}>
-                    {/* {aiGeneratedImage == null ? 
-                      (oneClick &&
-                        <div
-                          ref={thisRef}
-                          style={{position: 'absolute'}}
-                        >
-                        <LoadingCat />
-                      </div>)
-                      : null
-                    } */}
-
-                    {
-                      oneClick ? (
-                        <div
-                          ref={thisRef}
-                          className="boundingBox"
-                          style={{
-                            position: 'absolute',
-                            zIndex: 10,
-                          }}
-                        >
-                          {/* <ImageLoading /> */}
-                          {/* <LoadingCat /> */}
-                          {/* <div className="dancingPeople"></div> */}
-                        </div>
-                      ) : (
-                        animation ? (
-                          <div
-                            ref={thisRef}
-                            className="boundingBox"
-                            style={{
-                              position: 'absolute',
-                              zIndex: 10,
-                            }}
-                          >
-                            {/* <ImageLoading /> */}
-                            {/* <LoadingCat /> */}
-                            {/* <div className="dancingPeople"></div> */}
-                          </div>
-                        ) : null
-                      )
-                    }
-
+                  ) : (
+                    <FDGAiGeneratedCanvas
+                      mode={"aiImgUpload"}
+                      image={aiGeneratedImage}
+                      maskX1={Math.round(startX)}
+                      maskY1={Math.round(startY)}
+                      maskX2={Math.round(endX)}
+                      maskY2={Math.round(endY)}
+                    />
+                  )}
+                  <div
+                    style={{
+                      width: "512px",
+                      height: "512px",
+                      position: "absolute",
+                      right: "59px",
+                    }}
+                  >
+                    {showAnimation ? (
+                      <div
+                        ref={thisRef}
+                        className="boundingBox"
+                        style={{
+                          position: "absolute",
+                          zIndex: 10,
+                        }}
+                      >
+                        <video
+                          src="/images/game2/imageLoading.mp4"
+                          muted={true}
+                          autoPlay={true}
+                          loop={true}
+                        />
+                        <ImageLoading />
+                      </div>
+                    ) : animation ? (
+                      <div
+                        ref={thisRef}
+                        className="boundingBox"
+                        style={{
+                          position: "absolute",
+                          zIndex: 10,
+                        }}
+                      ></div>
+                    ) : null}
                   </div>
                 </div>
               </div>
@@ -219,13 +210,19 @@ const Game2_upload = () => {
                   style={{ display: "none" }}
                 />
                 {originalImage === null ? (
-                  <NewButton text={"Upload"} onClick={() => imgUploadBtn.current.click()}/>
+                  <NewButton
+                    text={"Upload"}
+                    onClick={() => imgUploadBtn.current.click()}
+                  />
                 ) : aiGeneratedImage === null ? (
-                  <NewButton text={"이미지 생성"} onClick={sendToServer}/>
+                  <NewButton text={"이미지 생성"} onClick={sendToServer} />
                 ) : (
                   <div className="game2-bottom">
-                    <NewButton text={"이미지 다시 생성"} onClick={sendToServer}/>
-                    <NewButton text={"준비 완료!"} onClick={readyToStart}/>
+                    <NewButton
+                      text={"이미지 다시 생성"}
+                      onClick={sendToServer}
+                    />
+                    <NewButton text={"준비 완료!"} onClick={readyToStart} />
                   </div>
                 )}
               </div>

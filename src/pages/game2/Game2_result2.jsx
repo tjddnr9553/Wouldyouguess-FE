@@ -36,12 +36,12 @@ const Game2_result2 = () => {
       const res = await findDiff_result(findDiffGameId);
       setPlayers(res);
     };
+    resetFDGFileStore();
+    resetFDGCanvasStore();
     sync_func();
   }, []);
 
   const goHome = () => {
-    resetFDGFileStore();
-    resetFDGCanvasStore();
     navigate(`/lobby/${roomId}`);
   };
 

@@ -23,7 +23,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 125%;
+  width: 150%;
+  margin-bottom: 10%;
   gap: 2em;
   border-radius: 0.5rem;
   background: rgba(0, 255, 240, 0.52);
@@ -36,7 +37,7 @@
   font-family: "Keania One", sans-serif; /* 폰트 누락 추가 */
   text-align: center;
   color: white;
-  font-size: 2rem;
+  font-size: 3rem;
   font-weight: 600;
   letter-spacing: 8px;
   text-shadow: 0px 0px 16px #f00; /* 단축 표기법 사용 */
@@ -44,9 +45,9 @@
 
 .form-content {
   font-family: "Galmuri14", sans-serif;
-  height: 3em;
+  height: 3.5em;
   padding: 1px 8px;
-  border-radius: 5%;
+  border-radius: 3%;
   border: 2px solid #fff;
   background: rgba(139, 255, 247, 0.486);
   box-shadow: 0 0 1px 3px #9ee5e3 inset, 0 4px 4px 0 #181a6040;
