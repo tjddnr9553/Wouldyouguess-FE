@@ -65,6 +65,8 @@
 }
 
 .game1.result > .homeBtn {
+  z-index: 10;
+
   position: fixed;
   right: 50px;
   bottom: 30px;

@@ -39,13 +39,13 @@ function Video({
   useEffect(() => {
     const sync_func = async () => {
       const res = await catchLiar_result(gameId, userId);
-      setPlayers(res);
 
       const player = res.find(player => Number(participantIdentity) === player.userId);
       setCurrentPlayer(player.username);
       setIsSpy(player.isLiar);
       setIsWinner(player.isWinner);
 
+      setPlayers(res);
       console.log(player.isWinner);
     }
     sync_func();
@@ -93,20 +93,34 @@ function Video({
     const delay = 1.5;
     const id = "camera-" + participantIdentity;
     floatingObj(id, delay);
-
-    if (isWinner === false && isWinner !== null) {
-      gsap.to('.loser', {
-        duration: 1,
-        delay: 3.5,
-        x: 1000,
-        y: -300,
-        rotateX: 360,
-        rotationY: 360,
-        rotationZ: 360, 
-        opacity: 0,
-        ease: "pwer1.easeInOut"
-      })
-    }
+    players.map((player) => {
+      if(player.isWinner === false) {
+        gsap.to('.loser', {
+          duration: 1,
+          delay: 3.5,
+          x: 1000,
+          y: -300,
+          rotateX: 360,
+          rotationY: 360,
+          rotationZ: 360,
+          opacity: 0,
+          ease: "pwer1.easeInOut"
+        })
+      }
+    })
+    // if (isWinner === false && isWinner !== null) {
+    //     gsap.to('.loser', {
+    //       duration: 1,
+    //       delay: 3.5,
+    //       x: 1000,
+    //       y: -300,
+    //       rotateX: 360,
+    //       rotationY: 360,
+    //       rotationZ: 360,
+    //       opacity: 0,
+    //       ease: "pwer1.easeInOut"
+    //     })
+    // }
     // if (isWinner === true && isWinner !== null) {
     //   gsap.to(".winner", {
     //     duration: 1,    
@@ -117,7 +131,7 @@ function Video({
     //     ease: "power1.inOut" // 애니메이션의 easing 함수
     //   });
     // }
-  }, [isWinner])
+  }, [players])
 
 
 
