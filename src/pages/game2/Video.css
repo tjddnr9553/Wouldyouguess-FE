@@ -1,0 +1,93 @@
+.video-container {
+    position: relative;
+  
+    transition: 0.5s;
+    /* padding: 1%; */
+    animation: 5s ease infinite;
+    margin-bottom: 10%;
+  }
+  
+  .video-container video {
+    width: 400px;
+    /* width: 100%; */
+    /*height: 90%;*/
+  }
+  
+  .video-container .participant-data {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  .participant-data p {
+    background: #f8f8f8;
+    margin: 0;
+    padding: 0 5px;
+    color: #777777;
+    font-weight: bold;
+    border-bottom-right-radius: 4px;
+  }
+  
+  /* Media Queries */
+  @media screen and (max-width: 480px) {
+    .video-container {
+      aspect-ratio: 9/16;
+    }
+  }
+  
+  .vote-camera {
+    height: 40%;
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+    border-radius: 1rem;
+  }
+  
+  .vote-camera video {
+    height: 70%;
+  }
+  
+  .voteUser-layout-container video{
+    border-radius: 50% 50% 0 0;
+    border: 11px solid black;
+  }
+  
+  .vote-camera div {
+    margin-left: 40px;
+  }
+  
+  .vote-camera strong {
+    color: black;
+  }
+  
+  .video-container-small {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  
+    border-radius: 1rem;
+    transition: 0.5s;
+    width: 100%;
+    padding: 0% 3%;
+    animation: 5s ease infinite;
+    background-image: white;
+    margin-bottom: 10%;
+  }
+  
+  .video-container-small video {
+    width: 80%;
+    height: 90%;
+  }
+  
+  .ufo-body {
+    position: absolute;
+    width: 672px;
+    top: -70px;
+    left: -81px;
+  }
+
+  .voteUser-layout-container{
+    flex-wrap: wrap;
+  }
+  

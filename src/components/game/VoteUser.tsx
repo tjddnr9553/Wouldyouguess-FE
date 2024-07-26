@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import VideoComponent from "../webrtc/VideoComponent";
+import Video from "../../pages/game2/Video";
 import AudioComponent from "../webrtc/AudioComponent";
 import useUserStore from "../../store/user/useUserStore";
 import useWebrtcStore from "../../store/webrtc/useWebrtcStore";
@@ -27,23 +27,23 @@ const VoteUser = ({ targetId }) => {
     >
       {
         // localTrack은 targetIdArray 배열에 userId가 포함될 때만 렌더링
-        targetIdArrayNumber.includes(userId) && localTrack && (
-          <VideoComponent
+         localTrack && (
+          <Video
             track={localTrack}
             participantIdentity={userId}
-            color="red"
+            color=""
             classNameCss="video-container"
           />
         )
       }
       {remoteTracks.map((remoteTrack) =>
         remoteTrack.trackPublication.kind === "video" ? (
-          targetIdArrayString.includes(remoteTrack.participantIdentity) && (
-            <VideoComponent
+           (
+            <Video
               key={remoteTrack.trackPublication.trackSid}
               track={remoteTrack.trackPublication.videoTrack!}
               participantIdentity={remoteTrack.participantIdentity}
-              color={colors[i++]}
+              color={''}
               classNameCss="video-container"
             />
           )
