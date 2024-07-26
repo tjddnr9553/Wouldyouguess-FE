@@ -37,7 +37,7 @@ const dummy = [
 ];
 
 const dummy2 = {
-  liar: "인라인 스케이트",
+  liar: "아이스크림",
   normal: "아이스링크",
   win: "normal",
 };
