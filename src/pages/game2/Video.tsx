@@ -17,6 +17,9 @@ interface VideoComponentProps {
   participantIdentity: string;
   color: string;
   classNameCss: string;
+  username: string;
+  isSpy: Boolean;
+  isWinner: Boolean;
 }
 
 function Video({
@@ -24,6 +27,9 @@ function Video({
   participantIdentity,
   color,
   classNameCss,
+  username,
+  isSpy,
+  isWinner,
 }: VideoComponentProps) {
   const videoElement = useRef<HTMLVideoElement | null>(null);
 
@@ -31,26 +37,7 @@ function Video({
   const { userId } = useUserStore();
   const { gameId ,setIsVotePage } = useCatchLiarStore();
 
-  const [players, setPlayers] = useState([]);
-  const [currentPlayer, setCurrentPlayer] = useState(null);
-  const [isSpy, setIsSpy] = useState(false);
-  const [isWinner, setIsWinner] = useState(null);
 
-  useEffect(() => {
-    setIsWinner(null);
-    const sync_func = async () => {
-      const res = await catchLiar_result(gameId, userId);
-
-      const player = res.find(player => Number(participantIdentity) === player.userId);
-      setCurrentPlayer(player.username);
-      setIsSpy(player.isLiar);
-      setIsWinner(player.isWinner);
-
-      setPlayers(res);
-      console.log(player.isWinner);
-    }
-    sync_func();
-  }, []);
 
   useEffect(() => {
     if (videoElement.current) {
@@ -95,21 +82,6 @@ function Video({
     const id = "camera-" + participantIdentity;
     floatingObj(id, delay);
 
-    // players.map((player) => {
-    //   if(player.isWinner === false) {
-    //     gsap.to('.loser', {
-    //       duration: 1,
-    //       delay: 3.5,
-    //       x: 1000,
-    //       y: -300,
-    //       rotateX: 360,
-    //       rotationY: 360,
-    //       rotationZ: 360,
-    //       opacity: 0,
-    //       ease: "pwer1.easeInOut"
-    //     })
-    //   }
-    // })
     if (isWinner === false && isWinner !== null) {
         gsap.to('.loser', {
           duration: 1,
@@ -141,10 +113,10 @@ function Video({
     <div id={"camera-" + participantIdentity} className={`${classNameCss ? classNameCss : ''} ${isWinner && isWinner ? 'winner' : 'loser'}`}
     style={{position: 'relative'}}>
       <div className="ufo-nick">
-        {currentPlayer && 
-          (isSpy ? 
-            `Spy ${currentPlayer}`:
-            `Player ${currentPlayer}`)
+        {username &&
+          (isSpy ?
+            `Spy ${username}`:
+            `Player ${username}`)
         }
       </div>
       <img src="/images/game/game1/ufo-body.png" className="ufo-body"/>

@@ -2,22 +2,40 @@ import React, { useEffect, useState } from "react";
 import Video from "../../pages/game2/Video";
 import AudioComponent from "../webrtc/AudioComponent";
 import useUserStore from "../../store/user/useUserStore";
+import useCatchLiarStore from "../../store/game/useCatchLiarStore";
 import useWebrtcStore from "../../store/webrtc/useWebrtcStore";
+import { catchLiar_result } from "../../api/game/CatchLiar";
 
 const VoteUser = ({ targetId }) => {
+  const [players, setPlayers] = useState([]);
+
   const { userId } = useUserStore();
+  const { gameId } = useCatchLiarStore();
   const { localTrack, remoteTracks } = useWebrtcStore();
 
-  let i = 0;
-
   useEffect(() => {
-    i = 0;
-  }, [targetId]);
+    const sync_func = async () => {
+      const res = await catchLiar_result(gameId, userId);
+      setPlayers(res);
+    }
+    sync_func();
+  }, []);
 
-  const targetIdArrayNumber = Array.isArray(targetId) ? targetId : [targetId];
-  const targetIdArrayString = Array.isArray(targetId)
-    ? targetId.map(String)
-    : [String(targetId)];
+  const getPlayerUsername = (participantIdentity) => {
+    const player = players.find(player => Number(participantIdentity) === player.userId);
+    return player.username;
+  }
+
+  const getPlayerIsSpy = (participantIdentity) => {
+    const player = players.find(player => Number(participantIdentity) === player.userId);
+    return player.isSpy;
+  }
+
+  const getPlayerIsWinner = (participantIdentity) => {
+    const player = players.find(player => Number(participantIdentity) === player.userId);
+    return player.isWinner;
+  }
+
 
   return (
     <div
@@ -26,16 +44,19 @@ const VoteUser = ({ targetId }) => {
     >
       {
         // localTrack은 targetIdArray 배열에 userId가 포함될 때만 렌더링
-         localTrack && (
+          players && localTrack && (
           <Video
             track={localTrack}
             participantIdentity={userId}
             color=""
             classNameCss="video-container"
+            username={getPlayerUsername(userId)}
+            isSpy={getPlayerIsSpy(userId)}
+            isWinner={getPlayerIsWinner(userId)}
           />
         )
       }
-      {remoteTracks.map((remoteTrack) =>
+      {players && remoteTracks.map((remoteTrack) =>
         remoteTrack.trackPublication.kind === "video" ? (
            (
             <Video
@@ -44,6 +65,9 @@ const VoteUser = ({ targetId }) => {
               participantIdentity={remoteTrack.participantIdentity}
               color={''}
               classNameCss="video-container"
+              username={getPlayerUsername(remoteTrack.participantIdentity)}
+              isSpy={getPlayerIsSpy(remoteTrack.participantIdentity)}
+              isWinner={getPlayerIsWinner(remoteTrack.participantIdentity)}
             />
           )
         ) : (
