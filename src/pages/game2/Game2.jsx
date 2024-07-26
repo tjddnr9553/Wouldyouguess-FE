@@ -55,8 +55,12 @@ const Game2 = () => {
   }, [round]);
 
   useEffect(() => {
+    const sync_func1 = async () => {
+      await findDiff_update_score(userId, chance, false);
+    }
+
     if (chance === 0) {
-      findDiff_update_score(userId, chance, false);
+      sync_func1();
       setEndSearch(true);
     }
   }, [chance]);
