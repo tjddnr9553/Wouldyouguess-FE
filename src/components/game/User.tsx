@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 
 import useUserStore from "../../store/user/useUserStore";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore";
@@ -7,27 +7,14 @@ import useWebrtcStore from "../../store/webrtc/useWebrtcStore";
 import AudioComponent from "../webrtc/AudioComponent";
 import VideoComponent from "../webrtc/VideoComponent";
 
-import { catchLiar_info_list } from "../../api/game/CatchLiar"
-
 const User = () => {
-  const [camColor, setCamColor ] = useState([]);
 
   const { userId } = useUserStore();
-  const { gameId, userColor, setUserColorList } = useCatchLiarStore();
+  const { userColor, userColorList } = useCatchLiarStore();
   const { localTrack, remoteTracks } = useWebrtcStore();
 
-  useEffect(() => {
-    const sync_func = async () => {
-      const res = await catchLiar_info_list(gameId);
-      setCamColor(res);
-      setUserColorList(res);
-    }
-    sync_func()
-  }, [])
-
-  const getUserColor = (camColor, participantIdentity) => {
-    console.log(camColor);
-    const user = camColor.find(user => Number(user.userId) === Number(participantIdentity));
+  const getUserColor = ( participantIdentity) => {
+    const user = userColorList.find(user => Number(user.userId) === Number(participantIdentity));
     return user ? user.userColor : 'defaultColor';
   };
 
@@ -41,13 +28,13 @@ const User = () => {
           classNameCss="video-container"
         />
       )}
-      {camColor && remoteTracks.map((remoteTrack) =>
+      {userColorList && remoteTracks.map((remoteTrack) =>
         remoteTrack.trackPublication.kind === "video" ? (
           <VideoComponent
             key={remoteTrack.trackPublication.trackSid}
             track={remoteTrack.trackPublication.videoTrack!}
             participantIdentity={remoteTrack.participantIdentity}
-            color={getUserColor(camColor, remoteTrack.participantIdentity)}
+            color={getUserColor(remoteTrack.participantIdentity)}
             classNameCss="video-container"
           />
         ) : (

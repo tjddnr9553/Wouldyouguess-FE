@@ -17,7 +17,7 @@ import useWebrtcStore from "../../store/webrtc/useWebrtcStore.tsx";
 import useAudioStore from "../../store/bgm/useAudioStore.js";
 import useFDGStore from "../../store/game/findDiffGame/useFDGStore.js";
 
-import { catchLiar_start } from "../../api/game/CatchLiar.js";
+import {catchLiar_info_list, catchLiar_start} from "../../api/game/CatchLiar.js";
 import { findDiff_start } from "../../api/game/FindDiff.js";
 const textList = [
   {
@@ -45,7 +45,7 @@ const Lobby = () => {
   const { roomId } = useRoomStore();
   const { setFindDiffGameId } = useFDGStore();
   const { socket, setSocket } = useSocketStore();
-  const { setGameId } = useCatchLiarStore();
+  const { setGameId, setUserColorList } = useCatchLiarStore();
   const { joinRoom } = useWebrtcStore();
   const { play, stop } = useAudioStore();
   const gameStartSound = new Audio("/sound_effects/game_start_sound.mp3");
@@ -80,9 +80,11 @@ const Lobby = () => {
   }, [location.state]);
 
   useEffect(() => {
-    socket?.on("game_start", (data) => {
+    socket?.on("game_start", async (data) => {
       if (data.mode === 1) {
         setGameId(data.gameId);
+        const res = await catchLiar_info_list(data.gameId);
+        setUserColorList(res);
         navigate(`/game1?gameId=${data.gameId}&round=1`);
       } else if (data.mode === 2) {
         setFindDiffGameId(data.gameId);
