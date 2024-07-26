@@ -20,7 +20,7 @@ const VoteGaugebar = ({ gameStart, setGameStart }) => {
       setTimeout(() => {
         tensionSound.pause();
       }, 7000);
-    }, 43000);
+    }, 33000);
   }, []);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const VoteGaugebar = ({ gameStart, setGameStart }) => {
       gsap.to(".loader", {
         width: "99.9%",
         backgroundColor: "red",
-        duration: 50,
+        duration: 40,
         ease:"none",
         onComplete: () => {
           handleCountdownComplete();
