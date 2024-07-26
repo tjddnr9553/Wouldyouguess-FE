@@ -50,6 +50,7 @@ const Result = () => {
   }, [])
 
   useEffect(() => {
+    if (players.length === 0) return ;
     if (!players.find((player) => player.isWinner)?.isLiar) {
       showKewordRef.current.firstChild.classList.add("winKeyword");
       showKewordRef.current.lastChild.classList.add("loseKeyword");
