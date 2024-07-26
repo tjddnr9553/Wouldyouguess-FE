@@ -17,12 +17,12 @@
   transform: translate(-0%, -0%) scale(0.95);
 }
 
-.locked-planet{
+.locked-planet {
   width: 80%;
 }
 
 .item-hints .hint-dot img {
-  width: 120%;
+  width: 100%;
   height: auto;
   display: block;
   object-fit: contain;
@@ -95,9 +95,18 @@
   visibility: visible;
 }
 .item-hints .hint-content {
-  width: 300px;
-  top: -13%;
-  left: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 45%;
+  top: -6%;
+  left: 85%;
+  font-size: 1.5rem;
+  font-weight: 900;
+  text-shadow: 0 0 6px rgba(255, 0, 0, 0.92),
+    0 0 30px rgba(202, 228, 225, 0.34), 0 0 12px rgba(30, 132, 242, 0.52),
+    0 0 21px rgba(150, 242, 30, 0.92), 0 0 34px rgba(30, 132, 242, 0.78),
+    0 0 54px rgba(30, 132, 242, 0.92);
 }
 
 .hintBtn {
@@ -112,4 +121,3 @@
 .hint-dot {
   position: relative;
 }
-

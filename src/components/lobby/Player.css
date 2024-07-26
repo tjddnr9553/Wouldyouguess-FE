@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 120px;
+  height: 150px;
   width: 100%;
   color: white;
   font-size: 1.5rem;
@@ -19,7 +19,8 @@
 @keyframes slide {
   from {
     transform: translateX(0);
-  } to {
+  }
+  to {
     transform: translateX(50%);
   }
 }
@@ -27,7 +28,8 @@
 @keyframes returnAnimation {
   from {
     transform: translateX(50%);
-  } to {
+  }
+  to {
     transform: translateX(0);
   }
 }
@@ -41,16 +43,15 @@
   width: 120px;
   height: 120px;
   justify-content: center;
-  border-radius: 50% ;
+  border-radius: 50%;
   filter: drop-shadow(0 0 2px rgba(17, 26, 78, 0.7))
-          drop-shadow(0 0 5px rgba(43, 59, 111, 0.7))
-          drop-shadow(0 0 15px rgba(255, 255, 250, 0.7));
+    drop-shadow(0 0 5px rgba(43, 59, 111, 0.7))
+    drop-shadow(0 0 15px rgba(255, 255, 250, 0.7));
   z-index: 10;
 }
 
 .player .name-section {
   position: relative;
-;
   /* background-color: rgb(123 168 191 / 63%); */
   display: flex;
   flex-direction: column;
@@ -64,27 +65,27 @@
   flex: 1;
   border-radius: 0 10px 10px 0;
   border: 1px solid rgb(55, 36, 131);
-  box-shadow: 0 14px 28px rgba(29, 4, 83, 0.25), 0 20px 20px rgba(0,0,0,0.22);
+  box-shadow: 0 14px 28px rgba(29, 4, 83, 0.25), 0 20px 20px rgba(0, 0, 0, 0.22);
   border-left: none;
 }
 
 .player .name-section * {
-  margin-bottom: 5px;
+  margin-bottom: 5%;
+}
+
+.player .name-section h1::after {
+  content: "";
+  display: block;
+  width: 70%;
+  border-bottom: 2px solid black;
+  margin-top: 10px;
 }
 
 .player .name-section h1 {
+  font-size: 2rem;
   font-weight: bold;
 }
 
 .player .name-section .user-description {
-  font-size: 1rem;
-}
-
-.player .name-section .user-description::after {
-  content: "";
-  display: block;
-  width: 70%;
-  height: 2px;
-  border-bottom: 2px solid black;
-  margin-top: 10px;
+  font-size: 1.5rem;
 }
