@@ -49,6 +49,7 @@ const Drawing = ({ zIndex, position }) => {
     }
     if (tool === TOOL_CLEAR) {
       toolRef.current.clearCanvas(1200, 750);
+      socket?.emit("drawer_draw_start", {tool, roomId});
       setTool(TOOL_PENCIL);
     }
   }, [tool]);
@@ -105,7 +106,7 @@ const Drawing = ({ zIndex, position }) => {
     toolRef.current.onMouseMove(x, y);
 
     if (isDrawing) {
-      socket?.emit("drawer_draw_move", { tool, xAxis: x, yAxis: y, color, size, fillColor, roomId,});
+      socket?.emit("drawer_draw_move", { tool, xAxis: x, yAxis: y, color, size, fillColor, roomId});
     }
   };
 
@@ -116,6 +117,11 @@ const Drawing = ({ zIndex, position }) => {
 
   const handleDrawerDrawStart = (data) => {
     const { tool, xAxis, yAxis, color, size, fillColor } = data;
+    if (tool === TOOL_CLEAR) {
+      Clear(ctxRef.current).clearCanvas(1200, 750);
+      return;
+    }
+
     initTool(tool);
 
     if (tool === TOOL_PENCIL) {
