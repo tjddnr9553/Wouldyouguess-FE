@@ -1,15 +1,21 @@
 import "./ImageLoading.css";
 
 const ImageLoading = () => {
-  const squareElements = Array.from({ length: 3 }, (_, index) => (
-    <div className="square" key={index}>
-      {Array.from({ length: 4 }, (_, i) => (
-        <span style={{ "--i": i }} key={i} /> 
-      ))}
-    </div>
-  ));
-
-  return <div className="imageLoadContainer">{squareElements}</div>;
+  return (
+    <video
+      src="/images/game/game2/imageLoading.mp4"
+      muted
+      autoPlay
+      loop
+      style={{
+        position: "absolute",
+        top: "0",
+        right: "0",
+        width: "100%",
+        height: "100%",
+      }}
+    />
+  );
 };
 
 export default ImageLoading;

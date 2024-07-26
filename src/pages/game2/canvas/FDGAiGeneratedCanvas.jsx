@@ -86,7 +86,7 @@ const FDGAiGeneratedCanvas = ({
       contextRef.current.shadowOffsetX = 10;
       contextRef.current.shadowOffsetY = 10; 
 
-      contextRef.current.drawImage(image, x - 25, y - 30, 100, 100);
+      contextRef.current.drawImage(image, x - 50, y - 50, 100, 100);
     };
   };
 
