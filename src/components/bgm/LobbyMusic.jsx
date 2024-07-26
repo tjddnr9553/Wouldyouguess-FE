@@ -8,7 +8,7 @@ const LobbyMusic = () => (
     style={{ display: "none" }}
     preload={"auto"}
     loop={true}
-    volume={0.3}
+    volume={0.15}
   />
 );
 export default LobbyMusic;
