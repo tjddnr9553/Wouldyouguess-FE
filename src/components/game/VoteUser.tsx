@@ -30,7 +30,7 @@ const VoteUser = ({ targetId }) => {
   const getPlayerIsSpy = (participantIdentity) => {
     if (players.length === 0) return ;
     const player = players.find(player => Number(participantIdentity) === Number(player.userId));
-    return player.isSpy;
+    return player.isLiar;
   }
 
   const getPlayerIsWinner = (participantIdentity) => {
