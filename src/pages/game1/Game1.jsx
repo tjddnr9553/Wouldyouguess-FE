@@ -131,7 +131,7 @@ const Game1 = () => {
           <div className="drawing-container">
             <div className="keyword-title">
             </div>
-            <div ref={containerRef} className="canvas-container">
+            <div ref={containerRef} className="canvas-container" style={{cursor: 'url("/images/game/game1/pencil-cursor.png") 4 58, auto'}}>
               <Keyword keyword={keyword}/>
               <Drawing
                 zIndex={isDrawing ? 10 : 9}
