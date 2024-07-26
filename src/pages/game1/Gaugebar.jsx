@@ -40,7 +40,7 @@ const Gaugebar = ({ gameStart, setGameStart, time }) => {
       gsap.to(".loader", {
         width: "99.9%",
         backgroundColor: "red",
-        duration: 20,
+        duration: 30,
         ease:"none",
         onComplete: () => {
           handleCountdownComplete();
