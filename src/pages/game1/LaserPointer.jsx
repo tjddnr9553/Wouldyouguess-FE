@@ -1,16 +1,16 @@
-import { useRef, useEffect, useState, useId } from "react";
+import {useEffect, useRef, useState} from "react";
 import {
+  calControlPoints,
+  calDrawingData,
   drainPoints,
+  drawDrawingBezierData,
+  setColor,
   setDelay,
   setMaxWidth,
   setMinWidth,
   setOpacity,
-  setColor,
   setRoundCap,
-  calControlPoints,
   transformPointToBezier,
-  calDrawingData,
-  drawDrawingBezierData,
 } from "laser-pen";
 import useSocketStore from "../../store/socket/useSocketStore.js";
 import useRoomStore from "../../store/room/useRoomStore.js";
@@ -26,7 +26,7 @@ const LaserPointer = ({ zIndex, position }) => {
 
   const { socket } = useSocketStore();
   const { roomId } = useRoomStore();
-  const { isDrawing } = useCatchLiarStore();
+  const { isDrawing, userColor, userColorList } = useCatchLiarStore();
   const { userId } = useUserStore();
 
   useEffect(() => {
@@ -51,6 +51,8 @@ const LaserPointer = ({ zIndex, position }) => {
       const currentTime = Date.now();
       for (const userId in clientLines) {
         const lines = clientLines[userId];
+        const color = userColorList.find(user => Number(user.userId) === Number(userId)).userColor;
+
         lines.forEach((line) => {
           const drainedPoints = drainPoints(line);
           if (drainedPoints.length > 5) {
@@ -70,7 +72,18 @@ const LaserPointer = ({ zIndex, position }) => {
             const drawingData = calDrawingData(bezierCurves, totalLength);
 
             // 선에 그림자 블러 효과를 줘서 형광펜 느낌나도록
-            ctx.shadowColor = "rgba(255, 0, 0, 1)";
+            if (color === "red") {
+              ctx.shadowColor = "rgba(255, 0, 0, 1)";
+            } else if (color === "green") {
+              ctx.shadowColor = "rgba(0, 128, 0, 1)";
+            } else if (color === "yellow") {
+              ctx.shadowColor = "rgba(255, 255, 0, 1)";
+            } else if (color === "blue") {
+              ctx.shadowColor = "rgba(0, 0, 255, 1)";
+            } else if (color === "purple") {
+              ctx.shadowColor = "rgba(128, 0, 128, 1)";
+            }
+
             ctx.shadowBlur = 10;
             ctx.shadowOffsetX = 3;
             ctx.shadowOffsetY = 3;
@@ -92,6 +105,7 @@ const LaserPointer = ({ zIndex, position }) => {
             return newLines;
           });
         }
+
       }
     };
 
@@ -118,6 +132,7 @@ const LaserPointer = ({ zIndex, position }) => {
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
       time: Date.now(),
+      color: userColor
     };
     setLines([...lines, [newPoint]]); // 새로운 선 시작
 
@@ -133,7 +148,8 @@ const LaserPointer = ({ zIndex, position }) => {
       yAxis: newPoint.y,
       time: newPoint.time,
       roomId,
-      userId
+      userId,
+      userColor
     });
   };
 
@@ -144,6 +160,7 @@ const LaserPointer = ({ zIndex, position }) => {
         x: e.clientX - rect.left,
         y: e.clientY - rect.top,
         time: Date.now(),
+        color: userColor
       };
 
       socket?.emit("watcher_draw_move", {
@@ -151,7 +168,8 @@ const LaserPointer = ({ zIndex, position }) => {
         yAxis: newPoint.y,
         time: newPoint.time,
         roomId,
-        userId
+        userId,
+        userColor
       });
 
       setClientLines((prevLines) => {
@@ -175,12 +193,13 @@ const LaserPointer = ({ zIndex, position }) => {
 
   const handleWatcherDrawStart = (data) => {
     if (isDrawing) return;
-    const { xAxis, yAxis, time, userId } = data;
+    const { xAxis, yAxis, time, userId, userColor } = data;
 
     const newPoint = {
       x: xAxis,
       y: yAxis,
       time,
+      color: userColor
     };
 
     setClientLines((prevLines) => ({
@@ -193,12 +212,13 @@ const LaserPointer = ({ zIndex, position }) => {
 
   const handleWatcherDrawMove = (data) => {
     if (isDrawing) return;
-    const { xAxis, yAxis, time, userId } = data;
+    const { xAxis, yAxis, time, userId, userColor } = data;
 
     const newPoint = {
       x: xAxis,
       y: yAxis,
       time,
+      color: userColor
     };
 
     setClientLines((prevLines) => {
@@ -208,7 +228,7 @@ const LaserPointer = ({ zIndex, position }) => {
         ...prevLines,
         [userId]: [
           ...lines.slice(0, -1),
-          [...lastLine, { x: xAxis, y: yAxis, time }],
+          [...lastLine, newPoint],
         ],
       };
     });

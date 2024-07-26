@@ -4,28 +4,56 @@
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   text-align: center;
 }
 
+.game1.result *
+ {
+  font-family: "ARCADE" ,"Keania One";
+ }
+
+ /* title 관련 */
 .game1.result > .title {
   position: relative;
 
-  margin-bottom: 2%;
-  font-family: "Keania One";
+  margin-bottom: 1%;
   margin-top: 1%;
 
-  width: 57vw;
-  max-width: 57vw;
-  height: 18vh;
+  width: 100%;
+}
+
+.game1 .result-title {
+  padding: 40px 20px 40px 55px;
+  display: flex;
+  justify-content: center;
+
+  background-image: url("/images/game/game1_result/space-bg2.jpeg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% auto; /* 세로 길이를 div 요소에 맞춤 */
+
+  margin-top: 1.5%;
+  font-size: 4rem;
+  color: white;
+  letter-spacing: 5px;
+
+  border: 10px solid #FED128;
+
+  text-shadow: 0 0 1vw #FA1C16, 0 0 3vw #FA1C16, 0 0 10vw #FA1C16, 0 0 10vw #FA1C16, 0 0 .4vw #FED128, .5vw .5vw .1vw #806914;
+  color: #FED128;
+  border-radius: 30px;
+}
+
+.video-container {
+  flex-grow: 0; /* flex-grow 비활성화 */
 }
 
 .player-list1 {
+  width: 100%;
+  height: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 50%;
+  flex-direction: column;
+  gap: 38px;
 }
 
 .player-list1 .player-video {
@@ -71,35 +99,6 @@
 
   font-size: 5rem;
 }
-
-.game1 .result-title {
-  width: 100%;
-  max-width: 636px;
-  max-height: 127px;
-
-  display: flex;
-  justify-content: center;
-
-  background-image: url("/images/game/game1_result/ribbon.png");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 100% auto; /* 세로 길이를 div 요소에 맞춤 */
-
-  margin-top: 1.5%;
-  font-size: 140%;
-  color: white;
-  letter-spacing: 5px;
-}
-
-.player-list1 {
-  width: 60%;
-  height: 70%;
-
-  display: flex;
-  flex-direction: column;
-  gap: 38px;
-}
-
 
 .player-list1 .nick {
   background: white;
@@ -148,20 +147,15 @@
 .winnerVideo-container {
   display: flex;          /* Flexbox 레이아웃 적용 */
   justify-content: center; /* 가로 중앙 정렬 (선택 사항) */
-  align-items: center;    /* 세로 중앙 정렬 (선택 사항) */
-
-  filter: drop-shadow(0px 20px 20px #ffffff);
+  height: 100%;
 }
 
-.liar-win .video-container {
-  width: 640px; /* 고정 너비 설정 (원하는 값으로 변경 가능) */
-  height: 410px; /* 고정 높이 설정 (원하는 값으로 변경 가능) */
-  flex-grow: 0; /* flex-grow 비활성화 */
+@font-face {
+  font-family: 'DOSGothic';
+  src: url('/font/DOSGothic.ttf') format('truetype');
 }
 
-.citizen-win .video-container {
-  width: 540px; /* 고정 너비 설정 (원하는 값으로 변경 가능) */
-  height: 370px; /* 고정 높이 설정 (원하는 값으로 변경 가능) */
-  flex-grow: 0; /* flex-grow 비활성화 */
-  margin-bottom: -1%;
+@font-face {
+  font-family: 'ARCADE';
+  src: url('/font/ARCADE.TTF') format('truetype');
 }

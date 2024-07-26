@@ -35,6 +35,22 @@ export const catchLiar_info = async (gameId, userId, round) => {
     }
 };
 
+export const catchLiar_info_list = async (gameId) => {
+    try {
+        const res = await axios({
+            method: "GET",
+            url: `${API_SERVER_URL}/api/catchLiar/infos`,
+            params: {
+                catchLiarGameId: gameId,
+            }
+        });
+
+        return res.data;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
 
 export const catchLiar_vote_candidates = async (gameId) => {
     try {

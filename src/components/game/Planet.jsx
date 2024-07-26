@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap, Power1 } from "gsap";
 import { createPortal } from "react-dom"; // 포털 기능 import
 
 import GameInfo from "../../pages/lobby/GameInfo";
 import "./Planet.css";
+// import Astronaut from "../../pages/lobby/Astronaut";
 
 const Planet = ({ style, id, min, max, text, onClick, game }) => {
   const imagePath = `/images/planet/${id}.png`;
+
+  const planetRef = useRef();
 
   const [hoveredGame, setHoveredGame] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -32,6 +35,14 @@ const Planet = ({ style, id, min, max, text, onClick, game }) => {
     floatingObj(id, min, max);
   }, []);
 
+  const handleMouseOver = () => {
+    gsap.to(planetRef.current, { scale: 1.3, duration: 1 });
+  };
+
+  const handleMouseOut = () => {
+    gsap.to(planetRef.current, { scale: 1, duration: 1 });
+  };
+
   const handleMouseEnter = () => {
     setIsHovered(true);
     setHoveredGame(game);
@@ -55,7 +66,13 @@ const Planet = ({ style, id, min, max, text, onClick, game }) => {
   };
 
   return (
-    <div className={`${id} item-hints`} style={style}>
+    <div 
+      className={`${id} item-hints`} 
+      style={style}
+      ref={planetRef}
+      onMouseOver={handleMouseOver}
+      onMouseOut={handleMouseOut}
+    >
       {createPortal(
         <div
           className="info-container" // 페이드 관련 클래스 제거
@@ -87,6 +104,10 @@ const Planet = ({ style, id, min, max, text, onClick, game }) => {
             onClick={onClick}
             onMouseOver={id !== "planet3" ? hoverSound : hoverSoundGame3}
           />
+          {/* {id === 'planet1' && (
+            <Astronaut onClick={handleMouseEnter} />
+          )} */}
+
           {id === "planet3" && (
             <img
               src="/images/planet/lock.png"
@@ -110,7 +131,7 @@ const Planet = ({ style, id, min, max, text, onClick, game }) => {
             <img
               src="/images/planet/hintBtn.png"
               className="hintBtn"
-              onClick={handleMouseEnter}
+              handleMouseEnter={handleMouseEnter}
             />
           )}
         </span>

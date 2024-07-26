@@ -1,39 +1,60 @@
-import React from "react";
-import VideoComponent from "../../components/webrtc/VideoComponent";
+import React, {useEffect, useState} from "react";
+
 import useUserStore from "../../store/user/useUserStore";
+import useCatchLiarStore from "../../store/game/useCatchLiarStore";
 import useWebrtcStore from "../../store/webrtc/useWebrtcStore";
 
-const User = ( ) => {
-  const colors = ["blue", "purple", "green", "yellow"];
+import AudioComponent from "../webrtc/AudioComponent";
+import VideoComponent from "../webrtc/VideoComponent";
+
+import { catchLiar_info_list } from "../../api/game/CatchLiar"
+
+const User = () => {
+  const [camColor, setCamColor ] = useState([]);
 
   const { userId } = useUserStore();
+  const { gameId, userColor, setUserColorList } = useCatchLiarStore();
   const { localTrack, remoteTracks } = useWebrtcStore();
+
+  useEffect(() => {
+    const sync_func = async () => {
+      const res = await catchLiar_info_list(gameId);
+      setCamColor(res);
+      setUserColorList(res);
+    }
+    sync_func()
+  }, [])
+
+  const getUserColor = (camColor, participantIdentity) => {
+    console.log(camColor);
+    const user = camColor.find(user => Number(user.userId) === Number(participantIdentity));
+    return user ? user.userColor : 'defaultColor';
+  };
 
   return (
     <div id="layout-container">
-      {localTrack && (
+      {userColor && localTrack && (
         <VideoComponent
           track={localTrack}
           participantIdentity={userId}
-          color="red"
+          color={userColor}
           classNameCss="video-container"
         />
       )}
-      {remoteTracks.map((remoteTrack, index) =>
+      {camColor && remoteTracks.map((remoteTrack) =>
         remoteTrack.trackPublication.kind === "video" ? (
           <VideoComponent
             key={remoteTrack.trackPublication.trackSid}
             track={remoteTrack.trackPublication.videoTrack!}
             participantIdentity={remoteTrack.participantIdentity}
-            color={colors[index++]}
+            color={getUserColor(camColor, remoteTrack.participantIdentity)}
             classNameCss="video-container"
           />
         ) : (
-            <></>
-          // <AudioComponent
-          //   key={remoteTrack.trackPublication.trackSid}
-          //   track={remoteTrack.trackPublication.audioTrack!}
-          // />
+          <AudioComponent
+            key={remoteTrack.trackPublication.trackSid}
+            track={remoteTrack.trackPublication.audioTrack!}
+          />
         )
       )}
     </div>
