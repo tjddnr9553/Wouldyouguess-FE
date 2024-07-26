@@ -10,7 +10,8 @@ import useRoomStore from "../../store/room/useRoomStore.js";
 import useAudioStore from "../../store/bgm/useAudioStore.js";
 import useWebrtcStore from "../../store/webrtc/useWebrtcStore.tsx";
 
-import { catchLiar_result } from "../../api/game/CatchLiar.js";
+import { catchLiar_result, catchLiar_vote_candidates } from "../../api/game/CatchLiar.js";
+import NewButton from "../../components/button/newButton.jsx";
 
 const dummy = [
   {
@@ -49,7 +50,7 @@ const Result = () => {
 
   const { userId } = useUserStore();
   const { roomId } = useRoomStore();
-  const { gameId } = useCatchLiarStore();
+  const { gameId ,setIsVotePage } = useCatchLiarStore();
   const { play, stop } = useAudioStore();
   const { remoteTracks } = useWebrtcStore();
 
@@ -78,6 +79,20 @@ const Result = () => {
   }, []);
 
   useEffect(() => {
+    setIsVotePage(true);
+  }, [])
+
+
+//   useEffect(() => {
+//     const sync_func = async () => {
+//         const res = await catchLiar_vote_candidates(gameId);
+//         setPlayers(res.sort((a, b) => a.userId - b.userId));
+//     };
+    
+//     sync_func();
+// }, []);
+
+  useEffect(() => {
     const sync_func = async () => {
       const res = await catchLiar_result(gameId, userId);
       setPlayers(res);
@@ -86,7 +101,7 @@ const Result = () => {
       const newWinnerIds = res
         .filter((player) => player.isWinner)
         .map((player) => player.userId);
-      setWinnerIds(newWinnerIds);
+      setWinnerIds(newWinnerIds); 
     };
 
     sync_func();
@@ -104,7 +119,7 @@ const Result = () => {
             ? "Spy  Win !"
             : "Catch Spy !"}{" "}
         </div>
-      </div>
+      </div>  
       <div
         className={`winnerVideo-container ${
           isLiarWin ? "liar-win" : "citizen-win"
@@ -116,11 +131,13 @@ const Result = () => {
           )}
         </div>
       </div>
+
       <div className="showKeyword" ref={showKewordRef}>
         <div className="normalKeyword">normal {dummy2.normal}</div>
         <div className="liarKeyword">liar {dummy2.liar}</div>
       </div>
       <button onClick={goHome} className="homeBtn"></button>
+      {/* <NewButton /> */}
     </div>
   );
 };

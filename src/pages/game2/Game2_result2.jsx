@@ -10,6 +10,7 @@ import useAudioStore from "../../store/bgm/useAudioStore.js";
 import useFDGStore from "../../store/game/findDiffGame/useFDGStore.js";
 import useFDGCanvasStore from "../../store/game/findDiffGame/useFDGCanvasStore.js";
 import useFDGFileStore from "../../store/game/findDiffGame/useFDGFileStore.js";
+import NewButton from "../../components/button/newButton.jsx";
 
 import {findDiff_result} from "../../api/game/FindDiff.js";
 
@@ -52,9 +53,7 @@ const Game2_result2 = () => {
           <strong>Result</strong>
         </div>
         <div className="game2-result-content">
-          <div className="tropy">
-            <div className="tropy-img"></div>
-          </div>
+
           <div className="player-list">
             {players && players.map((player, index) => (
               <Game2_playerResult
@@ -65,8 +64,15 @@ const Game2_result2 = () => {
               />
             ))}
           </div>
+
+                    <div className="tropy">
+            <div className="tropy-img"></div>
+          </div>
         </div>
-        <button onClick={goHome} className="homeBtn" />
+        {/* <NewButton onClick={goHome} className="homeBtn" /> */}
+        <div class="pixel-container">
+          <button class="pixel-btn">HOME</button>
+        </div>
       </div>
     </div>
   );
