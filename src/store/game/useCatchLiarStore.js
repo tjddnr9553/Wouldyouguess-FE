@@ -11,6 +11,8 @@ const useCatchLiarStore = create((set) => ({
     imagePath: '',
     myVotingUserId: 0,
     votePageShowGameOver: false,
+    isVotePage : false,
+    setIsVotePage: (isVotePage) => set({isVotePage}),
 
     setGameId: (gameId) => set({ gameId }),
     setIsDrawing: (isDrawing) => set({ isDrawing }),
