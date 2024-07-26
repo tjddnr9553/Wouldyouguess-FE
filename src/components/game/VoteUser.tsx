@@ -22,17 +22,20 @@ const VoteUser = ({ targetId }) => {
   }, []);
 
   const getPlayerUsername = (participantIdentity) => {
-    const player = players.find(player => Number(participantIdentity) === player.userId);
+    if (players.length === 0) return ;
+    const player = players.find(player => Number(participantIdentity) === Number(player.userId));
     return player.username;
   }
 
   const getPlayerIsSpy = (participantIdentity) => {
-    const player = players.find(player => Number(participantIdentity) === player.userId);
+    if (players.length === 0) return ;
+    const player = players.find(player => Number(participantIdentity) === Number(player.userId));
     return player.isSpy;
   }
 
   const getPlayerIsWinner = (participantIdentity) => {
-    const player = players.find(player => Number(participantIdentity) === player.userId);
+    if (players.length === 0) return ;
+    const player = players.find(player => Number(participantIdentity) === Number(player.userId));
     return player.isWinner;
   }
 
