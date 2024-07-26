@@ -28,7 +28,7 @@ const VoteGaugebar = ({ gameStart, setGameStart }) => {
       gsap.to(".loader", {
         width: "99.9%",
         backgroundColor: "red",
-        duration: 20,
+        duration: 50,
         ease:"none",
         onComplete: () => {
           handleCountdownComplete();

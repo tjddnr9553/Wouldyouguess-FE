@@ -22,7 +22,7 @@ const Home = () => {
 
   const goToKakaoLogin = () => {
     setIsStartClicked(true); // 버튼 클릭 상태 변경
-    nav("/temp/login");
+    nav("/login");
     // window.localStorage.setItem("isInvited", "false");
     // window.location.href = KAKAO_AUTH_URL;
   };

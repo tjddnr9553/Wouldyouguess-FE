@@ -65,7 +65,7 @@ const Lobby = () => {
   }, [roomId, userId]); // 의존성 배열 추가
 
   useEffect(() => {
-    if (location.state?.from === "/temp/login") {
+    if (location.state?.from === "/login") {
       const socketConnect = io(import.meta.env.VITE_SOCKET_SERVER_URL);
       setSocket(socketConnect);
 

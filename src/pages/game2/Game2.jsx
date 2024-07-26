@@ -56,7 +56,7 @@ const Game2 = () => {
 
   useEffect(() => {
     const sync_func1 = async () => {
-      await findDiff_update_score(userId, chance, false);
+      await findDiff_update_score(userId, findDiffGameId, chance, false);
     }
 
     if (chance === 0) {
@@ -78,7 +78,7 @@ const Game2 = () => {
       maskY1 <= answerY &&
       answerY <= maskY2
     ) {
-      await findDiff_update_score(userId, chance, true);
+      await findDiff_update_score(userId, findDiffGameId, chance, true);
       // setStartSearch(true);
       setEndSearch(true);
       
