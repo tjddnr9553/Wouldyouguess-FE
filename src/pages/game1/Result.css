@@ -1,3 +1,5 @@
+@import url("https://cdn.jsdelivr.net/npm/galmuri/dist/galmuri.css");
+
 .game1.result {
   width: 100vw;
   height: 100vh;
@@ -9,7 +11,7 @@
 
 .game1.result *
  {
-  font-family: "ARCADE" ,"Keania One";
+  font-family: "ARCADE" ,"Keania One", "LonelyCoffee";
  }
 
  /* title 관련 */
@@ -33,7 +35,7 @@
   background-size: 100% auto; /* 세로 길이를 div 요소에 맞춤 */
 
   margin-top: 1.5%;
-  font-size: 4rem;
+  font-size: 1.7rem; /* 간판 사이즈 조절 */
   color: white;
   letter-spacing: 5px;
 
@@ -126,18 +128,33 @@
   width: 100%;
   height: 20%;
 
-  font-size: 1.6rem;
+  font-size: 1.5rem;
 
-  margin-top: 30px;
+  margin-bottom: 2%;
+
+  z-index: 3;
 }
 
 .showKeyword * {
-  background-color: #ffffff;
-  padding: 15px;
+  padding: 30px;
   border-radius: 10px;
 }
+.normalKeyword span{
+  /* text-shadow: 0 0 4px #000 ; */
+  font-size: 2rem;
+  color: blue;
+  font-weight: 700;
+}
+
+.liarKeyword span{
+  /* text-shadow: 0 0 4px #000 ; */
+  font-size: 2rem;
+  color: red;
+  font-weight: 700;
+}
+
 .showKeyword .winKeyword {
-  transform: scale(1.2);
+  background-color: #ffffffd7;
 }
 .showKeyword .loseKeyword {
   opacity: 0.8;
@@ -158,4 +175,8 @@
 @font-face {
   font-family: 'ARCADE';
   src: url('/font/ARCADE.TTF') format('truetype');
+}
+@font-face {
+  font-family: 'LonelyCoffee KR';
+  src: url('/font/LonelyCoffee.ttf') format('truetype');
 }

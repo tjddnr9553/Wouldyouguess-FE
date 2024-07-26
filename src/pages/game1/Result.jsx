@@ -37,8 +37,8 @@ const dummy = [
 ];
 
 const dummy2 = {
-  liar: "초코파이",
-  normal: "몽쉘",
+  liar: "인라인 스케이트",
+  normal: "아이스링크",
   win: "normal",
 };
 
@@ -83,15 +83,6 @@ const Result = () => {
   }, [])
 
 
-//   useEffect(() => {
-//     const sync_func = async () => {
-//         const res = await catchLiar_vote_candidates(gameId);
-//         setPlayers(res.sort((a, b) => a.userId - b.userId));
-//     };
-    
-//     sync_func();
-// }, []);
-
   useEffect(() => {
     const sync_func = async () => {
       const res = await catchLiar_result(gameId, userId);
@@ -117,7 +108,7 @@ const Result = () => {
         <div className="result-title">
           {players.find((player) => player.isWinner)?.isLiar
             ? "Spy  Win !"
-            : "Catch Spy !"}{" "}
+            : "Player Win !"}{" "}
         </div>
       </div>  
       <div
@@ -133,11 +124,10 @@ const Result = () => {
       </div>
 
       <div className="showKeyword" ref={showKewordRef}>
-        <div className="normalKeyword">normal {dummy2.normal}</div>
-        <div className="liarKeyword">liar {dummy2.liar}</div>
+        <div className="normalKeyword">Player <span>{dummy2.normal}</span></div>
+        <div className="liarKeyword">Spy <span>{dummy2.liar}</span></div>
       </div>
       <button onClick={goHome} className="homeBtn"></button>
-      {/* <NewButton /> */}
     </div>
   );
 };
