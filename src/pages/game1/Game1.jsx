@@ -44,6 +44,7 @@ const Game1 = () => {
     setKeyword,
     setThisTurnUserId,
     setTotalRound,
+    setUserColor
   } = useCatchLiarStore();
   const { play, stop } = useAudioStore();
 
@@ -69,6 +70,7 @@ const Game1 = () => {
       setTotalRound(response.totalRound);
       setThisTurnUser(response.thisTurnNick);
       setThisTurnUserId(response.thisTurnUserId);
+      setUserColor(response.userColor);
     };
     sync_func();
     setTool("pencil");

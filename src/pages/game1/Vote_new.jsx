@@ -11,16 +11,9 @@ import useRoomStore from "../../store/room/useRoomStore.js";
 import useCatchLiarStore from "../../store/game/useCatchLiarStore.js";
 import useSocketStore from "../../store/socket/useSocketStore.js";
 import useWebrtcStore from "../../store/webrtc/useWebrtcStore.tsx";
-
-import {catchLiar_vote, catchLiar_vote_candidates} from "../../api/game/CatchLiar.js";
 import useAudioStore from "../../store/bgm/useAudioStore.js";
 
-const colors = [
-    "blue",
-    "purple",
-    "green",
-    "red",
-];
+import {catchLiar_vote, catchLiar_vote_candidates} from "../../api/game/CatchLiar.js";
 
 const Vote_new = () => {
     const [gameStart, setGameStart] = useState(true); // 게임 시작 상태, 30초 시작
@@ -114,10 +107,10 @@ const Vote_new = () => {
 
                 <div className="vote-image-container">
                     {players && players.map((player, index) => {
-                        const boxShadowStyle = `0 0 15px 15px ${colors[index]}`;
+                        const color = player.userColor;
+                        const boxShadowStyle = `0 0 15px 15px ${color}`;
                         const isCurrentUser = player.userId === userId;
                         const absolutePosition = index % 2 === 1 ? "vote-camera-wrap-right" : "vote-camera-wrap-left";
-                        const colorIndex = index;
 
                         return (
                             <div
@@ -135,7 +128,7 @@ const Vote_new = () => {
                                         <VideoComponent
                                             track={localTrack}
                                             participantIdentity={username}
-                                            color={colors[colorIndex]}
+                                            color={color}
                                             classNameCss={absolutePosition}
                                         />
                                         <img src={player.imagePath} className="vote-paint-img" alt={`${player.userId} image`} />
@@ -149,7 +142,7 @@ const Vote_new = () => {
                                                         <VideoComponent
                                                             track={remoteTrack.trackPublication.videoTrack}
                                                             participantIdentity={remoteTrack.participantIdentity}
-                                                            color={colors[colorIndex]}
+                                                            color={color}
                                                             classNameCss={absolutePosition}
                                                         />
                                                         <img src={player.imagePath} className="vote-paint-img"

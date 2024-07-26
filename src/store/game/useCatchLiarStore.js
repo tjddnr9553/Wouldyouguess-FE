@@ -11,6 +11,8 @@ const useCatchLiarStore = create((set) => ({
     imagePath: '',
     myVotingUserId: 0,
     votePageShowGameOver: false,
+    userColor: null,
+    userColorList: [],
 
     setGameId: (gameId) => set({ gameId }),
     setIsDrawing: (isDrawing) => set({ isDrawing }),
@@ -22,6 +24,8 @@ const useCatchLiarStore = create((set) => ({
     setImagePath: (imagePath) => set({ imagePath }),
     setMyVotingUserId: (myVotingUserId) => set({ myVotingUserId }),
     setVotePageShowGameOver: (votePageShowGameOver) => set({ votePageShowGameOver }),
+    setUserColor: (userColor) => set({ userColor }),
+    setUserColorList: (userColorList) => set({ userColorList }),
 }));
 
 export default useCatchLiarStore;
