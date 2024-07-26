@@ -134,5 +134,16 @@ export const catchLiar_image_delete = async (gameId, key, path) => {
     }
 };
 
+export const catchLiar_keyword = async (gameId) => {
+    try {
+        const res = await axios({
+            method: "GET",
+            url: `${API_SERVER_URL}/api/catchLiar/${gameId}/keyword`,
+        });
 
+        return res.data;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
 

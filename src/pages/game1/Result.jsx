@@ -1,6 +1,6 @@
 import "./Result.css";
-import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {useEffect, useRef, useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 import VoteUser from "../../components/game/VoteUser.tsx";
 
@@ -10,31 +10,8 @@ import useRoomStore from "../../store/room/useRoomStore.js";
 import useAudioStore from "../../store/bgm/useAudioStore.js";
 import useWebrtcStore from "../../store/webrtc/useWebrtcStore.tsx";
 
-import { catchLiar_result, catchLiar_vote_candidates } from "../../api/game/CatchLiar.js";
-import NewButton from "../../components/button/newButton.jsx";
+import {catchLiar_keyword, catchLiar_result} from "../../api/game/CatchLiar.js";
 
-const dummy = [
-  {
-    nickname: "채윤",
-    role: "라이어",
-    isWin: "lose",
-  },
-  {
-    nickname: "현민",
-    role: "일반시민",
-    isWin: "win",
-  },
-  {
-    nickname: "성욱",
-    role: "일반시민",
-    isWin: "win",
-  },
-  {
-    nickname: "광윤",
-    role: "일반시민",
-    isWin: "win",
-  },
-];
 
 const dummy2 = {
   liar: "아이스크림",
@@ -47,6 +24,8 @@ const Result = () => {
 
   const [players, setPlayers] = useState([]);
   const [winnerIds, setWinnerIds] = useState([]);
+  const [keyword, setKeyword] =
+                        useState({liar : "", normal : "", win : "" })
 
   const { userId } = useUserStore();
   const { roomId } = useRoomStore();
@@ -59,16 +38,26 @@ const Result = () => {
   const isLiarWin = players.find((player) => player.isWinner)?.isLiar || false; // 라이어 승리 여부
 
   useEffect(() => {
-    if (showKewordRef.current && dummy2) {
-      if (dummy2.win === "normal") {
-        showKewordRef.current.firstChild.classList.add("winKeyword");
-        showKewordRef.current.lastChild.classList.add("loseKeyword");
-      } else {
-        showKewordRef.current.firstChild.classList.add("loseKeyword");
-        showKewordRef.current.lastChild.classList.add("winKeyword");
-      }
+    const sync_func = async () => {
+      const res = await catchLiar_keyword(gameId);
+      setKeyword((prevState) => ({
+        ...prevState,
+        liar: res.liarKeyword,
+        normal: res.keyword
+      }));
     }
-  }, [dummy2]);
+    sync_func();
+  }, [])
+
+  useEffect(() => {
+    if (!players.find((player) => player.isWinner)?.isLiar) {
+      showKewordRef.current.firstChild.classList.add("winKeyword");
+      showKewordRef.current.lastChild.classList.add("loseKeyword");
+    } else {
+      showKewordRef.current.firstChild.classList.add("loseKeyword");
+      showKewordRef.current.lastChild.classList.add("winKeyword");
+    }
+  }, [players]);
 
   useEffect(() => {
     play("/bgm/Result_bgm.mp3");
@@ -124,8 +113,8 @@ const Result = () => {
       </div>
 
       <div className="showKeyword" ref={showKewordRef}>
-        <div className="normalKeyword">Player <span>{dummy2.normal}</span></div>
-        <div className="liarKeyword">Spy <span>{dummy2.liar}</span></div>
+        <div className="normalKeyword">Player <span>{keyword && keyword.normal}</span></div>
+        <div className="liarKeyword">Spy <span>{keyword && keyword.liar}</span></div>
       </div>
       <button onClick={goHome} className="homeBtn"></button>
     </div>

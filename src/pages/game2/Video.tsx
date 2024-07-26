@@ -1,16 +1,12 @@
 import "./Video.css";
 
-import React, { useState } from "react";
-import { useEffect, useRef } from "react";
+import React, {useEffect, useRef} from "react";
 
-import { LocalVideoTrack, RemoteVideoTrack } from "livekit-client";
+import {LocalVideoTrack, RemoteVideoTrack} from "livekit-client";
 
 import useCatchLiarStore from "../../store/game/useCatchLiarStore";
 
-import { gsap, Power1 } from "gsap";
-import useUserStore from "../../store/user/useUserStore";
-import { catchLiar_result } from "../../api/game/CatchLiar";
-import { unwatchFile } from "fs";
+import {gsap} from "gsap";
 
 interface VideoComponentProps {
   track: LocalVideoTrack | RemoteVideoTrack;
@@ -34,10 +30,6 @@ function Video({
   const videoElement = useRef<HTMLVideoElement | null>(null);
 
   const { thisTurnUserId, isVotePage } = useCatchLiarStore();
-  const { userId } = useUserStore();
-  const { gameId ,setIsVotePage } = useCatchLiarStore();
-
-
 
   useEffect(() => {
     if (videoElement.current) {
