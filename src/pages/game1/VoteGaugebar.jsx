@@ -20,7 +20,7 @@ const VoteGaugebar = ({ gameStart, setGameStart }) => {
       setTimeout(() => {
         tensionSound.pause();
       }, 7000);
-    }, 13000);
+    }, 43000);
   }, []);
 
   useEffect(() => {

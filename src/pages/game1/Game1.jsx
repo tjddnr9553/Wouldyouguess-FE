@@ -128,7 +128,7 @@ const Game1 = () => {
           <Gaugebar
             gameStart={gameStart}
             setGameStart={setGameStart}
-            time={round === 1 ? 9500 : 6000}
+            time={round === 1 ? 19500 : 16000}
           />
           <div className="drawing-container">
             <div className="keyword-title">
