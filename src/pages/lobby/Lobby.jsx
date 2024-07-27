@@ -113,19 +113,19 @@ const Lobby = () => {
   const startCatchLiar = async () => {
     gameStartSound.play();
     const gameId = await catchLiar_start(roomId);
-    setTimeout(() => {
+    // setTimeout(() => {
       socket.emit("game_start", { mode: 1, userId, roomId, gameId });
       gameStartSound.pause();
-    }, 3000);
+    // }, 3000);
   };
 
   const startFindDIff = async () => {
     gameStartSound.play();
     const gameId = await findDiff_start(roomId);
-    setTimeout(() => {
+    // setTimeout(() => {
       socket?.emit("game_start", { mode: 2, userId, roomId, gameId });
       gameStartSound.pause();
-    }, 3000);
+    // }, 3000);
   };
 
   return (
