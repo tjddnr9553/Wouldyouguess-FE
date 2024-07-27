@@ -122,6 +122,7 @@ const Game2 = () => {
                 <div
                   className="generatedImg game2-canvas-container"
                   ref={generatedImgRef}
+                  style={{cursor: "url('/images/game/game2/cursor.png') 35 0, auto"}}
                 >
                   {gameImages && (
                     <img
