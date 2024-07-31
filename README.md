@@ -19,7 +19,6 @@
 |:---:|:---:|
 |시작 화면|사용자 정보 화면|
 |![image](https://user-images.githubusercontent.com/66003567/216818254-18683c3f-af80-4009-b2cc-35bdee865f23.png)|![image](https://user-images.githubusercontent.com/66003567/216818272-8749569b-b217-4572-9738-32b0058459f4.png)|
-|:---:|:---:|
 |시작 화면|사용자 정보 화면|
 
 긴장감, 압박감과 같이 일상에서 느낄 수 있는 부정적인 감정에서 벗어나 편안한 분위기 속에서 즐길 수 있는 힐링 게임을 만들고자 소소빌리지(SosoVillage)를 개발하게 되었습니다.<br>
