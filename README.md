@@ -8,6 +8,9 @@
 - [개요](#개요)
 - [게임 설명](#게임-설명)
 - [게임 플레이 방식](#게임-플레이-방식)
+- [발표 영상](#발표-영상)
+- [아키텍처](#아키텍처)
+- [포스터](#포스터)
 
 ## 개요
 
@@ -101,3 +104,14 @@
 ## 발표 영상
 
 <a href="https://youtu.be/OTDst73LYHs?si=ecBMSHJwPYuIIKQM">유투브 링크</a>
+
+
+## 아키텍처
+
+<img src="./public/images/readme/architecture1.png"><br>
+<img src="./public/images/readme/architecture2.png">
+
+
+## 포스터
+
+<img src="./public/images/readme/poster.png">
