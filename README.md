@@ -30,9 +30,9 @@
 | <img src="./public/images/readme/gif/keyword.gif" width="350px"> |    <img src="./public/images/readme/gif/order.gif" width="350px">     |
 |:----------------------------------------------------------------:|:---------------------------------------------------------------------:|
 |                              키워드 안내                              |                              플레이어 순서 안내                               |
-|              ![image](./public/images/readme/.png)               |   <img src="./public/images/readme/gif/laserPen.gif" width="350px">   |
+|  <img src="./public/images/readme/gif/draw.gif" width="350px">   |   <img src="./public/images/readme/gif/laserPen.gif" width="350px">   |
 |                              그림 그리기                              |                              레이저 펜(낙서하기)                              |
-|              ![image](./public/images/readme/.png)               | <img src="./public/images/readme/gif/game1_result.gif" width="350px"> |
+|  <img src="./public/images/readme/gif/vote.gif" width="350px">   | <img src="./public/images/readme/gif/game1_result.gif" width="350px"> |
 |                             회의 및 투표                              |                                 결과 화면                                 |
 
 ### 2번 게임(Find Difference)
@@ -105,12 +105,10 @@
 
 <a href="https://youtu.be/OTDst73LYHs?si=ecBMSHJwPYuIIKQM">유투브 링크</a>
 
-
 ## 아키텍처
 
 <img src="./public/images/readme/architecture1.png"><br>
 <img src="./public/images/readme/architecture2.png">
-
 
 ## 포스터
 
