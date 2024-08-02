@@ -18,13 +18,13 @@
 
 ## 게임 설명
 
-| <img src="./public/images/readme/startPage.png" width="600px"> | <img src="./public/images/readme/lobby.png" width="600px"> |
+| <img src="./public/images/readme/startPage.png" width="350px"> | <img src="./public/images/readme/lobby.png" width="350px"> |
 |:--------------------------------------------------------------:|:----------------------------------------------------------:|
 |                             시작 화면                              |                           로비 화면                            |
 
 ### 1번 게임(Catch Spy)
 
-| <img src="./public/images/readme/gif/keyword.gif" width="600px"> | <img src="./public/images/readme/gif/order.gif" width="600px"> |
+| <img src="./public/images/readme/gif/keyword.gif" width="350px"> | <img src="./public/images/readme/gif/order.gif" width="350px"> |
 |:----------------------------------------------------------------:|:--------------------------------------------------------------:|
 |                              키워드 안내                              |                           플레이어 순서 안내                           |
 |              ![image](./public/images/readme/.png)               |             ![image](./public/images/readme/.png)              |
@@ -34,10 +34,10 @@
 
 ### 2번 게임(Find Difference)
 
-|    <img src="./public/images/readme/imageUpload.png" width="600px">     | <img src="./public/images/readme/gif/maskingImage.gif" width="600px"> |
+|    <img src="./public/images/readme/imageUpload.png" width="350px">     | <img src="./public/images/readme/gif/maskingImage.gif" width="350px"> |
 |:-----------------------------------------------------------------------:|:---------------------------------------------------------------------:|
 |                                 이미지 업로드                                 |                           이미지 마스킹 및 이미지 생성                            |
-| <img src="./public/images/readme/gif/findDifference.gif" width="600px"> |   <img src="./public/images/readme/Game2_Result.png" width="600px">   |
+| <img src="./public/images/readme/gif/findDifference.gif" width="350px"> |   <img src="./public/images/readme/Game2_Result.png" width="350px">   |
 |                                틀린 그림 찾기                                 |                                 결과 화면                                 |
 
 일상에서 친구나 동료들과 함께 잠시 쉬어가며 사진과 그림을 통해 가볍게 즐길 수 있는 게임을 만들고자 우주게스(Wouldyouguess?)를 개발하게 됐습니다.<br>
