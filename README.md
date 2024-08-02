@@ -18,19 +18,19 @@
 
 ## 게임 설명
 
-| <img src="./public/images/readme/startPage.png" width="350px"> | <img src="./public/images/readme/lobby.png" width="350px"> |
-|:--------------------------------------------------------------:|:----------------------------------------------------------:|
-|                             시작 화면                              |                           로비 화면                            |
+| <img src="./public/images/readme/startPage.png" width="350px"> | <img src="./public/images/readme/gif/lobby.gif" width="350px"> |
+|:--------------------------------------------------------------:|:--------------------------------------------------------------:|
+|                             시작 화면                              |                             로비 화면                              |
 
 ### 1번 게임(Catch Spy)
 
-| <img src="./public/images/readme/gif/keyword.gif" width="350px"> | <img src="./public/images/readme/gif/order.gif" width="350px"> |
-|:----------------------------------------------------------------:|:--------------------------------------------------------------:|
-|                              키워드 안내                              |                           플레이어 순서 안내                           |
-|              ![image](./public/images/readme/.png)               |             ![image](./public/images/readme/.png)              |
-|                              그림 그리기                              |                          레이저 펜(낙서하기)                           |
-|              ![image](./public/images/readme/.png)               |             ![image](./public/images/readme/.png)              |
-|                             회의 및 투표                              |                             결과 화면                              |
+| <img src="./public/images/readme/gif/keyword.gif" width="350px"> |    <img src="./public/images/readme/gif/order.gif" width="350px">     |
+|:----------------------------------------------------------------:|:---------------------------------------------------------------------:|
+|                              키워드 안내                              |                              플레이어 순서 안내                               |
+|              ![image](./public/images/readme/.png)               |   <img src="./public/images/readme/gif/laserPen.gif" width="350px">   |
+|                              그림 그리기                              |                              레이저 펜(낙서하기)                              |
+|              ![image](./public/images/readme/.png)               | <img src="./public/images/readme/gif/game1_result.gif" width="350px"> |
+|                             회의 및 투표                              |                                 결과 화면                                 |
 
 ### 2번 게임(Find Difference)
 
@@ -79,8 +79,8 @@
     - 낙서와 대화를 통해 다른 플레이어들과 협력하여 스파이의 단서를 찾아보세요.
     - 스파이는 최대한 다른 플레이어들의 그림과 비슷하게 그려야 합니다.
       <br>
+      <br>
 
----
 
 - **Game2 (Find Difference)**<br><br>
   **1. 사진 업로드**: 게임을 시작하고 원하는 사진을 선택하여 업로드합니다. 📸<br>
@@ -98,3 +98,6 @@
       <br>
       <br>
 
+## 발표 영상
+
+<a href="https://youtu.be/OTDst73LYHs?si=ecBMSHJwPYuIIKQM">유투브 링크</a>
