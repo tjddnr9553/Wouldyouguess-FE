@@ -81,7 +81,7 @@
 
 ## 발표 영상
 
-<a href="https://youtu.be/OTDst73LYHs?si=ecBMSHJwPYuIIKQM">유투브 링크</a>
+<a href="https://youtu.be/OTDst73LYHs?si=ecBMSHJwPYuIIKQM">유투브 링크</a><br>
 
 ## 아키텍처
 
